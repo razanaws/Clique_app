@@ -7,9 +7,10 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
 
-      body: const Login(),
+      body: Login(),
+      backgroundColor: Color.fromRGBO(37, 37, 37,0),
     );
   }
 }

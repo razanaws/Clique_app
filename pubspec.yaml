@@ -67,6 +67,9 @@ flutter:
   assets:
     - images/cliqueLogo.png
     - images/cliqueClipArtLogin.png
+    - images/facebookSymbol.png
+    - images/googleSymbol.png
+    - images/twitterSymbol.png
 
   #   - images/a_dot_ham.jpeg
 
