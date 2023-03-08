@@ -39,6 +39,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
+  cupertino_icons: ^1.0.2
+  firebase_core:
+  cloud_firestore:
+  firebase_auth:
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -60,6 +66,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/cliqueLogo.png
+    - images/cliqueClipArtLogin.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

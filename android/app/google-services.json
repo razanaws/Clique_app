@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "682011767728",
+    "project_id": "cliquegradproject",
+    "storage_bucket": "cliquegradproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682011767728:android:81e83330dbab46eaf91c75",
+        "android_client_info": {
+          "package_name": "com.example.clique"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682011767728-3gm7945rbvupb352qk1t1ts302rpt69t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiqmvBDr6gB4Ap1YxC9IY6wZoi_hTtNQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682011767728-3gm7945rbvupb352qk1t1ts302rpt69t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "682011767728-hgu0pjt9reccfmuomdahi93n61h5i3r6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.clique"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

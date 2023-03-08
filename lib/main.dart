@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:clique/screens/login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 void main() {
   runApp(MyApp());
 }
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home:loadingPage()
+      home:AuthScreen()
     );
   }
 }
@@ -50,7 +52,7 @@ class _loadingPageState extends State<loadingPage> {
                   'images/cliqueLogo.png',
                   width: width*0.4,
                   height: height*0.4,
-
+                  //TODO: animation loading image
               )
             ],
           )

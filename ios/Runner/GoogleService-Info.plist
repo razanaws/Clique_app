@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>682011767728-hgu0pjt9reccfmuomdahi93n61h5i3r6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.682011767728-hgu0pjt9reccfmuomdahi93n61h5i3r6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDtj4yaS446A5wp3aUjliip5OpkCIuufKg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>682011767728</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.clique</string>
+	<key>PROJECT_ID</key>
+	<string>cliquegradproject</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cliquegradproject.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:682011767728:ios:416f67d796b3659ef91c75</string>
+</dict>
+</plist>
