@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 //import 'package:firebase_core/firebase_core.dart';
@@ -52,6 +52,7 @@ class _LoginState extends State<Login> {
       child: Container(
         height: height,
         width: width,
+        color: Colors.white,
 
         child: Form(
           key: formKey,
@@ -63,7 +64,7 @@ class _LoginState extends State<Login> {
                   width: width*0.3,
                   height: height*0.3
               ),
-              SizedBox(height:height*0.05,),
+          //    SizedBox(height:height*0.05,),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -85,7 +86,7 @@ class _LoginState extends State<Login> {
 
                 ),
               ),
-              SizedBox(height:height*0.05,),
+          //    SizedBox(height:height*0.05,),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -108,7 +109,7 @@ class _LoginState extends State<Login> {
                 ),
               ),
 
-              SizedBox(height:height*0.05,),
+          //    SizedBox(height:height*0.05,),
 
               Container(
                 padding: const EdgeInsets.all(5),
@@ -133,13 +134,13 @@ class _LoginState extends State<Login> {
               },
               child:const Text(
                 "Forgot Password? Reset your password.",
-                style: TextStyle(color: Colors.white),)
+                style: TextStyle(color: Colors.black),)
 
           ),
 
 
           const Text("Sign Up with"),
-          SizedBox(height:height*0.05,),
+         //SizedBox(height:height*0.05,),
 
           Container(
             padding: const EdgeInsets.all(5),
@@ -159,7 +160,7 @@ class _LoginState extends State<Login> {
           ),
 
           const Text("Don't have an account?"),
-          SizedBox(height:height*0.05,),
+          //SizedBox(height:height*0.05,),
 
           TextButton(
             onPressed: (){
@@ -168,13 +169,13 @@ class _LoginState extends State<Login> {
               //});
             },
             child:const Text("Register as a musician.",
-              style: TextStyle(color: Colors.white),),
+              style: TextStyle(color: Colors.black),),
           ),
 
           const TextButton(
               onPressed: null,
               child:Text("Register as a recruiter.",
-                style: TextStyle(color: Colors.white),)
+                style: TextStyle(color: Colors.black),)
           ),
 
 
