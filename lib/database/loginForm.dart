@@ -32,9 +32,7 @@ class _LoginState extends State<Login> {
           {'email':emailController.text,
             'username':usernameController.text}
 
-
       );
-
 
     }
 
@@ -153,7 +151,7 @@ class _LoginState extends State<Login> {
               onPressed: null,
               child:Text('Login'),
               // style: ElevatedButton.styleFrom(primary: Color.fromRGBO(100, 13, 20, 0.0),
-              //                decoration: BoxDecoration(image: DecorationImage(image: "images/facebookSymbol.png")),
+              // decoration: BoxDecoration(image: DecorationImage(image: "images/facebookSymbol.png")),
             ),
 
 
@@ -185,7 +183,6 @@ class _LoginState extends State<Login> {
 
         ),
       ),
-
 
 
 
