@@ -10,7 +10,7 @@ class AuthScreen extends StatelessWidget {
     return const Scaffold(
 
       body: Login(),
-      backgroundColor: Color.fromRGBO(37, 37, 37,0),
+      backgroundColor: Color.fromRGBO(37, 37, 37,1),
     );
   }
 }
