@@ -177,7 +177,7 @@ class _LoginState extends State<Login> {
 
               SizedBox(width: width*0.05,height: height*0.05,),
               const Text("Don't have an account?",style: TextStyle(color: Colors.white),),
-              SizedBox(width: width*0.05,height: height*0.05,),
+              //SizedBox(width: width*0.05,height: height*0.05,),
 
               Row(
                 children: [
