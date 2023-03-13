@@ -92,7 +92,7 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-
+                  obscureText: true, //Hides password
                   controller: passwordController,
                   validator: (value){
                     if(value==null || value.isEmpty){
