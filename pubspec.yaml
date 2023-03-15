@@ -72,6 +72,10 @@ flutter:
     - images/facebookSymbol.png
     - images/googleSymbol.png
     - images/twitterSymbol.png
+    - images/bandCover.jpg
+    - images/drummerMan.jpg
+    - images/bandCover2.jpg
+    - icons/LocationPin.png
 
   #   - images/a_dot_ham.jpeg
 

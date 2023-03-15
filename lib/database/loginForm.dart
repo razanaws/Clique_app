@@ -121,7 +121,9 @@ class _LoginState extends State<Login> {
                 child:  ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(100, 13, 20, 1)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0),)),),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0))),
+                  ),
                   //TODO: onPressed
 
                   onPressed: null,

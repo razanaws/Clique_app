@@ -1,10 +1,14 @@
+
+//import 'package:firebase_core/firebase_core.dart';
+//import 'firebase_options.dart';
+
 import 'package:clique/database/loginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/screens/login.dart';
 import 'package:clique/screens/signup/musicianSignUp.dart';
 import 'package:clique/screens/signup/recruiterSignUp.dart';
-//import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
+import 'package:clique/screens/profile/MusicianProfile.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -17,7 +21,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home:RecruiterSignUp()
+      home:MusicianProfile()
     );
   }
 }
