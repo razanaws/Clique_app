@@ -2,7 +2,10 @@
 //import 'package:firebase_core/firebase_core.dart';
 //import 'firebase_options.dart';
 
+import 'package:clique/database/SignUpMusicianForm.dart';
 import 'package:clique/database/loginForm.dart';
+import 'package:clique/screens/profile/BandProfile.dart';
+import 'package:clique/screens/profile/RecruiterProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/screens/login.dart';
 import 'package:clique/screens/signup/musicianSignUp.dart';
@@ -20,8 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      home:MusicianProfile()
+      //home: RecruiterSignUp(),
+     // home:BandProfile()
+        home:MusicianSignUp()
+      //  home:Login()
+      //  home:SignUpMusicianForm()
+       // home:RecruiterSignUp()
     );
   }
 }

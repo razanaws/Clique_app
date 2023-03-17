@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_tags: "^0.1.9"
   font_awesome_flutter:
   fluttertoast:
   flutter:
@@ -76,7 +77,10 @@ flutter:
     - images/drummerMan.jpg
     - images/bandCover2.jpg
     - icons/LocationPin.png
-
+    - images/splashingDrums.png
+    - images/recruiterProfilePicture.jpeg
+    - images/recruiterSkyscrapers.jpeg
+    - images/bandProfilePicture.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
