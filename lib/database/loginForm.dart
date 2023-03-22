@@ -1,4 +1,5 @@
 import 'package:clique/database/authServiceGoogle.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,34 +11,28 @@ import 'package:clique/screens/homepage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-//import 'package:twitter_login/twitter_login.dart';
-
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:clique/database/authServiceGoogle.dart';
 
 
 //Google Sign In
-/*Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
-}
-*/
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
     'email',
   ],
 );
+
+//Apple Sign In
+Future signInWithApple() async {
+  final appleProvider = AppleAuthProvider();
+  if (kIsWeb) {
+    await FirebaseAuth.instance.signInWithPopup(appleProvider);
+  } else {
+    await FirebaseAuth.instance.signInWithProvider(appleProvider);
+  }
+}
 
 
 
@@ -53,29 +48,7 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
   //return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
 //}
 
-//Twitter Sign In
-/*
-Future<UserCredential> signInWithTwitter() async {
-  // Create a TwitterLogin instance
-  final twitterLogin = new TwitterLogin(
-      apiKey: '<your consumer key>',
-      apiSecretKey:' <your consumer secret>',
-      redirectURI: '<your_scheme>://'
-  );
 
-  // Trigger the sign-in flow
-  final authResult = await twitterLogin.login();
-
-  // Create a credential from the access token
-  final twitterAuthCredential = TwitterAuthProvider.credential(
-    accessToken: authResult.authToken!,
-    secret: authResult.authTokenSecret!,
-  );
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(twitterAuthCredential);
-}
-*/
 
 
 class Login extends StatefulWidget {
@@ -87,6 +60,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+//Google
   @override
   void initState() {
     super.initState();
@@ -104,6 +78,11 @@ class _LoginState extends State<Login> {
   }
 
 
+
+
+
+
+//Controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -285,9 +264,9 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       )),
                     ),
-                    onPressed: null,
+                    onPressed: signInWithApple,
                     child: Image.asset(
-                      "images/twitterSymbol.png",
+                      "images/appleSymbol.png",
                       height: 70,
                       width: 70,
                     ),
