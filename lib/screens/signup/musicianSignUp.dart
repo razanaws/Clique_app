@@ -8,7 +8,7 @@ class MusicianSignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SignUpMusicianForm(),
-      backgroundColor: Color.fromRGBO(37, 37, 37,1),
+      backgroundColor: Color.fromRGBO(37, 37, 37, 1),
     );
   }
 }
