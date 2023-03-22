@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clique/screens/signup/musicianSignUp.dart';
 import 'package:clique/screens/signup/recruiterSignUp.dart';
 import 'package:clique/screens/homepage.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 //import 'package:twitter_login/twitter_login.dart';
@@ -33,6 +33,12 @@ import 'package:clique/database/authServiceGoogle.dart';
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 */
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: <String>[
+    'email',
+  ],
+);
+
 
 
 //Facebook Sign In
@@ -80,6 +86,24 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.onCurrentUserChanged.listen((account)  async {
+      if (account != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Homepage(),
+          ),
+        );
+      }
+    });
+    _googleSignIn.signInSilently();
+  }
+
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -218,7 +242,7 @@ class _LoginState extends State<Login> {
               ),
 
               const Text(
-                "Or Sign Up with",
+                "Or Sign In with",
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ),
               SizedBox(
@@ -281,7 +305,10 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       )),
                     ),
-                    onPressed: null,//AuthService().signInWithGoogle(),
+                    onPressed: () async {
+                                await _handleSignIn();
+
+                              },
                     child: Image.asset(
                       "images/googleSymbol.png",
                       height: 70,
@@ -337,5 +364,12 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
   }
 }

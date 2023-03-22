@@ -46,8 +46,12 @@ class AuthService{
     FirebaseAuth.instance.signOut();
 
   }
-  final GoogleSignIn googleUser =  GoogleSignIn(
-  scopes: <String>["email"]);
+  // final GoogleSignIn googleUser =  GoogleSignIn(
+  // scopes: <String>["email"]);
+
+
+
+
 
 }
 
