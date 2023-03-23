@@ -1,3 +1,6 @@
+
+import 'dart:js';
+
 import 'package:clique/database/authServiceGoogle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +12,8 @@ import 'package:clique/screens/signup/musicianSignUp.dart';
 import 'package:clique/screens/signup/recruiterSignUp.dart';
 import 'package:clique/screens/homepage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:clique/database/authServiceGoogle.dart';
 
 
 //Google Sign In
@@ -36,49 +35,14 @@ Future signInWithApple() async {
 
 
 
-//Facebook Sign In
-//Future<UserCredential> signInWithFacebook() async {
-  // Trigger the sign-in flow
-  //final LoginResult loginResult = await FacebookAuth.instance.login();
+Future<UserCredential> signInWithFacebook() async {
 
-  // Create a credential from the access token
-  //final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+  final LoginResult loginResult = await FacebookAuth.instance.login();
 
-  // Once signed in, return the UserCredential
-  //return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-//}
+  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-
-
-
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
-
-  @override
-  State<Login> createState() => _LoginState();
+  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
 }
-
-class _LoginState extends State<Login> {
-
-//Google
-  @override
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((account)  async {
-      if (account != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Homepage(),
-          ),
-        );
-      }
-    });
-    _googleSignIn.signInSilently();
-  }
-
-
-
 
 
 
@@ -244,7 +208,7 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       )),
                     ),
-                    onPressed: null,
+                    onPressed: signInWithFacebook,
                     child: Image.asset(
                       "images/facebookSymbol.png",
                       height: 70,
@@ -351,4 +315,4 @@ class _LoginState extends State<Login> {
       print(error);
     }
   }
-}
+
