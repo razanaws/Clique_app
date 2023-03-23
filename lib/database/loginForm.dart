@@ -1,51 +1,63 @@
-
-import 'dart:js';
-
-import 'package:clique/database/authServiceGoogle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:clique/screens/signup/musicianSignUp.dart';
 import 'package:clique/screens/signup/recruiterSignUp.dart';
 import 'package:clique/screens/homepage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
 //Google Sign In
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: <String>[
-    'email',
-  ],
-);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
 
 //Apple Sign In
-Future signInWithApple() async {
-  final appleProvider = AppleAuthProvider();
-  if (kIsWeb) {
-    await FirebaseAuth.instance.signInWithPopup(appleProvider);
-  } else {
-    await FirebaseAuth.instance.signInWithProvider(appleProvider);
+  Future signInWithApple() async {
+    final appleProvider = AppleAuthProvider();
+    if (kIsWeb) {
+      await FirebaseAuth.instance.signInWithPopup(appleProvider);
+    } else {
+      await FirebaseAuth.instance.signInWithProvider(appleProvider);
+    }
   }
-}
 
+//FB
+  Future<UserCredential> signInWithFacebook() async {
+    final LoginResult loginResult = await FacebookAuth.instance.login();
 
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider
+        .credential(loginResult.accessToken!.token);
 
-Future<UserCredential> signInWithFacebook() async {
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
 
-  final LoginResult loginResult = await FacebookAuth.instance.login();
-
-  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-}
-
-
-
+//Google
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.onCurrentUserChanged.listen((account)  async {
+      if (account != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Homepage(),
+          ),
+        );
+      }
+    });
+    _googleSignIn.signInSilently();
+  }
 //Controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -74,11 +86,17 @@ Future<UserCredential> signInWithFacebook() async {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(37, 37, 37,1),
+      backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
 
       body: SizedBox(
         height: height,
@@ -201,63 +219,65 @@ Future<UserCredential> signInWithFacebook() async {
                   ),
                   Expanded(
                       child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
+                        style: ButtonStyle(
+                          backgroundColor:
                           MaterialStateProperty.all(Colors.white54),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              )),
+                        ),
+                        onPressed: signInWithFacebook,
+                        child: Image.asset(
+                          "images/facebookSymbol.png",
+                          height: 70,
+                          width: 70,
+                        ),
                       )),
-                    ),
-                    onPressed: signInWithFacebook,
-                    child: Image.asset(
-                      "images/facebookSymbol.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                  )),
                   SizedBox(
                     width: width * 0.1,
                     height: height * 0.1,
                   ),
                   Expanded(
                       child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
+                        style: ButtonStyle(
+                          backgroundColor:
                           MaterialStateProperty.all(Colors.white54),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              )),
+                        ),
+                        onPressed: signInWithApple,
+                        child: Image.asset(
+                          "images/appleSymbol.png",
+                          height: 70,
+                          width: 70,
+                        ),
                       )),
-                    ),
-                    onPressed: signInWithApple,
-                    child: Image.asset(
-                      "images/appleSymbol.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                  )),
                   SizedBox(
                     width: width * 0.1,
                     height: height * 0.1,
                   ),
                   Expanded(
                       child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
+                        style: ButtonStyle(
+                          backgroundColor:
                           MaterialStateProperty.all(Colors.white54),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              )),
+                        ),
+                        onPressed: () async {
+                          await _handleSignIn();
+                        },
+                        child: Image.asset(
+                          "images/googleSymbol.png",
+                          height: 70,
+                          width: 70,
+                        ),
                       )),
-                    ),
-                    onPressed: () async {
-                                await _handleSignIn();
-
-                              },
-                    child: Image.asset(
-                      "images/googleSymbol.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                  )),
                   SizedBox(
                     width: width * 0.1,
                     height: height * 0.1,
@@ -308,6 +328,7 @@ Future<UserCredential> signInWithFacebook() async {
       ),
     );
   }
+
   Future<void> _handleSignIn() async {
     try {
       await _googleSignIn.signIn();
@@ -316,3 +337,4 @@ Future<UserCredential> signInWithFacebook() async {
     }
   }
 
+}
