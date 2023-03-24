@@ -53,7 +53,7 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
       });
 
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => homepage()));
+          .push(MaterialPageRoute(builder: (context) => Homepage()));
 
       return 'success';
     } catch (e) {

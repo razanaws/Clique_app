@@ -1,13 +1,15 @@
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-class MusicianProfile extends StatefulWidget {
-  const MusicianProfile({Key? key}) : super(key: key);
+class RecruiterProfile extends StatefulWidget {
+  const RecruiterProfile({Key? key}) : super(key: key);
 
   @override
-  State<MusicianProfile> createState() => _MusicianProfileState();
+  State<RecruiterProfile> createState() => _RecruiterProfileState();
 }
+
+
+
 /*
 class MultiSelectChipGenres extends StatefulWidget {
   final List<String> genreList;
@@ -146,39 +148,8 @@ class _MultiSelectChipStateInstruments extends State<MultiSelectChip> {
 
 */
 
-/*List<String> _genresTags=[];
-@override
-void initState()
-{
-  super.initState();
-  _genresTags.addAll(
-      [
-        'Rock',
-        'Metal',
-        'Nu metal'
-      ]
-  );
 
-}
-
-InputTags(
-  tags: _genresTags,
-  onDelete: (tag){
-    print(tag);
-      },
-onInsert: (tag){
-  print(tag);
-  },
-),
-
-void _getTags()
-{
-  _tags.forEach((tag) => print(tag));
-}*/
-
-
-
-class _MusicianProfileState extends State<MusicianProfile> {
+class _RecruiterProfileState extends State<RecruiterProfile> {
   @override
   Widget build(BuildContext context) {
 
@@ -201,38 +172,40 @@ class _MusicianProfileState extends State<MusicianProfile> {
                 color: Colors.grey,
                 child: Center(
                   child: Image.asset(
-                    "images/bandCover2.jpg",
+                    "images/recruiterSkyscrapers.jpeg",
                     fit: BoxFit.fitWidth,
                     height: height*0.3,
                     width: width,
                   ),
                 ),
               ),
+              SizedBox(height: height*0.5),
 
-              Expanded(
-
+              SizedBox(
                 child: Container(
                   color: const Color.fromRGBO(37, 37, 37,1),
                   child: Column(
                     children: [
 
                       //TODO: Name should be added by user
-                      const Padding(
-                        padding: EdgeInsets.only(top:15),
-                        child:  Text(
-                          "NAME HERE",
-                          style:  TextStyle(
-                              color: Colors.white70, fontSize: 20
+
+                        const Padding(
+                          padding: EdgeInsets.only(top:15),
+                          child:  Text(
+                            "Recruiter's NAME HERE",
+                            style:  TextStyle(
+                                color: Colors.white70, fontSize: 20
+                            ),
                           ),
+
                         ),
 
-                      ),
 
 
                       SizedBox(height: height*0.05),
 
                       Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10,),
                         child: Column(
                           children: [
 
@@ -260,8 +233,8 @@ class _MusicianProfileState extends State<MusicianProfile> {
                             ),
                             //TODO: bio
                             Row(
-                              children:  [
-                                const Padding(
+                              children: const [
+                                Padding(
                                   padding: EdgeInsets.all(10.0),
                                   child: Text(
                                     "Bio goes here",
@@ -271,32 +244,32 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     ),
                                   ),
                                 ),
-                                //TODO: onPress
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 150),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: null,
-                                        style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(100, 13, 20, 1)),
-                                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(50.0)))
-                                        ),
-                                        child: const Text(
-                                            'Create a Band',
-                                            style: TextStyle(
-                                                color: Colors.white)
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
 
                               ],
                             ),
 
+                            //TODO: onPress
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: null,
+                                    style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(100, 13, 20, 1)),
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(50.0)))
+                                    ),
+                                    child: const Text(
+                                        'Create a Band',
+                                        style: TextStyle(
+                                            color: Colors.white)
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
 
 
 
@@ -314,107 +287,11 @@ class _MusicianProfileState extends State<MusicianProfile> {
                             ),
 
 
-                            /*
-                                * Align(
-                                  alignment: Alignment.topLeft,
-                                  child:Row(
-                                    children: [
-                                      Text("Rock",style:TextStyle(
-                                        color: Colors.black,
-                                        backgroundColor: Colors.grey,
-                                        decoration:  TextDecoration(
-
-                                        ),
-
-                                      ),),
-                                    ],
-                                  ),
-                                ),*/
 
 
 
-                            Padding(
-                              padding: const EdgeInsets.only(bottom:2.0,top: 1.0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width /5.2,
-                                      decoration:BoxDecoration(
-                                        color: Colors.grey,
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ) ,
-                                      child: const Center(
-                                        child:Text(
-                                          "Rock",
-                                          style:TextStyle(
-                                            color: Colors.black,
-                                          ),
-
-                                        ),
-                                      ) ,
-
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width /5.2,
-                                      decoration:BoxDecoration(
-                                        color: Colors.grey,
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ) ,
-                                      child: const Center(
-                                        child:Text(
-                                          "Metal",
-                                          style:TextStyle(
-                                            color: Colors.black,
-                                          ),
-
-                                        ),
-                                      ) ,
-
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width /5.2,
-                                      decoration:BoxDecoration(
-                                        color: Colors.grey,
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ) ,
-                                      child: const Center(
-                                        child:Text(
-                                          "Nu metal",
-                                          style:TextStyle(
-                                            color: Colors.black,
-                                          ),
-
-                                        ),
-                                      ) ,
-
-                                    ),
-                                  ),
 
 
-                                ],
-                              ),
-                            ),
 
 
 
@@ -436,97 +313,13 @@ class _MusicianProfileState extends State<MusicianProfile> {
                             const Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                "Instruments",
+                                "Requirements",
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
 
                                 ),
-                              ),
-                            ),
-
-
-                            Padding(
-                              padding: const EdgeInsets.only(bottom:2.0,top: 1.0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width /5.2,
-                                      decoration:BoxDecoration(
-                                        color: Colors.grey,
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ) ,
-                                      child: const Center(
-                                        child:Text(
-                                          "Drums",
-                                          style:TextStyle(
-                                            color: Colors.black,
-                                          ),
-
-                                        ),
-                                      ) ,
-
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width /5.2,
-                                      decoration:BoxDecoration(
-                                        color: Colors.grey,
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ) ,
-                                      child: const Center(
-                                        child:Text(
-                                          "Vocals",
-                                          style:TextStyle(
-                                            color: Colors.black,
-                                          ),
-
-                                        ),
-                                      ) ,
-
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: MediaQuery.of(context).size.width /5.2,
-                                      decoration:BoxDecoration(
-                                        color: Colors.grey,
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ) ,
-                                      child: const Center(
-                                        child:Text(
-                                          "Guitar",
-                                          style:TextStyle(
-                                            color: Colors.black,
-                                          ),
-
-                                        ),
-                                      ) ,
-
-                                    ),
-                                  ),
-
-
-                                ],
                               ),
                             ),
 
@@ -546,7 +339,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                           shape: BoxShape.circle,
                                           color: Colors.red,
                                           image: DecorationImage(
-                                            image: AssetImage("images/drummerMan.jpg"),
+                                            image: AssetImage("images/recruiterProfilePicture.jpeg"),
                                             fit: BoxFit.cover,
                                           ),
                                         ),)
@@ -565,7 +358,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                         child: Row(
                                           children: const [
                                             Text(
-                                              "Name",
+                                              "Recruiter's Name",
                                               style: TextStyle(color: Colors.white70),
 
                                             ),
@@ -584,12 +377,83 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                       Center(
                                         child: Row(
                                             children: [
-                                              Image.asset(
+                                              /*Image.asset(
                                                 "images/splashingDrums.png",
                                                 fit: BoxFit.fill,
                                                 height: height*0.3,
                                                 width: width*0.8,
-                                              ),]
+                                              ),*/
+
+                                              Flexible(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    const Divider(
+                                                        color: Colors.grey
+                                                    ),
+                                                    //TODO:Recruiter
+                                                    const Text("Users Recruited by Recruiter's Name"),
+                                                    Row(
+                                                      children: [
+                                                        Column(
+                                                          children:[
+                                                            Row(children: [
+                                                              Column(
+                                                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Container(
+                                                                    height: 60.0,
+                                                                    width: 60.0,
+                                                                    decoration: const BoxDecoration(
+                                                                      shape: BoxShape.circle,
+                                                                      color: Colors.red,
+                                                                      image: DecorationImage(
+                                                                        image: AssetImage("images/drummerMan.jpg"),
+                                                                        fit: BoxFit.cover,
+                                                                      ),
+                                                                    ),)
+                                                                ],
+                                                              ),
+                                                            ],),
+                                                            //TODO: connect the recruited users
+                                                            Row(children:const [
+                                                              Text("Musician's Name"),
+                                                            ],),
+                                                          ],
+
+                                                        ),
+
+                                                        Column(
+                                                          children:[
+                                                            Row(children: [
+                                                              Column(
+                                                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Container(
+                                                                    height: 60.0,
+                                                                    width: 60.0,
+                                                                    decoration: const BoxDecoration(
+                                                                      shape: BoxShape.circle,
+                                                                      color: Colors.red,
+                                                                      image: DecorationImage(
+                                                                        image: AssetImage("images/drummerMan.jpg"),
+                                                                        fit: BoxFit.cover,
+                                                                      ),
+                                                                    ),)
+                                                                ],
+                                                              ),
+                                                            ],),
+                                                            Row(children:const [
+                                                              Text("Band's Name"),
+                                                            ],),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+
+                                            ]
 
                                         ),
                                       ),
@@ -627,7 +491,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                 shape: BoxShape.circle,
                 color: Colors.red,
                 image: DecorationImage(
-                  image: AssetImage("images/drummerMan.jpg"),
+                  image: AssetImage("images/recruiterProfilePicture.jpeg"),
                   fit: BoxFit.cover,
                 ),
               ),
