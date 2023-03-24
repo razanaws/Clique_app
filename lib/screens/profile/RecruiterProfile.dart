@@ -179,16 +179,16 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                   ),
                 ),
               ),
+              SizedBox(height: height*0.5),
 
-              Expanded(
-
+              SizedBox(
                 child: Container(
                   color: const Color.fromRGBO(37, 37, 37,1),
                   child: Column(
                     children: [
 
                       //TODO: Name should be added by user
-                      
+
                         const Padding(
                           padding: EdgeInsets.only(top:15),
                           child:  Text(

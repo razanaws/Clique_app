@@ -52,7 +52,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
       });
 
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => homepage()));
+          .push(MaterialPageRoute(builder: (context) => Homepage()));
 
       return 'success';
     } catch (e) {

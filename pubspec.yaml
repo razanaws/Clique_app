@@ -28,12 +28,16 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter_tags: "^0.1.9"
-  font_awesome_flutter:
   loading_animation_widget:
   fluttertoast:
   flutter:
     sdk: flutter
-
+  font_awesome_flutter: ^9.0.0
+  google_sign_in: ^6.0.2
+  #twitter_login: ^3.0.8
+  flutter_facebook_auth: ^5.0.8
+  the_apple_sign_in: ^1.1.1
+  provider: ^6.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,6 +45,8 @@ dependencies:
   firebase_core: ^2.8.0
   cloud_firestore: ^4.4.5
   firebase_auth: ^4.3.0
+  twitter_login: ^4.3.1
+  sign_in_with_apple: ^4.3.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +88,7 @@ flutter:
     - images/recruiterProfilePicture.jpeg
     - images/recruiterSkyscrapers.jpeg
     - images/bandProfilePicture.jpeg
+    - images/appleSymbol.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
