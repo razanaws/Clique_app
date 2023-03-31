@@ -7,6 +7,8 @@ import 'package:clique/screens/homepage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
+import '../screens/resetPasswordPage.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -36,8 +38,8 @@ class _LoginState extends State<Login> {
   Future<UserCredential> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
-    final OAuthCredential facebookAuthCredential = FacebookAuthProvider
-        .credential(loginResult.accessToken!.token);
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
@@ -46,7 +48,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((account)  async {
+    _googleSignIn.onCurrentUserChanged.listen((account) async {
       if (account != null) {
         Navigator.pushReplacement(
           context,
@@ -58,6 +60,7 @@ class _LoginState extends State<Login> {
     });
     _googleSignIn.signInSilently();
   }
+
 //Controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -86,18 +89,11 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
-
       body: SizedBox(
         height: height,
         width: width,
@@ -129,7 +125,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(color: Colors.black, fontSize: 13),
                     ),
                     floatingLabelBehavior: FloatingLabelBehavior.never,
-                    hintText: 'example_123',
+                    hintText: 'example_123@example.com',
                     hintStyle: const TextStyle(color: Colors.black26),
                     fillColor: Colors.grey,
                     filled: true,
@@ -188,9 +184,8 @@ class _LoginState extends State<Login> {
 
               TextButton(
                   onPressed: () {
-                    //setState(() {
-                    //  isLoginPage=!isLoginPage;
-                    //});
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ResetPasswordPage()));
                   },
                   child: const Text(
                     "Forgot Password? Reset your password.",
@@ -219,65 +214,62 @@ class _LoginState extends State<Login> {
                   ),
                   Expanded(
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
+                    style: ButtonStyle(
+                      backgroundColor:
                           MaterialStateProperty.all(Colors.white54),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              )),
-                        ),
-                        onPressed: signInWithFacebook,
-                        child: Image.asset(
-                          "images/facebookSymbol.png",
-                          height: 70,
-                          width: 70,
-                        ),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
                       )),
+                    ),
+                    onPressed: signInWithFacebook,
+                    child: Image.asset(
+                      "images/facebookSymbol.png",
+                      height: 70,
+                      width: 70,
+                    ),
+                  )),
                   SizedBox(
                     width: width * 0.1,
                     height: height * 0.1,
                   ),
                   Expanded(
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
+                    style: ButtonStyle(
+                      backgroundColor:
                           MaterialStateProperty.all(Colors.white54),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              )),
-                        ),
-                        onPressed: signInWithApple,
-                        child: Image.asset(
-                          "images/appleSymbol.png",
-                          height: 70,
-                          width: 70,
-                        ),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
                       )),
+                    ),
+                    onPressed: signInWithApple,
+                    child: Image.asset(
+                      "images/appleSymbol.png",
+                      height: 70,
+                      width: 70,
+                    ),
+                  )),
                   SizedBox(
                     width: width * 0.1,
                     height: height * 0.1,
                   ),
                   Expanded(
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
+                    style: ButtonStyle(
+                      backgroundColor:
                           MaterialStateProperty.all(Colors.white54),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              )),
-                        ),
-                        onPressed: () async {
-                          await _handleSignIn();
-                        },
-                        child: Image.asset(
-                          "images/googleSymbol.png",
-                          height: 70,
-                          width: 70,
-                        ),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
                       )),
+                    ),
+                    onPressed: () async {
+                      await _handleSignIn();
+                    },
+                    child: Image.asset(
+                      "images/googleSymbol.png",
+                      height: 70,
+                      width: 70,
+                    ),
+                  )),
                   SizedBox(
                     width: width * 0.1,
                     height: height * 0.1,
@@ -336,5 +328,4 @@ class _LoginState extends State<Login> {
       print(error);
     }
   }
-
 }

@@ -1,0 +1,9 @@
+diff a/lib/main.dart b/lib/main.dart	(rejected hunks)
+@@ -17,7 +17,6 @@
+   @override
+   Widget build(BuildContext context) {
+     return const MaterialApp(
+-      home:MusicianProfile()
+         debugShowCheckedModeBanner: false, home: loadingPage());
+   }
+ }
