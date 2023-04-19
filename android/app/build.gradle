@@ -30,7 +30,6 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
 
-
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
     ndkVersion "22.1.7171670"
@@ -96,9 +95,4 @@ dependencies {
 
     // Also add the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
-}
-
-android {
-    compileSdkVersion 33
-
 }

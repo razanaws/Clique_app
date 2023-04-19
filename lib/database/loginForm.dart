@@ -64,25 +64,33 @@ class _LoginState extends State<Login> {
 //Controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
+
+  bool isValidEmail(value) {
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(value);
+  }
+
+  bool isValidPassword(value) {
+    return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(value);
+  }
 
   //TODO: stay logged in
-
-  submitForm() async {
+   submitForm() async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
       //navigate to homepage after signing in.
 
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => Homepage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        //TODO: input red with warning msg
         print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        //TODO: input red with warning msg
-        print('Wrong password provided for that user.');
+        return SnackBar(content: Text('Invalid username or password'));
+
       }
     }
   }
@@ -94,9 +102,7 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
-      body: SizedBox(
-        height: height,
-        width: width,
+      body: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Column(
@@ -113,6 +119,10 @@ class _LoginState extends State<Login> {
                     if (value == null || value.isEmpty) {
                       //TODO: Validate email "xxx@xxx.com"
                       return 'This field is required.';
+                    } else if (value.contains(" ")) {
+                      return 'Spaces are not allowed';
+                    } else if (!isValidEmail(value)) {
+                      return 'Invalid Email Address';
                     }
                     return null;
                   },
@@ -142,6 +152,10 @@ class _LoginState extends State<Login> {
                     if (value == null || value.isEmpty) {
                       //TODO: Validate password ">6"
                       return 'This field is required.';
+                    } else if (value.contains(" ")) {
+                      return 'Spaces are not allowed';
+                    } else if (!isValidPassword(value)) {
+                      return 'Password cannot contain any special characters';
                     }
                     return null;
                   },
@@ -172,7 +186,15 @@ class _LoginState extends State<Login> {
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0))),
                   ),
-                  onPressed: () {
+                  onPressed:  (){
+                    if (formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Processing Data')));
+
+                    }
+
+                    //TODO:go back
+
                     submitForm();
                   },
                   child: const Text(
@@ -221,7 +243,8 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       )),
                     ),
-                    onPressed: signInWithFacebook,
+                    onPressed: // signInWithFacebook
+                        null,
                     child: Image.asset(
                       "images/facebookSymbol.png",
                       height: 70,
@@ -241,7 +264,8 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       )),
                     ),
-                    onPressed: signInWithApple,
+                    onPressed: //signInWithApple
+                        null,
                     child: Image.asset(
                       "images/appleSymbol.png",
                       height: 70,
@@ -261,9 +285,10 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30.0),
                       )),
                     ),
-                    onPressed: () async {
+                    onPressed: /*() async {
                       await _handleSignIn();
-                    },
+                    }*/
+                        null,
                     child: Image.asset(
                       "images/googleSymbol.png",
                       height: 70,
@@ -277,13 +302,12 @@ class _LoginState extends State<Login> {
                 ],
               ),
 
-              SizedBox(
-                width: width * 0.05,
-                height: height * 0.05,
-              ),
-              const Text(
-                "Don't have an account?",
-                style: TextStyle(color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: const Text(
+                  "Don't have an account?",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               //SizedBox(width: width*0.05,height: height*0.05,),
 
