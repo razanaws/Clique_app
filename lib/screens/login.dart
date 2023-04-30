@@ -14,3 +14,22 @@ class AuthScreen extends StatelessWidget {
     );
   }
 }
+
+/* keep logged in
+
+    return MaterialApp(
+
+      home: StreamBuilder(
+        stream:  FirebaseAuth.instance.authStateChanges(),
+          builder: (context, userSnapShot) {
+            //userSnapShot checks if signed in or not
+            if (userSnapShot.hasData) {
+              return const Homepage();
+            }else {
+              return const Login();
+            }
+          }
+      ),
+      debugShowCheckedModeBanner: false,
+    );
+ */

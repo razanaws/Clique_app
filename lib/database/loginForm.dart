@@ -89,8 +89,12 @@ class _LoginState extends State<Login> {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
-        return SnackBar(content: Text('Invalid username or password'));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("invalid username or password")));
 
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("invalid username or password")));
       }
     }
   }
@@ -155,7 +159,7 @@ class _LoginState extends State<Login> {
                     } else if (value.contains(" ")) {
                       return 'Spaces are not allowed';
                     } else if (!isValidPassword(value)) {
-                      return 'Password cannot contain any special characters';
+                      return 'Minimum eight characters, at least one letter and one number';
                     }
                     return null;
                   },
@@ -192,8 +196,6 @@ class _LoginState extends State<Login> {
                           const SnackBar(content: Text('Processing Data')));
 
                     }
-
-                    //TODO:go back
 
                     submitForm();
                   },

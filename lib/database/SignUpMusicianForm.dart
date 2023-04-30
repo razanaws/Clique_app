@@ -24,6 +24,14 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
   var TalentsList = ['Singer', 'Drummer', 'Guitarist']; //TODO: Add all talents
   String? _selectedItem;
 
+   validating(formkey, context) async {
+
+    if (formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Processing Data')));
+
+    }
+  }
 
   bool isValidPassword(value) {
     return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(value);
@@ -62,9 +70,12 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('The account already exists for that email.')));
       }
     } catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("something went wrong please try again later")));
     }
 
     try {
@@ -308,10 +319,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
                         //TODO: onPressed
 
                         onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Processing Data')));
-                          }
+                          validating(formKey, context);
                           //TODO:go back
 
                           submitForm();
