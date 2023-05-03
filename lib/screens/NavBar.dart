@@ -1,6 +1,8 @@
 import 'package:clique/screens/Chat.dart';
 import 'package:clique/screens/Notifications.dart';
+import 'package:clique/screens/profile/BandProfile.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
+import 'package:clique/screens/profile/RecruiterProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -24,7 +26,10 @@ class _NavBar extends State<NavBar> {
     Homepage(),
     Chat(),
     Notifications(),
-    MusicianProfile(),
+    MusicianProfile()
+    //BandProfile(),
+    //RecruiterProfile()
+    //TODO:If the user is a different kind, they should it insteas of the musicialprofile
   ];
 
 
