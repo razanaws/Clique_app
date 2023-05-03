@@ -1,3 +1,4 @@
+import 'package:clique/screens/createProfile/welcomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/screens/login.dart';
 
@@ -49,11 +50,11 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
 
   //TODO: stay logged in
 
-  submitForm() async {
+  Future<bool> CreateUserNameAndPassword() async{
     try {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
+          email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -62,14 +63,19 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('The account already exists for that email.')));
       }
+      return false;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("something went wrong please try again later")));
+    return false;
     }
+    return true;
+  }
 
+  Future<bool> CreateUserInfo() async {
     try {
       CollectionReference users =
-          FirebaseFirestore.instance.collection('Recruiters');
+      FirebaseFirestore.instance.collection('Recruiters');
       // Call the user's CollectionReference to connect user email
       await users.doc(emailController.text).set({
         //TODO: Validate data + password
@@ -79,13 +85,36 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
         'company': companyController.text
       });
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => Homepage()));
-
-      return 'success';
     } catch (e) {
-      return 'Error adding user';
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("something went wrong please try again later")));
+      return false;
     }
+    return true;
+  }
+
+  submitForm() async {
+    CreateUserNameAndPassword().then((value) {
+      if(value == true){
+        CreateUserInfo().then((value2){
+          if(value2 == true){
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => WelcomePage()));
+          }
+          else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("something went wrong please try again later")));
+          }
+        });
+      }
+      else
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("something went wrong please try again later")));
+      }
+
+    });
+
   }
 
   @override
@@ -143,7 +172,6 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                   child: TextFormField(
                     controller: usernameController,
                     validator: (value) {
-                      print("in validator");
                       if (value == null || value.isEmpty) {
                         return 'Field is required';
                       } else if (value.contains(" ")) {

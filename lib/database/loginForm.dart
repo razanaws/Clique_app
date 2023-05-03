@@ -83,20 +83,20 @@ class _LoginState extends State<Login> {
           email: emailController.text.trim(),
           password: passwordController.text.trim());
       //navigate to homepage after signing in.
-
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => Homepage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("invalid username or password")));
+        return false;
 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("invalid username or password")));
+        return false;
       }
     }
+    return true;
   }
 
   @override
