@@ -5,7 +5,7 @@ import 'package:clique/screens/signup/musicianSignUp.dart';
 import 'package:clique/screens/signup/recruiterSignUp.dart';
 import 'package:clique/screens/homepage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+//import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -33,14 +33,14 @@ class _LoginState extends State<Login> {
   }
 
 //FB
-  Future<UserCredential> signInWithFacebook() async {
+ /* Future<UserCredential> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
     final OAuthCredential facebookAuthCredential = FacebookAuthProvider
         .credential(loginResult.accessToken!.token);
 
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
+  }*/
 
 //Google
   @override
@@ -227,7 +227,7 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(30.0),
                               )),
                         ),
-                        onPressed: signInWithFacebook,
+                        onPressed:null,// signInWithFacebook,
                         child: Image.asset(
                           "images/facebookSymbol.png",
                           height: 70,

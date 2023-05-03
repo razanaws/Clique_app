@@ -1,6 +1,8 @@
+// TODO Implement this library.
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class Users {
   final String uid;
   final String username;
   final String email;
@@ -10,7 +12,7 @@ class User {
   final String location;
 
 
-  User({
+  Users({
     required this.uid,
     required this.username,
     required this.email,
@@ -21,8 +23,8 @@ class User {
 
   });
 
-  factory User.fromDocument(DocumentSnapshot doc) {
-    return User(
+  factory Users.fromDocument(DocumentSnapshot doc) {
+    return Users(
       uid: doc['uid'],
       email: doc['email'],
       username: doc['username'],

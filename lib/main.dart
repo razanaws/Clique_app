@@ -5,6 +5,7 @@
 import 'package:clique/database/loginForm.dart';
 import 'package:clique/firebase_options.dart';
 import 'package:clique/screens/profile/BandProfile.dart';
+import 'package:clique/screens/profile/BandProfileEdit.dart';
 import 'package:clique/screens/profile/RecruiterProfile.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home:Login()
+      home:BandProfileEdit()
     );
   }
 }
