@@ -28,10 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -63,6 +60,18 @@ class DefaultFirebaseOptions {
     messagingSenderId: '682011767728',
     projectId: 'cliquegradproject',
     storageBucket: 'cliquegradproject.appspot.com',
+    androidClientId: '682011767728-iu4criv4q03aisfi2290qu5bc1tdh38q.apps.googleusercontent.com',
+    iosClientId: '682011767728-hgu0pjt9reccfmuomdahi93n61h5i3r6.apps.googleusercontent.com',
+    iosBundleId: 'com.example.clique',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDtj4yaS446A5wp3aUjliip5OpkCIuufKg',
+    appId: '1:682011767728:ios:416f67d796b3659ef91c75',
+    messagingSenderId: '682011767728',
+    projectId: 'cliquegradproject',
+    storageBucket: 'cliquegradproject.appspot.com',
+    androidClientId: '682011767728-iu4criv4q03aisfi2290qu5bc1tdh38q.apps.googleusercontent.com',
     iosClientId: '682011767728-hgu0pjt9reccfmuomdahi93n61h5i3r6.apps.googleusercontent.com',
     iosBundleId: 'com.example.clique',
   );
