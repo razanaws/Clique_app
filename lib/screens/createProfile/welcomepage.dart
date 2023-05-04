@@ -28,7 +28,7 @@ class WelcomePage extends StatelessWidget {
           children: [
             Center(
               child: Image(
-                image: AssetImage('images/welcome.png'),
+                  image: AssetImage('images/welcome.png'),
                 fit: BoxFit.fill,
               ),
             ),
@@ -38,10 +38,10 @@ class WelcomePage extends StatelessWidget {
               child: Text(
                 "Hello ${User.name}!",
                 style: const TextStyle(
-                    fontSize: 30,
-                    fontFamily: 'SanFrancisco',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white70
+                  fontSize: 30,
+                  fontFamily: 'SanFrancisco',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70
                 ),
               ),
             ),
@@ -80,7 +80,7 @@ class WelcomePage extends StatelessWidget {
                     'Create my profile',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18
+                      fontSize: 18
                     )
                     ,
                   ),

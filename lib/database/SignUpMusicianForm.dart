@@ -1,3 +1,4 @@
+import 'package:clique/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/screens/login.dart';
 import 'package:clique/screens/homepage.dart';
@@ -99,7 +100,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
         CreateUserInfo().then((value2){
           if(value2 == true){
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => WelcomePage()));
+                .push(MaterialPageRoute(builder: (context) => WelcomePage(User: new user(nameController.text))));
           }
           else {
             ScaffoldMessenger.of(context).showSnackBar(

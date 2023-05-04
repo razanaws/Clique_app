@@ -240,14 +240,14 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     onPressed: null,
                                     style: ButtonStyle(
                                         backgroundColor:
-                                        MaterialStateProperty.all(
-                                            const Color.fromRGBO(
-                                                100, 13, 20, 1)),
+                                            MaterialStateProperty.all(
+                                                const Color.fromRGBO(
+                                                    100, 13, 20, 1)),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(
-                                                    50.0)))),
+                                                    BorderRadius.circular(
+                                                        50.0)))),
                                     child: const Text('Create a Band',
                                         style: TextStyle(color: Colors.white)),
                                   )
@@ -308,11 +308,11 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(bottom: 2.0),
+                                            const EdgeInsets.only(bottom: 2.0),
                                         child: Row(
                                           children: const [
                                             Text(
@@ -325,7 +325,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                       ),
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(bottom: 2.0),
+                                            const EdgeInsets.only(bottom: 2.0),
                                         child: Row(
                                           children: const [
                                             Text(
@@ -366,13 +366,13 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                                                   height: 60.0,
                                                                   width: 60.0,
                                                                   decoration:
-                                                                  const BoxDecoration(
+                                                                      const BoxDecoration(
                                                                     shape: BoxShape
                                                                         .circle,
                                                                     color: Colors
                                                                         .red,
                                                                     image:
-                                                                    DecorationImage(
+                                                                        DecorationImage(
                                                                       image: AssetImage(
                                                                           "images/drummerMan.jpg"),
                                                                       fit: BoxFit
@@ -404,13 +404,13 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                                                   height: 60.0,
                                                                   width: 60.0,
                                                                   decoration:
-                                                                  const BoxDecoration(
+                                                                      const BoxDecoration(
                                                                     shape: BoxShape
                                                                         .circle,
                                                                     color: Colors
                                                                         .red,
                                                                     image:
-                                                                    DecorationImage(
+                                                                        DecorationImage(
                                                                       image: AssetImage(
                                                                           "images/drummerMan.jpg"),
                                                                       fit: BoxFit

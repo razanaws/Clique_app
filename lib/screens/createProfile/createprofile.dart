@@ -19,7 +19,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<void> _pickProfilePicture() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _profilePicture = File(pickedFile.path);
@@ -32,7 +32,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<void> _pickCoverPhoto() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _coverPhoto = File(pickedFile.path);
@@ -95,12 +95,12 @@ class _CreateProfileState extends State<CreateProfile> {
                   color: Colors.grey,
                   child: _coverPhoto == null
                       ? const Center(
-                      child: Text('Click here to upload a cover photo'))
+                          child: Text('Click here to upload a cover photo'))
                       : Image.file(
-                    _coverPhoto!,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
+                          _coverPhoto!,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 onTap: () {
                   _pickCoverPhoto();
@@ -118,18 +118,18 @@ class _CreateProfileState extends State<CreateProfile> {
                 width: 120.0,
                 decoration: BoxDecoration(
                   border:
-                  Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
+                      Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
                   color: Colors.grey,
                   shape: BoxShape.circle,
                 ),
                 child: _profilePicture == null
                     ? const Center(child: const Icon(Icons.add, size: 30))
                     : ClipOval(
-                  child: Image.file(
-                    _profilePicture!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                      child: Image.file(
+                          _profilePicture!,
+                          fit: BoxFit.cover,
+                        ),
+                    ),
               ),
               onTap: () {
                 _pickProfilePicture();

@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:clique/screens/homepage.dart';
 
+import '../models/user.dart';
+
 class SignUpRecruiterForm extends StatefulWidget {
   const SignUpRecruiterForm({Key? key}) : super(key: key);
 
@@ -99,7 +101,7 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
         CreateUserInfo().then((value2){
           if(value2 == true){
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => WelcomePage()));
+                .push(MaterialPageRoute(builder: (context) => WelcomePage(User: new user(nameController.text))));
           }
           else {
             ScaffoldMessenger.of(context).showSnackBar(
