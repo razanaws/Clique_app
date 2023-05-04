@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-
 class RecruiterProfile extends StatefulWidget {
   const RecruiterProfile({Key? key}) : super(key: key);
 
   @override
   State<RecruiterProfile> createState() => _RecruiterProfileState();
 }
-
-
 
 /*
 class MultiSelectChipGenres extends StatefulWidget {
@@ -148,347 +145,332 @@ class _MultiSelectChipStateInstruments extends State<MultiSelectChip> {
 
 */
 
-
 class _RecruiterProfileState extends State<RecruiterProfile> {
-  var scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
-
-    double height=MediaQuery.of(context).size.height;
-    double width=MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(37, 37, 37,1),
+      backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
       body: Stack(
-
         alignment: Alignment.center,
         children: <Widget>[
-          PrimaryScrollController(
-            controller:ScrollController(),
-
-            child: ListView(
-              children: [
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: <Widget>[
-                  //TODO: Cover Picture should be added
-                  Container(
-                    height: height*0.38,
-                    color: const Color.fromRGBO(37, 37, 37,1),
-                    child: Center(
-                      child: Image.asset(
-                        "images/recruiterSkyscrapers.jpeg",
-                        fit: BoxFit.fitWidth,
-                        height: height*0.3,
-                        width: width,
-                      ),
-                    ),
+          Column(
+            children: <Widget>[
+              //TODO: Cover Picture should be added
+              Container(
+                height: height * 0.3,
+                color: Colors.grey,
+                child: Center(
+                  child: Image.asset(
+                    "images/recruiterSkyscrapers.jpeg",
+                    fit: BoxFit.fitWidth,
+                    height: height * 0.3,
+                    width: width,
                   ),
-                    Positioned(
-                    //(background container size) - (circle height / 2)
-                    top: (height*0.3) - (120/2),
-                    right: width*0.67,
-                    child: Container(
-                      height: 120.0,
-                      width: 120.0,
-                      child:const CircleAvatar(
-                        backgroundColor: Colors.red,
-                        backgroundImage: NetworkImage
-                          ("images/recruiterProfilePicture.jpeg"),
-                        //fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  ]
                 ),
+              ),
+              SizedBox(height: height * 0.5),
 
-                  Expanded(
+              SizedBox(
+                child: Container(
+                  color: const Color.fromRGBO(37, 37, 37, 1),
+                  child: Column(
+                    children: [
+                      //TODO: Name should be added by user
 
-                    child: Container(
-                      color: const Color.fromRGBO(37, 37, 37,1),
-                      child: Column(
-                        children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Text(
+                          "Recruiter's NAME HERE",
+                          style: TextStyle(color: Colors.white70, fontSize: 20),
+                        ),
+                      ),
 
-                          //TODO: Name should be added by user
+                      SizedBox(height: height * 0.05),
 
-                            const Padding(
-                              padding: EdgeInsets.only(top:15),
-                              child:  Text(
-                                "Recruiter's NAME HERE",
-                                style:  TextStyle(
-                                    color: Colors.white70, fontSize: 20
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                        ),
+                        child: Column(
+                          children: [
+                            //TODO: location
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: const TextSpan(children: [
+                                    WidgetSpan(
+                                      child: Icon(
+                                        Icons.pin_drop_outlined,
+                                        size: 20,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                        text: "  Country, city..etc",
+                                        style: TextStyle(fontSize: 17))
+                                  ]),
                                 ),
-                              ),
-
+                              ],
+                            ),
+                            //TODO: bio
+                            Row(
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    "Bio goes here",
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 17),
+                                  ),
+                                ),
+                              ],
                             ),
 
-                          SizedBox(height: height*0.05),
+                            //TODO: onPress
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: null,
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                        MaterialStateProperty.all(
+                                            const Color.fromRGBO(
+                                                100, 13, 20, 1)),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    50.0)))),
+                                    child: const Text('Create a Band',
+                                        style: TextStyle(color: Colors.white)),
+                                  )
+                                ],
+                              ),
+                            ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10,),
-                            child: Column(
+                            const Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Genres",
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+
+                            //TODO: rock etc
+
+                            const Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Requirements",
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+
+                            Row(
                               children: [
-
-                                //TODO: location
-                                Row(
-                                  mainAxisAlignment:MainAxisAlignment.start,
-                                  children: [
-                                    RichText(
-                                      text: const TextSpan(
-                                          children: [
-                                            WidgetSpan(
-                                              child: Icon(
-                                                Icons.pin_drop_outlined,
-                                                size: 20,
-                                                color: Colors.white70,),
-                                            ),
-                                            TextSpan(
-                                                text: "  Country, city..etc",
-                                                style: TextStyle(fontSize: 17)
-                                            )
-                                          ]
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                //TODO: bio
-                                Row(
-                                  children: const [
-                                    Padding(
-                                      padding: EdgeInsets.all(10.0),
-                                      child: Text(
-                                        "Bio goes here",
-                                        style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 17
-                                        ),
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-
-                                //TODO: onPress
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                  padding: const EdgeInsets.only(bottom: 240.0),
+                                  child: Column(
+                                    //crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      ElevatedButton(
-                                        onPressed: null,
-                                        style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(100, 13, 20, 1)),
-                                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(50.0)))
-                                        ),
-                                        child: const Text(
-                                            'Create a Band',
-                                            style: TextStyle(
-                                                color: Colors.white)
+                                      Container(
+                                        height: 60.0,
+                                        width: 60.0,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red,
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                "images/recruiterProfilePicture.jpeg"),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       )
                                     ],
                                   ),
                                 ),
-
-
-
-                                const Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Genres",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-
-                                    ),
-                                  ),
-                                ),
-
-
-
-                                //TODO: rock etc
-
-                                const Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Requirements",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-
-                                    ),
-                                  ),
-                                ),
-
-
-                                Row(
-                                  children: [
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom:240.0),
-                                      child: Column(
-                                        //crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 60.0,
-                                            width: 60.0,
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.red,
-                                              image: DecorationImage(
-                                                image: AssetImage("images/recruiterProfilePicture.jpeg"),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),)
-                                        ],
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(bottom: 2.0),
+                                        child: Row(
+                                          children: const [
+                                            Text(
+                                              "Recruiter's Name",
+                                              style: TextStyle(
+                                                  color: Colors.white70),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(bottom: 2.0),
+                                        child: Row(
+                                          children: const [
+                                            Text(
+                                              "2d ago",
+                                              style: TextStyle(
+                                                  color: Colors.white70),
+                                            )
+                                          ], //TODO: time-postTime
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Row(children: [
+                                          /*Image.asset(
+                                                "images/splashingDrums.png",
+                                                fit: BoxFit.fill,
+                                                height: height*0.3,
+                                                width: width*0.8,
+                                              ),*/
 
-                                    Padding(
-                                      padding: const EdgeInsets.only(left:8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(bottom:2.0),
-                                            child: Row(
-                                              children: const [
-                                                Text(
-                                                  "Recruiter's Name",
-                                                  style: TextStyle(color: Colors.white70),
-
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(bottom:2.0),
-                                            child: Row(
-                                              children: const [Text(
-                                                "2d ago",
-                                                style: TextStyle(color: Colors.white70),
-                                              )],//TODO: time-postTime
-                                            ),
-                                          ),
-                                          Center(
-                                            child: Row(
-                                                children: [
-                                                  /*Image.asset(
-                                                    "images/splashingDrums.png",
-                                                    fit: BoxFit.fill,
-                                                    height: height*0.3,
-                                                    width: width*0.8,
-                                                  ),*/
-
-                                                  Flexible(
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        const Divider(
-                                                            color: Colors.grey
-                                                        ),
-                                                        //TODO:Recruiter
-                                                        const Text("Users Recruited by Recruiter's Name"),
+                                          Flexible(
+                                            child: Column(
+                                              children: <Widget>[
+                                                const Divider(
+                                                    color: Colors.grey),
+                                                //TODO:Recruiter
+                                                const Text(
+                                                    "Users Recruited by Recruiter's Name"),
+                                                Row(
+                                                  children: [
+                                                    Column(
+                                                      children: [
                                                         Row(
                                                           children: [
                                                             Column(
-                                                              children:[
-                                                                Row(children: [
-                                                                  Column(
-                                                                    //crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Container(
-                                                                        height: 60.0,
-                                                                        width: 60.0,
-                                                                        decoration: const BoxDecoration(
-                                                                          shape: BoxShape.circle,
-                                                                          color: Colors.red,
-                                                                          image: DecorationImage(
-                                                                            image: AssetImage("images/drummerMan.jpg"),
-                                                                            fit: BoxFit.cover,
-                                                                          ),
-                                                                        ),)
-                                                                    ],
+                                                              //crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Container(
+                                                                  height: 60.0,
+                                                                  width: 60.0,
+                                                                  decoration:
+                                                                  const BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    color: Colors
+                                                                        .red,
+                                                                    image:
+                                                                    DecorationImage(
+                                                                      image: AssetImage(
+                                                                          "images/drummerMan.jpg"),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
                                                                   ),
-                                                                ],),
-                                                                //TODO: connect the recruited users
-                                                                Row(children:const [
-                                                                  Text("Musician's Name"),
-                                                                ],),
-                                                              ],
-
-                                                            ),
-
-                                                            Column(
-                                                              children:[
-                                                                Row(children: [
-                                                                  Column(
-                                                                    //crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Container(
-                                                                        height: 60.0,
-                                                                        width: 60.0,
-                                                                        decoration: const BoxDecoration(
-                                                                          shape: BoxShape.circle,
-                                                                          color: Colors.red,
-                                                                          image: DecorationImage(
-                                                                            image: AssetImage("images/drummerMan.jpg"),
-                                                                            fit: BoxFit.cover,
-                                                                          ),
-                                                                        ),)
-                                                                    ],
-                                                                  ),
-                                                                ],),
-                                                                Row(children:const [
-                                                                  Text("Band's Name"),
-                                                                ],),
+                                                                )
                                                               ],
                                                             ),
                                                           ],
                                                         ),
+                                                        //TODO: connect the recruited users
+                                                        Row(
+                                                          children: const [
+                                                            Text(
+                                                                "Musician's Name"),
+                                                          ],
+                                                        ),
                                                       ],
                                                     ),
-                                                  ),
-
-                                                ]
-
+                                                    Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Column(
+                                                              //crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Container(
+                                                                  height: 60.0,
+                                                                  width: 60.0,
+                                                                  decoration:
+                                                                  const BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    color: Colors
+                                                                        .red,
+                                                                    image:
+                                                                    DecorationImage(
+                                                                      image: AssetImage(
+                                                                          "images/drummerMan.jpg"),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: const [
+                                                            Text("Band's Name"),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ),
-
-
-
-                                        ],
+                                        ]),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-
                               ],
                             ),
-
-                          ),
-
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
 
-                ],
-            )
+          // TODO: Profile image
+          Positioned(
+            //(background container size) - (circle height / 2)
+            top: (height * 0.3) - (120 / 2),
+            right: width * 0.67,
+            child: Container(
+              height: 120.0,
+              width: 120.0,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red,
+                image: DecorationImage(
+                  image: AssetImage("images/recruiterProfilePicture.jpeg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
-
-
-
-
-
-
-
   }
 }
