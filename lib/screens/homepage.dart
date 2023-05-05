@@ -1,11 +1,11 @@
 import 'package:clique/screens/chat/Chat.dart';
-import 'package:clique/screens/Notifications.dart';
+import 'package:clique/screens/notifications/Notifications.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'NavBar.dart';
+import 'navigationBar/NavBar.dart';
 
 
 class Homepage extends StatefulWidget {
