@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import 'login.dart';
+import 'login/login.dart';
 
 class loadingPage extends StatefulWidget {
   const loadingPage({Key? key}) : super(key: key);

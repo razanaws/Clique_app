@@ -1,4 +1,4 @@
-import 'package:clique/screens/Chat.dart';
+import 'package:clique/screens/chat/Chat.dart';
 import 'package:clique/screens/Notifications.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:flutter/material.dart';

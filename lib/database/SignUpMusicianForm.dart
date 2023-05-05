@@ -1,6 +1,6 @@
 import 'package:clique/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:clique/screens/login.dart';
+import 'package:clique/screens/login/login.dart';
 import 'package:clique/screens/homepage.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

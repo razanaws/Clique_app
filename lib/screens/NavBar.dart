@@ -1,5 +1,6 @@
-import 'package:clique/screens/Chat.dart';
+import 'package:clique/screens/chat/Chat.dart';
 import 'package:clique/screens/Notifications.dart';
+import 'package:clique/drawers/SettingsDrawer.dart';
 import 'package:clique/screens/profile/BandProfile.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:clique/screens/profile/RecruiterProfile.dart';
@@ -38,8 +39,8 @@ class _NavBar extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
-      appBar: AppBar(
-      ),
+
+      //Navigation Bar
       body: IndexedStack(index: selectedIndexNavBar,children:pages,),
       bottomNavigationBar: Container(
 
@@ -70,6 +71,25 @@ class _NavBar extends State<NavBar> {
           ),
         ),
       ),
+
+
+
+
+
+      //Drawer Menu
+      appBar: AppBar(
+
+        backgroundColor: Colors.black,
+        leading: Builder(
+          builder:(context) {
+            return IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: ()=>Scaffold.of(context).openDrawer(),);
+          }
+        ),
+
+      ),
+      drawer: SettingsDrawer(),
     );
 
 

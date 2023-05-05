@@ -1,12 +1,13 @@
-import 'package:clique/screens/Chat.dart';
+import 'package:clique/screens/chat/Chat.dart';
 import 'package:clique/screens/LoadingScreen.dart';
 import 'package:clique/screens/NavBar.dart';
 import 'package:clique/screens/homepage.dart';
+import 'package:clique/screens/privacyPolicy/PrivacyPolicy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-import 'package:clique/screens/login.dart';
+import 'package:clique/screens/login/login.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: NavBar(),
+
     );
   }
 }
