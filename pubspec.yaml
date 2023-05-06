@@ -97,6 +97,14 @@ flutter:
     - images/bandProfilePicture.jpeg
     - images/appleSymbol.png
     - images/welcome.png
+    - images/userImage1.jpg
+    - images/userImage2.jpeg
+    - images/userImage3.jpeg
+    - images/userImage4.jpeg
+    - images/userImage5.jpeg
+    - images/userImage6.jpeg
+    - images/userImage7.jpeg
+    - images/userImage8.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

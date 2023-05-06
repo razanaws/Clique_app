@@ -1,4 +1,4 @@
-import 'package:clique/screens/chat/Chat.dart';
+import 'package:clique/screens/chat/ConversationList.dart';
 import 'package:clique/screens/notifications/Notifications.dart';
 import 'package:clique/drawers/SettingsDrawer.dart';
 import 'package:clique/screens/profile/BandProfile.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../chat/ChatPreviewList.dart';
 import '../homepage.dart';
 
 
@@ -25,12 +26,12 @@ class _NavBar extends State<NavBar> {
   int selectedIndexNavBar=0;
   static const List<Widget> pages = <Widget>[
     Homepage(),
-    Chat(),
+    ChatPreviewList(),
     Notifications(),
-    MusicianProfile()
+    MusicianProfile(),
     //BandProfile(),
     //RecruiterProfile()
-    //TODO:If the user is a different kind, they should it insteas of the musicialprofile
+    //TODO:If the user is a different kind, they should it instead of the musicianprofile
   ];
 
 
@@ -38,6 +39,8 @@ class _NavBar extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: false,
+
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
 
       //Navigation Bar

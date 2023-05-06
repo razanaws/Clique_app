@@ -1,4 +1,3 @@
-import 'package:clique/screens/chat/Chat.dart';
 import 'package:clique/screens/loadingScreen/LoadingScreen.dart';
 import 'package:clique/screens/navigationBar/NavBar.dart';
 import 'package:clique/screens/homepage.dart';
