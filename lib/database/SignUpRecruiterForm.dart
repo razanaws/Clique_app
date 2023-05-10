@@ -5,7 +5,7 @@ import 'package:clique/screens/login/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:clique/screens/homepage.dart';
+import 'package:clique/screens/swipingCards/homepage.dart';
 
 import '../models/user.dart';
 

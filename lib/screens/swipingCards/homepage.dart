@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'navigationBar/NavBar.dart';
+import '../navigationBar/NavBar.dart';
+import 'BackgroudCurveWidget.dart';
+import 'CardsStackWidget.dart';
 
 
 class Homepage extends StatefulWidget {
@@ -43,8 +45,11 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      child: Text("Hellllooooooo"),
+    return Stack(
+      children: [
+        BackgroudCurveWidget(),
+        CardsStackWidget(),
+      ],
     );
 
   }

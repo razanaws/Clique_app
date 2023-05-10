@@ -1,6 +1,6 @@
 import 'package:clique/screens/loadingScreen/LoadingScreen.dart';
 import 'package:clique/screens/navigationBar/NavBar.dart';
-import 'package:clique/screens/homepage.dart';
+import 'package:clique/screens/swipingCards/homepage.dart';
 import 'package:clique/screens/privacyPolicy/PrivacyPolicy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -9,7 +9,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../chat/ChatPreviewList.dart';
-import '../homepage.dart';
+import '../swipingCards/homepage.dart';
 
 
 class NavBar extends StatefulWidget {
