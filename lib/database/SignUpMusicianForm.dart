@@ -100,7 +100,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
         CreateUserInfo().then((value2){
           if(value2 == true){
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => WelcomePage(User: new user(nameController.text))));
+                .push(MaterialPageRoute(builder: (context) => WelcomePage(User: new user(nameController.text, emailController.text))));
           }
           else {
             ScaffoldMessenger.of(context).showSnackBar(

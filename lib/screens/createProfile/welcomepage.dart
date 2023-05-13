@@ -74,7 +74,7 @@ class WelcomePage extends StatelessWidget {
                   ),
                   onPressed:  (){
                     Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (context) => CreateProfile()));
+                        context, MaterialPageRoute(builder: (context) => CreateProfile(User:  User)));
                   },
                   child: const Text(
                     'Create my profile',

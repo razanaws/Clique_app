@@ -2,5 +2,6 @@ import 'package:flutter/material.dart';
 
 class user{
   final String name;
-  user(this.name);
+  final String email;
+  user(this.name, this.email);
 }
