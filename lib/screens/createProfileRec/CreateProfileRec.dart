@@ -6,39 +6,38 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clique/models/user.dart';
 
-import '../navigationBar/NavBar.dart';
 
 
 
-class CreateProfile extends StatefulWidget {
+class CreateProfileRec extends StatefulWidget {
   final user User;
-  const CreateProfile({required this.User});
+  const CreateProfileRec({required this.User});
 
   @override
-  State<CreateProfile> createState() => _CreateProfileState();
+  State<CreateProfileRec> createState() => _CreateProfileRecState();
 }
 
-class _CreateProfileState extends State<CreateProfile> {
+class _CreateProfileRecState extends State<CreateProfileRec> {
   File? _profilePicture;
   File? _coverPhoto;
-  List<String> _instruments = [];
+  List<String> _requirements = [];
   List<String> _genres = [];
   final _formKey = GlobalKey<FormState>();
 
   final ImagePicker _picker = ImagePicker();
   TextEditingController bioController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  TextEditingController instrumentsController = TextEditingController();
+  TextEditingController requirementsController = TextEditingController();
   TextEditingController genresController = TextEditingController();
 
-  String? _validateTalents(String? value) {
+  String? _validateRequirements(String? value) {
     if (value!.isEmpty) {
-      return 'Please enter your talents';
+      return 'Please enter your requirements';
     }
 
     final regex = RegExp(r'^[a-zA-Z]+\s?(,\s?[a-zA-Z]+)*$');
     if (!regex.hasMatch(value)) {
-      return 'Invalid format. Only talents separated by commas are allowed';
+      return 'Invalid format. Only requirements separated by commas are allowed';
     }
 
     return null;
@@ -58,27 +57,27 @@ class _CreateProfileState extends State<CreateProfile> {
   }
 
 
-   _submitForm() async {
+  _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _instruments = instrumentsController.text.replaceAll(' ', '').split(',');
+        _requirements = requirementsController.text.replaceAll(' ', '').split(',');
         _genres = genresController.text.replaceAll(' ', '').split(',');
 
       });
-      print(_instruments);
 
       try {
-        CollectionReference users = FirebaseFirestore.instance.collection('Musicians');
+        CollectionReference users = FirebaseFirestore.instance.collection('Recruiters');
         await users.doc(widget.User.email).update({
           'bio': bioController.text.trim(),
           'location' : locationController.text.trim(),
-          'instruments' : _instruments,
+          'requirements' : _requirements,
           'genres': _genres,
+
         });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("something went wrong please try again later")));
-            return false;
+        return false;
       }
       Navigator.pushReplacement(
         context,
@@ -92,13 +91,13 @@ class _CreateProfileState extends State<CreateProfile> {
 
   @override
   void dispose() {
-    instrumentsController.dispose();
+    requirementsController.dispose();
     super.dispose();
   }
 
   Future<void> _StoreProfileUrl(downloadUrl) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('Musicians');
+      CollectionReference users = FirebaseFirestore.instance.collection('Recruiters');
       await users.doc(widget.User.email).update({
         'profileUrl': downloadUrl
       });
@@ -111,7 +110,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<void> _StorCoverUrl(downloadUrl) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('Musicians');
+      CollectionReference users = FirebaseFirestore.instance.collection('Recruiters');
       await users.doc(widget.User.email).update({
         'coverUrl': downloadUrl
       });
@@ -125,7 +124,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<void> _pickProfilePicture() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _profilePicture = File(pickedFile.path);
@@ -138,7 +137,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<void> _pickCoverPhoto() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _coverPhoto = File(pickedFile.path);
@@ -209,19 +208,19 @@ class _CreateProfileState extends State<CreateProfile> {
                     color: Colors.grey,
                     child: _coverPhoto == null
                         ? const Center(
-                            child: Text('Click here to upload a cover photo'))
+                        child: Text('Click here to upload a cover photo'))
                         : Image.file(
-                            _coverPhoto!,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
+                      _coverPhoto!,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   onTap: () {
                     _pickCoverPhoto();
                   },
                 ),
                 SizedBox(height: 100),
-                
+
                 Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -230,10 +229,10 @@ class _CreateProfileState extends State<CreateProfile> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                              "Tell us more about you ${widget.User.name}",
+                            "Tell us more about you ${widget.User.name}",
                             style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white70
+                                fontSize: 20,
+                                color: Colors.white70
                             ),
                           ),
                         ),
@@ -252,15 +251,15 @@ class _CreateProfileState extends State<CreateProfile> {
                               controller: bioController,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(30.0)
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(30.0)
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
+                                  borderRadius: BorderRadius.circular(30.0),
                                   borderSide: BorderSide(color: Colors.white), // Set enabled border color
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
+                                  borderRadius: BorderRadius.circular(30.0),
                                   borderSide: BorderSide(color: Colors.white), // Set focused border color
                                 ),
 
@@ -280,7 +279,7 @@ class _CreateProfileState extends State<CreateProfile> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Where can people find you?",
+                            "Whats the location of your company",
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white70
@@ -331,7 +330,7 @@ class _CreateProfileState extends State<CreateProfile> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Tell us more about your instruments\n         seperated by a comma",
+                            "Tell us more about your requirements\n           seperated by a comma",
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white70
@@ -343,10 +342,10 @@ class _CreateProfileState extends State<CreateProfile> {
                           child: Container(
                             width: 300,
                             child: TextFormField(
-                              validator: _validateTalents,
+                              validator: _validateRequirements,
                               style: TextStyle(color: Colors.white70),
                               maxLines: 1,
-                              controller: instrumentsController,
+                              controller: requirementsController,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
@@ -361,7 +360,7 @@ class _CreateProfileState extends State<CreateProfile> {
                                   borderSide: BorderSide(color: Colors.white), // Set focused border color
                                 ),
 
-                                label: const Text("Talent1, talent2, talent3",
+                                label: const Text("Requirement1, Requirement2, Requirement3",
                                     style: TextStyle(color: Colors.white70, fontSize: 13)),
                                 floatingLabelBehavior: FloatingLabelBehavior.never,
                                 hintStyle: const TextStyle(color: Colors.white70),
@@ -432,9 +431,9 @@ class _CreateProfileState extends State<CreateProfile> {
                           ),
                           onPressed: _submitForm,
                           child: Text(
-                              'Create profile',
+                            'Create profile',
                             style: TextStyle(
-                              fontSize: 17
+                                fontSize: 17
                             ),
                           ),
                         ),
@@ -457,18 +456,18 @@ class _CreateProfileState extends State<CreateProfile> {
                   width: 120.0,
                   decoration: BoxDecoration(
                     border:
-                        Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
+                    Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
                     color: Colors.grey,
                     shape: BoxShape.circle,
                   ),
                   child: _profilePicture == null
                       ? const Center(child: const Icon(Icons.add, size: 30))
                       : ClipOval(
-                        child: Image.file(
-                            _profilePicture!,
-                            fit: BoxFit.cover,
-                          ),
-                      ),
+                    child: Image.file(
+                      _profilePicture!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 onTap: () {
                   _pickProfilePicture();

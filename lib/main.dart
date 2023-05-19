@@ -1,3 +1,4 @@
+import 'package:clique/database/loginForm.dart';
 import 'package:clique/screens/loadingScreen/LoadingScreen.dart';
 import 'package:clique/screens/navigationBar/NavBar.dart';
 import 'package:clique/screens/swipingCards/homepage.dart';
@@ -26,10 +27,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: NavBar(),
+    return MaterialApp(
 
+      home: StreamBuilder(
+          stream:  FirebaseAuth.instance.authStateChanges(),
+          builder: (context, userSnapShot) {
+            //userSnapShot checks if signed in or not
+            if (userSnapShot.hasData) {
+              return NavBar();
+            }else {
+              return const Login();
+            }
+          }
+      ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

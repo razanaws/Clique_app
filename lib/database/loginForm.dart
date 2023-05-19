@@ -1,3 +1,4 @@
+import 'package:clique/screens/navigationBar/NavBar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,8 +77,7 @@ class _LoginState extends State<Login> {
     return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(value);
   }
 
-  //TODO: stay logged in
-   submitForm() async {
+  Future<bool> validateUserInfo() async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
@@ -97,6 +97,20 @@ class _LoginState extends State<Login> {
       }
     }
     return true;
+
+  }
+
+  //TODO: stay logged in
+   submitForm() async {
+    validateUserInfo().then((value) {
+      if (value == true)
+        {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => NavBar()));
+        }
+
+    });
+
   }
 
   @override

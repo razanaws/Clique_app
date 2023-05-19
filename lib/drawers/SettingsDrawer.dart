@@ -1,17 +1,27 @@
+import 'package:clique/database/loginForm.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:flutter/material.dart';
-
 import '../screens/createProfile/CreateBand.dart';
 import '../screens/createProfile/ViewBands.dart';
-import '../screens/login/Logout.dart';
 import '../screens/privacyPolicy/PrivacyPolicy.dart';
 import 'SettingsSubDrawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({Key? key}) : super(key: key);
 
-
+   logoutUser(context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Redirect or show login screen
+    } catch (e) {
+      print('Error occurred while logging out: $e');
+      return false;
+    }
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context)=>Login()));
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -75,14 +85,10 @@ class SettingsDrawer extends StatelessWidget {
             const SizedBox(height: 10,),
             const Divider(color: Colors.white,height: 5,),
 
-
-
             buildMenuItem(
               text:'Log out',
               icon:Icons.logout,
               onClicked: ()=>selectedItem(context,4)),
-
-
 
           ],
         ),
@@ -128,8 +134,8 @@ class SettingsDrawer extends StatelessWidget {
             MaterialPageRoute(builder: (context)=>ViewBands()));
         break;
         //TODO:Log out page or functionality
-        case 4:Navigator.of(context).push(
-            MaterialPageRoute(builder: (context)=>Logout()));
+        case 4:
+          logoutUser(context);
         break;
 
 

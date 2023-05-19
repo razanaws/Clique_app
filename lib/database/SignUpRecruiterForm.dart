@@ -1,4 +1,5 @@
 import 'package:clique/screens/createProfile/welcomepage.dart';
+import 'package:clique/screens/createProfileRec/welcomePageRec.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/screens/login/login.dart';
 
@@ -101,7 +102,7 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
         CreateUserInfo().then((value2){
           if(value2 == true){
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => WelcomePage(User: new user(nameController.text, emailController.text))));
+                .push(MaterialPageRoute(builder: (context) => WelcomePageRec(User: new user(nameController.text, emailController.text))));
           }
           else {
             ScaffoldMessenger.of(context).showSnackBar(
