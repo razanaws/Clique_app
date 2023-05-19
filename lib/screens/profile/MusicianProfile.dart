@@ -299,9 +299,9 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                             padding: const EdgeInsets.only(
                                                 bottom: 2.0),
                                             child: Row(
-                                              children: const [
+                                              children:  [
                                                 Text(
-                                                  "Name",
+                                                  musician.name,
                                                   style: TextStyle(
                                                       color: Colors.white70),
                                                 ),
