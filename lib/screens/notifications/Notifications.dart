@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Notifications extends StatefulWidget {
-  const Notifications({Key? key}) : super(key: key);
+class Bands extends StatefulWidget {
+  const Bands({Key? key}) : super(key: key);
 
   @override
-  State<Notifications> createState() => _NotificationsState();
+  State<Bands> createState() => _BandsState();
 }
 
-class _NotificationsState extends State<Notifications> {
+class _BandsState extends State<Bands> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Notifications"),
+      child: Text("Bands")
     );
-
   }
 }

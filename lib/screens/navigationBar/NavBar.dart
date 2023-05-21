@@ -70,14 +70,14 @@ class _NavBar extends State<NavBar> {
       pages = <Widget>[
         Homepage(),
         ChatPreviewList(),
-        Notifications(),
+        Bands(),
         RecruiterProfile()
       ];
     } else {
       pages = <Widget>[
         Homepage(),
         ChatPreviewList(),
-        Notifications(),
+        Bands(),
         MusicianProfile()
       ];
     }
@@ -136,8 +136,8 @@ class _NavBar extends State<NavBar> {
                 text: "Chat",
               ),
               GButton(
-                icon: Icons.notifications,
-                text: "Notifications",
+                icon: Icons.group,
+                text: "Bands",
               ),
               GButton(
                 icon: Icons.account_box_rounded,

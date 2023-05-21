@@ -264,8 +264,8 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 7,),
 
+                                SizedBox(height: 7,),
                                 Row(
                                   children: [
                                     Padding(
