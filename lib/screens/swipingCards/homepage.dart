@@ -1,4 +1,4 @@
-import 'package:clique/screens/notifications/Notifications.dart';
+import 'package:clique/screens/bands/bands.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           builder: (context, userSnapShot) {
             //userSnapShot checks if signed in or not
             if (userSnapShot.hasData) {
-              return NavBar();
+              return NavBar(selectedIndexNavBar: 0,);
             }else {
               return const Login();
             }

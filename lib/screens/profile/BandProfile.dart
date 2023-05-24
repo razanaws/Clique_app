@@ -4,152 +4,9 @@ import 'package:flutter/material.dart';
 class BandProfile extends StatefulWidget {
   const BandProfile({Key? key}) : super(key: key);
 
-
-
   @override
   State<BandProfile> createState() => _BandProfileState();
 }
-
-
-
-/*
-class MultiSelectChipGenres extends StatefulWidget {
-  final List<String> genreList;
-
-  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
-
-  @override
-  _MultiSelectChipStateGenres createState() => _MultiSelectChipStateGenres();
-}
-
-class MultiSelectChipInstruments extends StatefulWidget {
-  final List<String> genreList;
-
-
-
-  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
-
-  @override
-  _MultiSelectChipStateInstruments createState() => _MultiSelectChipStateInstruments();
-}
-
-
-
-class _MultiSelectChipStateGenres extends State<MultiSelectChip> {
-  List<String> selectedChoices = [];
-
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.genresList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(3.0),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-          label: Container(
-              width: MediaQuery.of(context).size.width / 4.2,
-              child: Text(
-                item,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: selectedChoices.contains(item)
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 9),
-              )),
-          selected: selectedChoices.contains(item),
-          selectedColor: Color.fromRGBO(100, 13, 20, 1),
-          onSelected: (selected) {
-            setState(() {
-              if(widget.canSelect) {
-                selectedChoices.contains(item)
-                    ? selectedChoices.remove(item)
-                    : selectedChoices.add(item);
-
-                widget.onSelectionChanged!(selectedChoices);
-              }
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Wrap(
-          children: _buildChoiceList(),
-        )
-      ],
-    );
-  }
-}
-class _MultiSelectChipStateInstruments extends State<MultiSelectChip> {
-  List<String> selectedChoices = [];
-
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.instrumentsList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(3.0),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-          label: Container(
-              width: MediaQuery.of(context).size.width / 4.2,
-              child: Text(
-                item,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: selectedChoices.contains(item)
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 9),
-              )),
-          selected: selectedChoices.contains(item),
-          selectedColor: Color.fromRGBO(100, 13, 20, 1),
-          onSelected: (selected) {
-            setState(() {
-              if(widget.canSelect) {
-                selectedChoices.contains(item)
-                    ? selectedChoices.remove(item)
-                    : selectedChoices.add(item);
-
-                widget.onSelectionChanged!(selectedChoices);
-              }
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Wrap(
-          children: _buildChoiceList(),
-        )
-      ],
-    );
-  }
-}
-
-*/
-
 
 class _BandProfileState extends State<BandProfile> {
   var scrollController = ScrollController();
@@ -674,3 +531,143 @@ class _BandProfileState extends State<BandProfile> {
     );
   }
 }
+
+
+
+/*
+class MultiSelectChipGenres extends StatefulWidget {
+  final List<String> genreList;
+
+  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
+
+  @override
+  _MultiSelectChipStateGenres createState() => _MultiSelectChipStateGenres();
+}
+
+class MultiSelectChipInstruments extends StatefulWidget {
+  final List<String> genreList;
+
+
+
+  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
+
+  @override
+  _MultiSelectChipStateInstruments createState() => _MultiSelectChipStateInstruments();
+}
+
+
+
+class _MultiSelectChipStateGenres extends State<MultiSelectChip> {
+  List<String> selectedChoices = [];
+
+  _buildChoiceList() {
+    List<Widget> choices = [];
+    widget.genresList.forEach((item) {
+      choices.add(Container(
+        padding: const EdgeInsets.all(3.0),
+        child: ChoiceChip(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+          label: Container(
+              width: MediaQuery.of(context).size.width / 4.2,
+              child: Text(
+                item,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: selectedChoices.contains(item)
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 9),
+              )),
+          selected: selectedChoices.contains(item),
+          selectedColor: Color.fromRGBO(100, 13, 20, 1),
+          onSelected: (selected) {
+            setState(() {
+              if(widget.canSelect) {
+                selectedChoices.contains(item)
+                    ? selectedChoices.remove(item)
+                    : selectedChoices.add(item);
+
+                widget.onSelectionChanged!(selectedChoices);
+              }
+            });
+          },
+        ),
+      ));
+    });
+    return choices;
+  }
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Wrap(
+          children: _buildChoiceList(),
+        )
+      ],
+    );
+  }
+}
+class _MultiSelectChipStateInstruments extends State<MultiSelectChip> {
+  List<String> selectedChoices = [];
+
+  _buildChoiceList() {
+    List<Widget> choices = [];
+    widget.instrumentsList.forEach((item) {
+      choices.add(Container(
+        padding: const EdgeInsets.all(3.0),
+        child: ChoiceChip(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+          label: Container(
+              width: MediaQuery.of(context).size.width / 4.2,
+              child: Text(
+                item,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: selectedChoices.contains(item)
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 9),
+              )),
+          selected: selectedChoices.contains(item),
+          selectedColor: Color.fromRGBO(100, 13, 20, 1),
+          onSelected: (selected) {
+            setState(() {
+              if(widget.canSelect) {
+                selectedChoices.contains(item)
+                    ? selectedChoices.remove(item)
+                    : selectedChoices.add(item);
+
+                widget.onSelectionChanged!(selectedChoices);
+              }
+            });
+          },
+        ),
+      ));
+    });
+    return choices;
+  }
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Wrap(
+          children: _buildChoiceList(),
+        )
+      ],
+    );
+  }
+}
+
+*/

@@ -1,5 +1,5 @@
 import 'package:clique/screens/chat/ConversationList.dart';
-import 'package:clique/screens/notifications/Notifications.dart';
+import 'package:clique/screens/bands/bands.dart';
 import 'package:clique/drawers/SettingsDrawer.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:clique/screens/profile/RecruiterProfile.dart';
@@ -14,7 +14,8 @@ import '../chat/ChatPreviewList.dart';
 import '../swipingCards/homepage.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({super.key});
+   int selectedIndexNavBar;
+   NavBar({Key? key, required this.selectedIndexNavBar}): super(key: key);
 
   @override
   State<NavBar> createState() => _NavBar();
@@ -22,10 +23,11 @@ class NavBar extends StatefulWidget {
 
 //https://github.com/surveshoeb/flutter-google-signin/blob/master/lib/pages/home_page.dart
 //TODO:Refer back to the documentation above to link the profile info to the homepage,similar to the hi message
+
 class _NavBar extends State<NavBar> {
-  int selectedIndexNavBar = 0;
   late bool isRecruiter;
   late var Profile;
+
   List<Widget> pages = const <Widget>[];
 
   Future fetchUserInfo() async {
@@ -92,7 +94,7 @@ class _NavBar extends State<NavBar> {
           CreateList();
         });
       } else {
-        // Handle the case when user doesn't exist
+        //TODO: Handle the case when user doesn't exist
       }
     });
   }
@@ -106,7 +108,7 @@ class _NavBar extends State<NavBar> {
 
       //Navigation Bar
       body: IndexedStack(
-        index: selectedIndexNavBar,
+        index: widget.selectedIndexNavBar,
         children: pages,
       ),
       bottomNavigationBar: Container(
@@ -120,10 +122,10 @@ class _NavBar extends State<NavBar> {
             tabBackgroundColor: Colors.grey,
             padding: const EdgeInsets.all(10),
             gap: 4,
-            selectedIndex: selectedIndexNavBar,
+            selectedIndex: widget.selectedIndexNavBar,
             onTabChange: (index) {
               setState(() {
-                selectedIndexNavBar = index;
+                widget.selectedIndexNavBar = index;
               });
             },
             tabs: const [

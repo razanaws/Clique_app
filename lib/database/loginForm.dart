@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
       if (value == true)
         {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => NavBar()));
+              .push(MaterialPageRoute(builder: (context) => NavBar(selectedIndexNavBar: 0,)));
         }
 
     });

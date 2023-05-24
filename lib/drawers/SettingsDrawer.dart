@@ -1,8 +1,7 @@
 import 'package:clique/database/loginForm.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:flutter/material.dart';
-import '../screens/createProfile/CreateBand.dart';
-import '../screens/createProfile/ViewBands.dart';
+import '../screens/createBand/CreateBand.dart';
 import '../screens/privacyPolicy/PrivacyPolicy.dart';
 import 'SettingsSubDrawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -77,18 +76,13 @@ class SettingsDrawer extends StatelessWidget {
             const SizedBox(height: 10,),
             const Divider(color: Colors.white,height: 5,),
 
-            buildMenuItem(
-              text:'View Bands',
-              icon:Icons.groups,
-              onClicked: ()=>selectedItem(context,3)),
-
             const SizedBox(height: 10,),
             const Divider(color: Colors.white,height: 5,),
 
             buildMenuItem(
               text:'Log out',
               icon:Icons.logout,
-              onClicked: ()=>selectedItem(context,4)),
+              onClicked: ()=>selectedItem(context,3)),
 
           ],
         ),
@@ -123,18 +117,12 @@ class SettingsDrawer extends StatelessWidget {
         case 1:Navigator.of(context).push(
             MaterialPageRoute(builder: (context)=>PrivacyPolicy()));
         break;
-      //TODO:CreateBand functionality
 
         case 2:Navigator.of(context).push(
             MaterialPageRoute(builder: (context)=>CreateBand()));
         break;
-      //TODO: ViewBands functionality
 
-        case 3:Navigator.of(context).push(
-            MaterialPageRoute(builder: (context)=>ViewBands()));
-        break;
-        //TODO:Log out page or functionality
-        case 4:
+        case 3:
           logoutUser(context);
         break;
 

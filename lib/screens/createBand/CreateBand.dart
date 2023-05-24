@@ -1,8 +1,9 @@
+import "package:clique/screens/createBand/CreateBandProfile.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 
-import "../navigationBar/NavBar.dart";
+import '../navigationBar/NavBar.dart';
 
 class CreateBand extends StatefulWidget {
   const CreateBand({Key? key}) : super(key: key);
@@ -14,7 +15,6 @@ class CreateBand extends StatefulWidget {
 class _CreateBandState extends State<CreateBand> {
   final TextEditingController _groupNameController = TextEditingController();
   final TextEditingController _memberEmailController = TextEditingController();
-  //List<Map<String, dynamic>> members = [];
   final List<String?> _memberEmails = [];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -87,9 +87,6 @@ class _CreateBandState extends State<CreateBand> {
         // Clear the text fields and member list
         _groupNameController.clear();
         _memberEmailController.clear();
-        setState(() {
-          _memberEmails.clear();
-        });
 
         // Show a success message
         showDialog(
@@ -103,20 +100,21 @@ class _CreateBandState extends State<CreateBand> {
                   child: Text('OK'),
                   onPressed: () {
                     Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => NavBar()));
+                        .push(MaterialPageRoute(builder: (context) => CreateBandProfile(groupRef.id, groupData)));
                   },
                 ),
               ],
             );
           },
         );
+       // _memberEmails.clear();
       } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Error'),
-              content: Text('error msg.'),
+              title: const Text('Error'),
+              content: const Text('error msg.'), //TODO: error msg
               actions: <Widget>[
                 TextButton(
                   child: Text('OK'),
@@ -188,12 +186,12 @@ class _CreateBandState extends State<CreateBand> {
                     onPressed: () {
                       _addMember();
                     },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(100, 13, 20, 1)),
+                    ),
                     child: Text(
                       'Add Member',
                       style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(100, 13, 20, 1)),
                     ),
                   ),
                   SizedBox(height: 16.0),
@@ -206,12 +204,12 @@ class _CreateBandState extends State<CreateBand> {
                     onPressed: () {
                       _createGroup();
                     },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(100, 13, 20, 1)),
+                    ),
                     child: Text(
                       'Create Group',
                       style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(100, 13, 20, 1)),
                     ),
                   ),
                 ],
