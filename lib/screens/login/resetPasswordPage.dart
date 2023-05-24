@@ -1,4 +1,6 @@
+
 import 'package:clique/database/loginForm.dart';
+import 'package:clique/screens/navigationBar/NavBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,16 +22,29 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   showAlertDialog(BuildContext context) {
+    
     // Create button
     Widget okButton = TextButton(
       child: Text("Ok"),
       onPressed: () {
-        Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Login(),
-        ),
-      );
+        final currentUser = FirebaseAuth.instance.currentUser;
+
+        if(currentUser?.email==null){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Login(),
+            ),
+          );
+        }else{
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavBar(selectedIndexNavBar: 3),
+            ),
+          );
+        }
+       
       },
     );
 
