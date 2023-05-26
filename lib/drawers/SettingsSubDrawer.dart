@@ -2,6 +2,8 @@ import "package:clique/screens/profile/MusicianProfile.dart";
 import "package:flutter/material.dart";
 
 import "../screens/login/resetPasswordPage.dart";
+import "ChangeCoverPicture.dart";
+import "ChangeProfilePicture.dart";
 
 class SubDrawer extends StatelessWidget {
   const SubDrawer({Key? key}) : super(key: key);
@@ -86,11 +88,11 @@ class SubDrawer extends StatelessWidget {
 
       //TODO:place an if else condition to navigate to the profile page according to each user
       case 1:Navigator.of(context).push(
-          MaterialPageRoute(builder: (context)=>MusicianProfile()));
+          MaterialPageRoute(builder: (context)=>ChangeProfilePicture()));
       break;
 
       case 2:Navigator.of(context).push(
-          MaterialPageRoute(builder: (context)=>MusicianProfile()));
+          MaterialPageRoute(builder: (context)=>ChangeCoverPicture()));
       break;
 
 

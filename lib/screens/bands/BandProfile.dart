@@ -237,14 +237,11 @@ class _BandProfileState extends State<BandProfile> {
                             SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 5),
-                                    child: Text(
-                                      bandName,
-                                      style: TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 25,
-                                      ),
+                                  Text(
+                                    bandName,
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 25,
                                     ),
                                   ),
                                   SizedBox(height: height * 0.05),

@@ -16,10 +16,36 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
   @override
   void initState() {
     super.initState();
-    recruiterFuture = fetchUserInfo();
+    setState(() {
+      recruiterFuture = fetchUserInfo();
+    });
   }
 
+  Future<void> _loadImages(model) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final bandRef =
+      FirebaseFirestore.instance.collection('Musicians')
+          .doc(currentUser?.email.toString());
+      final bandDoc = await bandRef.get();
+      final data = bandDoc.data() as Map<String, dynamic>?;
+      if (data != null) {
+        setState(() {
+          model.profileUrl = data['profileUrl'];
+          model.coverUrl = data['coverUrl'];
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Something went wrong. Please try again later.")),
+      );
+    }
+  }
+
+
   Future<RecruitersModel?> fetchUserInfo() async {
+
     final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -54,6 +80,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
         model.bio = bio;
         model.requirements = requirements;
         model.genres = genres;
+        _loadImages(model);
         return model;
       } else {
         return null;

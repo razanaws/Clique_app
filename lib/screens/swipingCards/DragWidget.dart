@@ -37,36 +37,36 @@ class _DragWidgetState extends State<DragWidget> {
               return RotationTransition(
                 turns: widget.swipeNotifier.value != Swipe.none
                     ? widget.swipeNotifier.value == Swipe.left
-                    ? const AlwaysStoppedAnimation(-15 / 360)
-                    : const AlwaysStoppedAnimation(15 / 360)
+                        ? const AlwaysStoppedAnimation(-15 / 360)
+                        : const AlwaysStoppedAnimation(15 / 360)
                     : const AlwaysStoppedAnimation(0),
                 child: Stack(
                   children: [
                     ProfileCard(profile: widget.profile),
                     widget.swipeNotifier.value != Swipe.none
                         ? widget.swipeNotifier.value == Swipe.right
-                        ? Positioned(
-                      top: 40,
-                      left: 20,
-                      child: Transform.rotate(
-                        angle: 12,
-                        child: TagWidget(
-                          text: 'LIKE',
-                          color: Colors.green[400]!,
-                        ),
-                      ),
-                    )
-                        : Positioned(
-                      top: 50,
-                      right: 24,
-                      child: Transform.rotate(
-                        angle: -12,
-                        child: TagWidget(
-                          text: 'DISLIKE',
-                          color: Colors.red[400]!,
-                        ),
-                      ),
-                    )
+                            ? Positioned(
+                                top: 40,
+                                left: 20,
+                                child: Transform.rotate(
+                                  angle: 12,
+                                  child: TagWidget(
+                                    text: 'LIKE',
+                                    color: Colors.green[400]!,
+                                  ),
+                                ),
+                              )
+                            : Positioned(
+                                top: 50,
+                                right: 24,
+                                child: Transform.rotate(
+                                  angle: -12,
+                                  child: TagWidget(
+                                    text: 'DISLIKE',
+                                    color: Colors.red[400]!,
+                                  ),
+                                ),
+                              )
                         : const SizedBox.shrink(),
                   ],
                 ),
@@ -104,28 +104,28 @@ class _DragWidgetState extends State<DragWidget> {
                   // heck if this is the last card and Swipe is not equal to Swipe.none
                   swipe != Swipe.none && widget.isLastCard
                       ? swipe == Swipe.right
-                      ? Positioned(
-                    top: 40,
-                    left: 20,
-                    child: Transform.rotate(
-                      angle: 12,
-                      child: TagWidget(
-                        text: 'LIKE',
-                        color: Colors.green[400]!,
-                      ),
-                    ),
-                  )
-                      : Positioned(
-                    top: 50,
-                    right: 24,
-                    child: Transform.rotate(
-                      angle: -12,
-                      child: TagWidget(
-                        text: 'DISLIKE',
-                        color: Colors.red[400]!,
-                      ),
-                    ),
-                  )
+                          ? Positioned(
+                              top: 40,
+                              left: 20,
+                              child: Transform.rotate(
+                                angle: 12,
+                                child: TagWidget(
+                                  text: 'LIKE',
+                                  color: Colors.green[400]!,
+                                ),
+                              ),
+                            )
+                          : Positioned(
+                              top: 50,
+                              right: 24,
+                              child: Transform.rotate(
+                                angle: -12,
+                                child: TagWidget(
+                                  text: 'DISLIKE',
+                                  color: Colors.red[400]!,
+                                ),
+                              ),
+                            )
                       : const SizedBox.shrink(),
                 ],
               );

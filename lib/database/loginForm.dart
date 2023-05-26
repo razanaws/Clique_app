@@ -18,51 +18,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-//Google Sign In
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-    ],
-  );
 
-//Apple Sign In
-  Future signInWithApple() async {
-    final appleProvider = AppleAuthProvider();
-    if (kIsWeb) {
-      await FirebaseAuth.instance.signInWithPopup(appleProvider);
-    } else {
-      await FirebaseAuth.instance.signInWithProvider(appleProvider);
-    }
-  }
-
-//FB
-  Future<UserCredential> signInWithFacebook() async {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
-
-//Google
-  @override
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((account) async {
-      if (account != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Homepage(),
-          ),
-        );
-      }
-    });
-    _googleSignIn.signInSilently();
-  }
-
-//Controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -100,7 +56,6 @@ class _LoginState extends State<Login> {
 
   }
 
-  //TODO: stay logged in
    submitForm() async {
     validateUserInfo().then((value) {
       if (value == true)
@@ -126,6 +81,7 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: 40,),
               Image.asset('images/cliqueClipArtLogin.png',
                   width: width * 0.3, height: height * 0.3),
 
@@ -135,7 +91,6 @@ class _LoginState extends State<Login> {
                   controller: emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      //TODO: Validate email "xxx@xxx.com"
                       return 'This field is required.';
                     } else if (value.contains(" ")) {
                       return 'Spaces are not allowed';
@@ -168,7 +123,6 @@ class _LoginState extends State<Login> {
                   controller: passwordController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      //TODO: Validate password ">6"
                       return 'This field is required.';
                     } else if (value.contains(" ")) {
                       return 'Spaces are not allowed';
@@ -235,89 +189,6 @@ class _LoginState extends State<Login> {
                 height: height * 0.005,
               ),
 
-              const Text(
-                "Or Sign In with",
-                style: TextStyle(color: Colors.white, fontSize: 15),
-              ),
-              SizedBox(
-                width: width * 0.005,
-                height: height * 0.005,
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: width * 0.1,
-                    height: height * 0.1,
-                  ),
-                  Expanded(
-                      child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.white54),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      )),
-                    ),
-                    onPressed: // signInWithFacebook
-                        null,
-                    child: Image.asset(
-                      "images/facebookSymbol.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                  )),
-                  SizedBox(
-                    width: width * 0.1,
-                    height: height * 0.1,
-                  ),
-                  Expanded(
-                      child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.white54),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      )),
-                    ),
-                    onPressed: //signInWithApple
-                        null,
-                    child: Image.asset(
-                      "images/appleSymbol.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                  )),
-                  SizedBox(
-                    width: width * 0.1,
-                    height: height * 0.1,
-                  ),
-                  Expanded(
-                      child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.white54),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      )),
-                    ),
-                    onPressed: /*() async {
-                      await _handleSignIn();
-                    }*/
-                        null,
-                    child: Image.asset(
-                      "images/googleSymbol.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                  )),
-                  SizedBox(
-                    width: width * 0.1,
-                    height: height * 0.1,
-                  ),
-                ],
-              ),
-
               Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: const Text(
@@ -325,7 +196,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              //SizedBox(width: width*0.05,height: height*0.05,),
+              SizedBox(height: height*0.05,),
 
               Row(
                 children: [
@@ -361,11 +232,4 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
 }

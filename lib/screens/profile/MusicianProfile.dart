@@ -14,11 +14,35 @@ class MusicianProfile extends StatefulWidget {
 
 class _MusicianProfileState extends State<MusicianProfile> {
   late Future<MusiciansModel?> musicianFuture;
+  String? profileUrl;
+  String? coverUrl;
 
   @override
   void initState() {
     super.initState();
     musicianFuture = fetchUserInfo();
+  }
+
+  Future<void> _loadImages(model) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final bandRef =
+      FirebaseFirestore.instance.collection('Musicians')
+          .doc(currentUser?.email.toString());
+      final bandDoc = await bandRef.get();
+      final data = bandDoc.data() as Map<String, dynamic>?;
+      if (data != null) {
+        setState(() {
+          model.profileUrl = data['profileUrl'];
+          model.coverUrl = data['coverUrl'];
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Something went wrong. Please try again later.")),
+      );
+    }
   }
 
   Future<MusiciansModel?> fetchUserInfo() async {
@@ -56,6 +80,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
         model.bio = bio;
         model.instruments = instruments;
         model.genres = genres;
+        _loadImages(model);
         return model;
       } else {
         return null;

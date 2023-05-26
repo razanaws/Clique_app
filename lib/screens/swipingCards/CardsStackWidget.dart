@@ -1,4 +1,5 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'ActionButtonWidget.dart';
@@ -14,41 +15,50 @@ class CardsStackWidget extends StatefulWidget {
 
 class _CardsStackWidgetState extends State<CardsStackWidget>
     with SingleTickerProviderStateMixin {
+  List<Profile> profiles = [];
 
-  List<Profile> draggableItems = [
-    const Profile(
-        name: 'Jenna A.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage1.jpg'),
-    const Profile(
-        name: 'Perla M.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage2.jpeg'),
-    const Profile(
-        name: 'Deandra R.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage3.jpeg'),
-    const Profile(
-        name: 'Ron M.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage4.jpeg'),
-    const Profile(
-        name: 'Reese H.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage5.jpeg'),
-    const Profile(
-        name: 'Jacob R.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage6.jpeg'),
-    const Profile(
-        name: 'Dennis A.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage7.jpeg'),
-    const Profile(
-        name: 'Ellie W.',
-        distance: '10 miles away',
-        imageAsset: 'images/userImage8.jpeg'),
-  ];
+  Future<List<Profile>> fetchProfiles() async {
+
+
+    try {
+      // Fetch users from "Musicians" collection
+      QuerySnapshot musiciansSnapshot = await FirebaseFirestore.instance.collection('Musicians').get();
+      musiciansSnapshot.docs.forEach((musicianDoc) {
+        if (musicianDoc.exists) {
+          String username = musicianDoc['username'];
+          String location = musicianDoc['location'];
+          String profileUrl = musicianDoc['profileUrl'];
+
+
+          if (username != null && location != null && profileUrl != null) {
+            Profile profile = Profile(name: username, distance: location, imageAsset: profileUrl);
+            profiles.add(profile);
+          }
+        }
+      });
+
+      // Fetch users from "Bands" collection
+      QuerySnapshot bandsSnapshot = await FirebaseFirestore.instance.collection('bands').get();
+      bandsSnapshot.docs.forEach((bandDoc) {
+        if (bandDoc.exists) {
+          String username = bandDoc['name'];
+          String location = bandDoc['location'];
+          String profileUrl = bandDoc['profileUrl'];
+
+          if (username != null && location != null && profileUrl != null) {
+            Profile profile = Profile(name: username, distance: location, imageAsset: profileUrl);
+            profiles.add(profile);
+          }
+        }
+      });
+
+      print(profiles);
+    } catch (e) {
+      print('Error fetching profiles: $e');
+    }
+
+    return profiles;
+  }
 
 
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
@@ -57,19 +67,23 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   @override
   void initState() {
     super.initState();
+    fetchProfiles().then((fetchedProfiles) {
+      setState(() {
+        profiles = fetchedProfiles;
+      });
+    });
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        draggableItems.removeLast();
+        profiles.removeLast();
         _animationController.reset();
         swipeNotifier.value = Swipe.none;
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +97,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             builder: (context, swipe, _) => Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
-              children: List.generate(draggableItems.length, (index) {
-                if (index == draggableItems.length - 1) {
+              children: List.generate(profiles.length, (index) {
+                if (index == profiles.length - 1) {
                   return PositionedTransition(
                     rect: RelativeRectTween(
                       begin: RelativeRect.fromSize(
@@ -94,8 +108,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                           Rect.fromLTWH(
                               swipe != Swipe.none
                                   ? swipe == Swipe.left
-                                  ? -300
-                                  : 300
+                                      ? -300
+                                      : 300
                                   : 0,
                               0,
                               580,
@@ -107,21 +121,21 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                     )),
                     child: RotationTransition(
                       turns: Tween<double>(
-                          begin: 0,
-                          end: swipe != Swipe.none
-                              ? swipe == Swipe.left
-                              ? -0.1 * 0.3
-                              : 0.1 * 0.3
-                              : 0.0)
+                              begin: 0,
+                              end: swipe != Swipe.none
+                                  ? swipe == Swipe.left
+                                      ? -0.1 * 0.3
+                                      : 0.1 * 0.3
+                                  : 0.0)
                           .animate(
                         CurvedAnimation(
                           parent: _animationController,
                           curve:
-                          const Interval(0, 0.4, curve: Curves.easeInOut),
+                              const Interval(0, 0.4, curve: Curves.easeInOut),
                         ),
                       ),
                       child: DragWidget(
-                        profile: draggableItems[index],
+                        profile: profiles[index],
                         index: index,
                         swipeNotifier: swipeNotifier,
                         isLastCard: true,
@@ -130,7 +144,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                   );
                 } else {
                   return DragWidget(
-                    profile: draggableItems[index],
+                    profile: profiles[index],
                     index: index,
                     swipeNotifier: swipeNotifier,
                   );
@@ -177,10 +191,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
           left: 0,
           child: DragTarget<int>(
             builder: (
-                BuildContext context,
-                List<dynamic> accepted,
-                List<dynamic> rejected,
-                ) {
+              BuildContext context,
+              List<dynamic> accepted,
+              List<dynamic> rejected,
+            ) {
               return IgnorePointer(
                 child: Container(
                   height: 700.0,
@@ -191,7 +205,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             },
             onAccept: (int index) {
               setState(() {
-                draggableItems.removeAt(index);
+                profiles.removeAt(index);
               });
             },
           ),
@@ -200,10 +214,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
           right: 0,
           child: DragTarget<int>(
             builder: (
-                BuildContext context,
-                List<dynamic> accepted,
-                List<dynamic> rejected,
-                ) {
+              BuildContext context,
+              List<dynamic> accepted,
+              List<dynamic> rejected,
+            ) {
               return IgnorePointer(
                 child: Container(
                   height: 700.0,
@@ -214,7 +228,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             },
             onAccept: (int index) {
               setState(() {
-                draggableItems.removeAt(index);
+                profiles.removeAt(index);
               });
             },
           ),

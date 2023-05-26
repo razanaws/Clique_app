@@ -24,9 +24,6 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
 
   final formKey = GlobalKey<FormState>();
 
-  var TalentsList = ['Singer', 'Drummer', 'Guitarist']; //TODO: Add all talents
-  String? _selectedItem;
-
   bool isValidPassword(value) {
     return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(value);
   }
@@ -38,7 +35,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
   }
 
   bool isValidName(value) {
-    return RegExp(r'^[a-zA-Z]+$').hasMatch(value);
+    return RegExp(r'^[a-zA-Z ]+$').hasMatch(value);
   }
 
   bool isValidUsername(value) {
@@ -54,7 +51,6 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
     try {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-
           email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -81,11 +77,10 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
       FirebaseFirestore.instance.collection('Musicians');
       // Call the user's CollectionReference to connect user email
       await users.doc(emailController.text).set({
-        //TODO: Validate data + password
         'name': nameController.text,
         'number': numberController.text,
         'username': usernameController.text,
-        'talent': _selectedItem
+        //'talent': _selectedItem
       });
 
     } catch (e) {
@@ -296,7 +291,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(50.0),
                         ),
-                        child: Padding(
+                        /*child: Padding(
                           padding: const EdgeInsets.all(7.0),
                           child: DropdownButtonFormField(
                             validator: (value) => value == null ? 'Field is required' : null,
@@ -316,7 +311,7 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
                               });
                             },
                           ),
-                        ),
+                        ),*/
                       ),
                     ),
                   ),

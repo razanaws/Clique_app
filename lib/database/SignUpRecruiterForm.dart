@@ -38,7 +38,7 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
   }
 
   bool isValidName(value) {
-    return RegExp(r'^[a-zA-Z]+$').hasMatch(value);
+    return RegExp(r'^[a-zA-Z ]+$').hasMatch(value);
   }
 
   bool isValidUsername(value) {

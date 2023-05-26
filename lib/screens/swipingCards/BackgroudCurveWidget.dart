@@ -5,9 +5,11 @@ class BackgroudCurveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Container(
-      width: double.infinity,
-      height: 500,
+      width: screenSize.width,
+      height: screenSize.height,
       decoration: const ShapeDecoration(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -26,7 +28,7 @@ class BackgroudCurveWidget extends StatelessWidget {
       ),
       child: const Padding(
         padding: EdgeInsets.only(top: 46.0, left: 20.0),
-
+        child: SizedBox(), // Replace with your desired content
       ),
     );
   }
