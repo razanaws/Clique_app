@@ -42,6 +42,8 @@ class _MusicianProfileState extends State<MusicianProfile> {
         final location = userData['location'] as String;
         final genres = userData['genres'] as List;
         final instruments = userData['instruments'] as List;
+        final recruited = userData['recruited'] as bool;
+        final recruiterId = userData['recruiterId'] as String?;
 
         MusiciansModel model = MusiciansModel(
             name: name.toString(),
@@ -50,7 +52,10 @@ class _MusicianProfileState extends State<MusicianProfile> {
             location: location,
             bio: bio,
             genres: genres,
-            instruments: instruments);
+            instruments: instruments,
+            recruited: recruited,
+            recruiterId:recruiterId
+        );
 
         model.name = name;
         model.profileLink = profileUrl;

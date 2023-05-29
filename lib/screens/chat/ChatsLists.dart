@@ -57,7 +57,7 @@ class _ChatListsState extends State<ChatLists> {
     return isRecruiter;
   }
 
-  fetchChat() async {
+  Future<void> fetchChat() async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('chats')
         .where('participants', arrayContains: currentUserEmail)
@@ -65,7 +65,7 @@ class _ChatListsState extends State<ChatLists> {
 
     if (querySnapshot.docs.isNotEmpty) {
       List<String> documentIds =
-          querySnapshot.docs.map((doc) => doc.id).toList();
+      querySnapshot.docs.map((doc) => doc.id).toList();
 
       if (documentIds.isNotEmpty) {
         for (String documentId in documentIds) {
@@ -82,7 +82,7 @@ class _ChatListsState extends State<ChatLists> {
             var receiver = lastMessageData['receiver'];
             var message = lastMessageData['message'];
             var timestamp =
-                (lastMessageData['timestamp'] as Timestamp).toDate();
+            (lastMessageData['timestamp'] as Timestamp).toDate();
 
             if (sender == currentUserEmail) {
               otherUserName = receiver;
@@ -102,62 +102,71 @@ class _ChatListsState extends State<ChatLists> {
               otherUserName: otherUserName,
             );
 
-            chatModels.add(chatModel);
+            setState(() {
+              chatModels.add(chatModel);
+            });
           }
         }
       }
     }
-
-    setState(() {});
   }
 
-  fetchProfileUrl(String receiverEmail) async {
-    print("is receiverEmail $receiverEmail");
-
+  Future<String?> fetchProfileUrl(String receiverEmail) async {
     try {
       final userSnapshot = await FirebaseFirestore.instance
           .collection('Musicians')
           .doc(receiverEmail)
           .get();
       if (userSnapshot.exists) {
-
         String? profileUrl = userSnapshot.data()?['profileUrl'];
         return profileUrl;
       } else {
-        try {
-          final secondUserSnapshot = await FirebaseFirestore.instance
-              .collection('Recruiters')
-              .doc(receiverEmail)
-              .get();
+        final secondUserSnapshot = await FirebaseFirestore.instance
+            .collection('Recruiters')
+            .doc(receiverEmail)
+            .get();
 
-          if (secondUserSnapshot.exists) {
-            print("HEEREEEE $receiverEmail");
-            print("HEEREEEE DATAA ${secondUserSnapshot.data()}");
-            String? profileUrl = secondUserSnapshot.data()?['profileUrl'];
-            print("HEEREEEE profileUrl $profileUrl");
-
-            return profileUrl;
-          }
-        } catch (e) {
-          print(e);
+        if (secondUserSnapshot.exists) {
+          String? profileUrl = secondUserSnapshot.data()?['profileUrl'];
+          return profileUrl;
         }
       }
     } catch (e) {
       print(e);
     }
+
+    return null;
+  }
+
+  Future<void> refreshChat() async {
+    setState(() {
+      chatModels.clear();
+    });
+    await fetchChat();
   }
 
   @override
   void initState() {
     super.initState();
-    fetchUserInfo();
-    fetchChat();
+    fetchUserInfo().then((isRecruiter) {
+      fetchChat();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+        title: Text('Chat List'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: refreshChat,
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemCount: chatModels.length,
         itemBuilder: (BuildContext context, int index) {
@@ -165,14 +174,14 @@ class _ChatListsState extends State<ChatLists> {
 
           return ListTile(
             title: Text(
-              chatModel.otherUserName,
+              chatModel.otherUserName!,
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
             subtitle: Text(
-              chatModel.message,
+              chatModel.message!,
               style: const TextStyle(color: Colors.white),
             ),
             trailing: Text(
@@ -185,10 +194,10 @@ class _ChatListsState extends State<ChatLists> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChatAfterSwiping(
-                    profileName: chatModel.receiver,
-                    profileImage: chatModel.profileUrl,
+                    profileName: chatModel.receiver!,
+                    profileImage: chatModel.profileUrl!,
                     currentUserEmail: currentUserEmail!,
-                    otherUserEmail: chatModel.otherUserName,
+                    otherUserEmail: chatModel.otherUserName!,
                   ),
                 ),
               );

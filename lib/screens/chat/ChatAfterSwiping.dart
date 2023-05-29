@@ -1,3 +1,4 @@
+import 'package:clique/models/ChatModel.dart';
 import 'package:clique/screens/chat/ChatBloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
