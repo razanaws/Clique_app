@@ -51,8 +51,6 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
   }
 
 
-  //TODO: stay logged in
-
   Future<bool> CreateUserNameAndPassword() async{
     try {
       final credential = await FirebaseAuth.instance
@@ -81,7 +79,6 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
       FirebaseFirestore.instance.collection('Recruiters');
       // Call the user's CollectionReference to connect user email
       await users.doc(emailController.text).set({
-        //TODO: Validate data + password
         'name': nameController.text,
         'number': numberController.text,
         'username': usernameController.text,
@@ -335,8 +332,6 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')));
                       }
-                      //TODO:go back
-
                       submitForm();
                     },
                     child: const Text(

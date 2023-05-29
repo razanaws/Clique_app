@@ -20,8 +20,6 @@ class _loadingPageState extends State<loadingPage> {
   }
 
   startTime() async {
-    /*TODO: if is logged in direct to homepage without showing loading page
-              else if not show this page and direct to log in page */
     var duration = const Duration(seconds: 3);
     return Timer(duration, route);
   }

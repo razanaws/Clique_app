@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../chat/ChatAfterSwiping.dart';
 import 'ActionButtonWidget.dart';
 import 'DragWidget.dart';
 import 'ProfileModel.dart';
+
+
 
 class CardsStackWidget extends StatefulWidget {
   const CardsStackWidget({Key? key}) : super(key: key);
@@ -16,12 +20,53 @@ class CardsStackWidget extends StatefulWidget {
 class _CardsStackWidgetState extends State<CardsStackWidget>
     with SingleTickerProviderStateMixin {
   List<Profile> profiles = [];
+  List<String> bands = [];
+  late bool isRecruiter = false;
+  ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
+  late final AnimationController _animationController;
+
+   fetchUserInfo() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      final userSnapshot = await firestore
+          .collection('Musicians')
+          .doc(currentUser?.email.toString())
+          .get();
+      if (userSnapshot.exists) {
+        setState(() {
+          isRecruiter = false;
+        });
+        return true;
+      } else {
+        try {
+          final secondUserSnapshot = await firestore
+              .collection('Recruiters')
+              .doc(currentUser?.email.toString())
+              .get();
+
+          if (secondUserSnapshot.exists) {
+            setState(() {
+              isRecruiter = true;
+            });
+            return true;
+          } else {
+            print("user doesn't exist");
+            return "user doesn't exist";
+          }
+        } catch (e) {
+          print(e);
+          return e;
+        }
+      }
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }
 
   Future<List<Profile>> fetchProfiles() async {
-
-
     try {
-      // Fetch users from "Musicians" collection
       QuerySnapshot musiciansSnapshot = await FirebaseFirestore.instance.collection('Musicians').get();
       musiciansSnapshot.docs.forEach((musicianDoc) {
         if (musicianDoc.exists) {
@@ -45,28 +90,70 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
           String location = bandDoc['location'];
           String profileUrl = bandDoc['profileUrl'];
 
-          if (username != null && location != null && profileUrl != null) {
+          if (username.isNotEmpty && location.isNotEmpty && profileUrl.isNotEmpty) {
             Profile profile = Profile(name: username, distance: location, imageAsset: profileUrl);
+            bands.add(username);
             profiles.add(profile);
           }
         }
       });
 
-      print(profiles);
     } catch (e) {
       print('Error fetching profiles: $e');
     }
-
     return profiles;
   }
 
+  void navigateToChat(profile) async {
+    final String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
+    final String receiverEmail = await getReceiverEmail(profile.name);
 
-  ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
-  late final AnimationController _animationController;
+    if (receiverEmail.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatAfterSwiping(
+            profileName: profile.name,
+            profileImage: profile.imageAsset,
+            currentUserEmail: currentUserEmail!,
+            otherUserEmail: receiverEmail,
+          ),
+        ),
+      );
+    } else {
+      // Handle receiver email not found scenario
+    }
+  }
+
+  Future<String> getReceiverEmail(String profileName) async {
+    List<String> uids = [];
+
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('Musicians')
+        .where('username', isEqualTo: profileName)
+        .get();
+
+    snapshot.docs.forEach((document) {
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      String? uid = document.id;
+      if (uid != null) {
+        uids.add(uid);
+      }
+    });
+    debugPrint(uids.toString());
+
+    if (uids.isNotEmpty) {
+      final email = uids[0];
+      return email;
+    } else {
+      return 'no user';
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    fetchUserInfo();
     fetchProfiles().then((fetchedProfiles) {
       setState(() {
         profiles = fetchedProfiles;
@@ -84,6 +171,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +263,21 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                 const SizedBox(width: 20),
                 ActionButtonWidget(
                   onPressed: () {
+                    debugPrint("Accepted");
+                    Profile acceptedProfile = profiles.last;
+                    if (isRecruiter) {
+                      navigateToChat(acceptedProfile);
+                      //TODO: Handle navigation for recruiters
+                    }
+
+                    else {
+                      if(bands.contains(acceptedProfile.name)){
+                        //TODO: NAVIGATES TO BAND PROFILE
+                      }else {
+                      navigateToChat(acceptedProfile);
+                      }
+
+                    }
                     swipeNotifier.value = Swipe.right;
                     _animationController.forward();
                   },
@@ -206,6 +309,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             onAccept: (int index) {
               setState(() {
                 profiles.removeAt(index);
+
               });
             },
           ),
@@ -227,6 +331,18 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
               );
             },
             onAccept: (int index) {
+              debugPrint("Accepted");
+              Profile acceptedProfile = profiles[index];
+              if (isRecruiter) {
+                // Handle navigation for recruiters
+              } else {
+                if(bands.contains(acceptedProfile.name)){
+                  navigateToChat(acceptedProfile);
+                  //TODO: NAVIGATES TO BAND PROFILE
+                }else {
+                  navigateToChat(acceptedProfile);
+                }
+              }
               setState(() {
                 profiles.removeAt(index);
               });

@@ -86,7 +86,6 @@ class SubDrawer extends StatelessWidget {
           MaterialPageRoute(builder: (context)=>ResetPasswordPage()));
       break;
 
-      //TODO:place an if else condition to navigate to the profile page according to each user
       case 1:Navigator.of(context).push(
           MaterialPageRoute(builder: (context)=>ChangeProfilePicture()));
       break;

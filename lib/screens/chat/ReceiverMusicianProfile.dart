@@ -1,65 +1,110 @@
-import 'package:clique/models/RecruitersModel.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'dart:ffi';
 
-class RecruiterProfile extends StatefulWidget {
-  const RecruiterProfile({Key? key}) : super(key: key);
+import 'package:clique/models/MusiciansModel.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class ReceiverMusicianProfile extends StatefulWidget {
+  final String receiverEmail;
+
+  const ReceiverMusicianProfile({Key? key, required this.receiverEmail})
+      : super(key: key);
 
   @override
-  State<RecruiterProfile> createState() => _RecruiterProfileState();
+  State<ReceiverMusicianProfile> createState() =>
+      _ReceiverMusicianProfileState();
 }
 
-class _RecruiterProfileState extends State<RecruiterProfile> {
-  late Future<RecruitersModel?> recruiterFuture;
+class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
+  late Future<MusiciansModel?> musicianFuture;
+  String? profileUrl;
+  String? coverUrl;
+  late bool isRecruiter;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      recruiterFuture = fetchUserInfo();
-    });
+    musicianFuture = fetchUserInfo();
   }
 
-  Future<RecruitersModel?> fetchUserInfo() async {
-
-    final currentUser = FirebaseAuth.instance.currentUser;
+  Future<MusiciansModel?> fetchUserInfo() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
-      final userSnapshot = await firestore
-          .collection('Recruiters')
-          .doc(currentUser?.email?.toString())
+      final receiverSnapshot = await firestore
+          .collection('Musicians')
+          .doc(widget.receiverEmail)
           .get();
 
-      if (userSnapshot.exists) {
-        final userData = userSnapshot.data() as Map<String, dynamic>;
-        final name = userData['name'] as String;
-        final bio = userData['bio'] as String;
-        final profileUrl = userData['profileUrl'] as String;
-        final coverUrl = userData['coverUrl'] as String;
-        final location = userData['location'] as String;
-        final genres = userData['genres'] as List;
-        final requirements = userData['requirements'] as List;
+      if (receiverSnapshot.exists) {
+        final receiverData = receiverSnapshot.data() as Map<String, dynamic>;
+        final name = receiverData['name'] as String;
+        final bio = receiverData['bio'] as String;
+        final profileUrl = receiverData['profileUrl'] as String;
+        final coverUrl = receiverData['coverUrl'] as String;
+        final location = receiverData['location'] as String;
+        final genres = receiverData['genres'] as List;
+        final instruments = receiverData['instruments'] as List;
 
-        RecruitersModel model = RecruitersModel(
-            name: name.toString(),
-            profileLink: profileUrl,
-            coverLink: coverUrl,
-            location: location,
-            bio: bio,
-            genres: genres,
-            requirements: requirements);
+        MusiciansModel model = MusiciansModel(
+          name: name.toString(),
+          profileLink: profileUrl,
+          coverLink: coverUrl,
+          location: location,
+          bio: bio,
+          genres: genres,
+          instruments: instruments,
+        );
 
         model.name = name;
         model.profileLink = profileUrl;
         model.coverLink = coverUrl;
         model.location = location;
         model.bio = bio;
-        model.requirements = requirements;
+        model.instruments = instruments;
         model.genres = genres;
         return model;
       } else {
-        return null;
+        final secondReceiverSnapshot = await firestore
+            .collection('Recruiters')
+            .doc(widget.receiverEmail)
+            .get();
+
+        if (secondReceiverSnapshot.exists) {
+          isRecruiter = true;
+          final receiverData =
+              secondReceiverSnapshot.data() as Map<String, dynamic>;
+          final name = receiverData['name'] as String;
+          final bio = receiverData['bio'] as String;
+          final profileUrl = receiverData['profileUrl'] as String;
+          final coverUrl = receiverData['coverUrl'] as String;
+          final location = receiverData['location'] as String;
+          final genres = receiverData['genres'] as List;
+          final requirements = receiverData['requirements'] as List;
+
+          MusiciansModel model = MusiciansModel(
+            name: name.toString(),
+            profileLink: profileUrl,
+            coverLink: coverUrl,
+            location: location,
+            bio: bio,
+            genres: genres,
+            instruments: requirements,
+          );
+
+          model.name = name;
+          model.profileLink = profileUrl;
+          model.coverLink = coverUrl;
+          model.location = location;
+          print("location $location");
+          model.bio = bio;
+          model.instruments = requirements;
+          print("requirements $requirements");
+          model.genres = genres;
+          return model;
+        } else {
+          print("user not found");
+        }
       }
     } catch (e) {
       print(e);
@@ -70,19 +115,23 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+      ),
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
       body: SingleChildScrollView(
-        child: FutureBuilder<RecruitersModel?>(
-            future: recruiterFuture,
+        child: FutureBuilder<MusiciansModel?>(
+            future: musicianFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator(); // Show a loading indicator while fetching data
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {
-                return Text('User not found.'); // Show appropriate message if user not found
+                return Text(
+                    'User not found.'); // Show appropriate message if user not found
               } else {
-                final recruiter = snapshot.data!;
+                final musician = snapshot.data!;
                 double height = MediaQuery.of(context).size.height;
                 double width = MediaQuery.of(context).size.width;
 
@@ -93,17 +142,17 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                         height: height * 0.38,
                         color: const Color.fromRGBO(37, 37, 37, 1),
                         child: Center(
-                          child: recruiter.coverLink.toString() == "null"
+                          child: musician.coverLink.toString() == "null"
                               ? const Center(
-                            //TODO CALL UPLOAD METHOD
-                              child: Text(
-                                  'Click here to upload a cover photo'))
+                                  //TODO CALL UPLOAD METHOD
+                                  child: Text(
+                                      'Click here to upload a cover photo'))
                               : Image.network(
-                            recruiter.coverLink,
-                            fit: BoxFit.fitWidth,
-                            height: height * 0.3,
-                            width: width,
-                          ),
+                                  musician.coverLink,
+                                  fit: BoxFit.fitWidth,
+                                  height: height * 0.3,
+                                  width: width,
+                                ),
                         ),
                       ),
                       Positioned(
@@ -120,15 +169,15 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                               color: Colors.grey,
                               shape: BoxShape.circle,
                             ),
-                            child: recruiter.profileLink == null
+                            child: musician.profileLink == null
                                 ? const Center(
-                                child: const Icon(Icons.add, size: 30))
+                                    child: const Icon(Icons.add, size: 30))
                                 : ClipOval(
-                              child: Image.network(
-                               recruiter.profileLink,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                                    child: Image.network(
+                                      musician.profileLink,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                           ),
                           onTap: () {
                             //_pickProfilePicture();
@@ -143,16 +192,14 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                           Padding(
                             padding: EdgeInsets.only(top: 5),
                             child: Text(
-                              recruiter.name,
+                              musician.name,
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 25,
                               ),
                             ),
                           ),
-
                           SizedBox(height: height * 0.05),
-
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Column(
@@ -171,7 +218,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                           ),
                                         ),
                                         TextSpan(
-                                            text:  recruiter.location,
+                                            text: "  ${musician.location}",
                                             style: TextStyle(fontSize: 17))
                                       ]),
                                     ),
@@ -183,7 +230,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     Padding(
                                       padding: EdgeInsets.all(10.0),
                                       child: Text(
-                                        recruiter.bio,
+                                        musician.bio,
                                         style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 17),
@@ -191,11 +238,15 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 7,),
+                                SizedBox(
+                                  height: 7,
+                                ),
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 2.0, top: 1.0),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 2.0, top: 1.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Align(
                                         alignment: Alignment.topLeft,
@@ -213,12 +264,14 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                         alignment: WrapAlignment.start,
                                         spacing: 6,
                                         runSpacing: 6,
-                                        children: recruiter.genres.map((genre) {
+                                        children: musician.genres.map((genre) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6),
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
-                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               genre,
@@ -230,28 +283,40 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                         }).toList(),
                                       ),
                                       SizedBox(height: 7),
-                                      const Align(
+                                      Align(
                                         alignment: Alignment.topLeft,
-                                        child: Text(
-                                          "Requirements",
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
+                                        child: isRecruiter == true
+                                            ? Text(
+                                                "Requirements",
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              )
+                                            : Text(
+                                                "Instruments",
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
                                       ),
                                       SizedBox(height: 7),
                                       Wrap(
                                         alignment: WrapAlignment.start,
                                         spacing: 6,
                                         runSpacing: 6,
-                                        children: recruiter.requirements.map((instrument) {
+                                        children: musician.instruments
+                                            .map((instrument) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6),
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
-                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               instrument,
@@ -265,8 +330,10 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 7,),
 
+                                SizedBox(
+                                  height: 7,
+                                ),
                                 Row(
                                   children: [
                                     Padding(
@@ -274,20 +341,21 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                           const EdgeInsets.only(bottom: 240.0),
                                       child: Column(
                                         //crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              height: 60.0,
-                                              width: 60.0,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.red,
-                                                image: DecorationImage(
-                                                  image: NetworkImage(recruiter.profileLink),
-                                                  fit: BoxFit.cover,
-                                                ),
+                                        children: [
+                                          Container(
+                                            height: 60.0,
+                                            width: 60.0,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.red,
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                    musician.profileLink),
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                          ],
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                     Padding(
@@ -302,7 +370,7 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  recruiter.name,
+                                                  musician.name,
                                                   style: TextStyle(
                                                       color: Colors.white70),
                                                 ),
@@ -322,7 +390,9 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                               ], //TODO: time-postTime
                                             ),
                                           ),
-                                          SizedBox(height: 7,),
+                                          SizedBox(
+                                            height: 7,
+                                          ),
                                           Center(
                                             child: Row(children: [
                                               Image.asset(
@@ -354,144 +424,3 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
     );
   }
 }
-
-
-
-/*
-class MultiSelectChipGenres extends StatefulWidget {
-  final List<String> genreList;
-
-  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
-
-  @override
-  _MultiSelectChipStateGenres createState() => _MultiSelectChipStateGenres();
-}
-
-class MultiSelectChipInstruments extends StatefulWidget {
-  final List<String> genreList;
-
-
-
-  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
-
-  @override
-  _MultiSelectChipStateInstruments createState() => _MultiSelectChipStateInstruments();
-}
-
-
-
-class _MultiSelectChipStateGenres extends State<MultiSelectChip> {
-  List<String> selectedChoices = [];
-
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.genresList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(3.0),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-          label: Container(
-              width: MediaQuery.of(context).size.width / 4.2,
-              child: Text(
-                item,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: selectedChoices.contains(item)
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 9),
-              )),
-          selected: selectedChoices.contains(item),
-          selectedColor: Color.fromRGBO(100, 13, 20, 1),
-          onSelected: (selected) {
-            setState(() {
-              if(widget.canSelect) {
-                selectedChoices.contains(item)
-                    ? selectedChoices.remove(item)
-                    : selectedChoices.add(item);
-
-                widget.onSelectionChanged!(selectedChoices);
-              }
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Wrap(
-          children: _buildChoiceList(),
-        )
-      ],
-    );
-  }
-}
-class _MultiSelectChipStateInstruments extends State<MultiSelectChip> {
-  List<String> selectedChoices = [];
-
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.instrumentsList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(3.0),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-          label: Container(
-              width: MediaQuery.of(context).size.width / 4.2,
-              child: Text(
-                item,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: selectedChoices.contains(item)
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 9),
-              )),
-          selected: selectedChoices.contains(item),
-          selectedColor: Color.fromRGBO(100, 13, 20, 1),
-          onSelected: (selected) {
-            setState(() {
-              if(widget.canSelect) {
-                selectedChoices.contains(item)
-                    ? selectedChoices.remove(item)
-                    : selectedChoices.add(item);
-
-                widget.onSelectionChanged!(selectedChoices);
-              }
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Wrap(
-          children: _buildChoiceList(),
-        )
-      ],
-    );
-  }
-}
-
-*/
-

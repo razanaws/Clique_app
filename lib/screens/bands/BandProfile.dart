@@ -43,24 +43,24 @@ class _BandProfileState extends State<BandProfile> {
           await firestore.collection('bands').doc(widget.bandId).get();
 
       if (userSnapshot.exists) {
-        final userData = userSnapshot.data() as Map<String, dynamic>;
-        final bio = userData['bio'] as String;
-        final profileUrl = userData['profileUrl'] as String;
-        final coverUrl = userData['coverUrl'] as String;
-        final location = userData['location'] as String;
-        final genres = userData['genres'] as List;
-        final instruments = userData['instruments'] as List;
+          final userData = userSnapshot.data() as Map<String, dynamic>;
+          final bio = userData['bio'] as String;
+          final profileUrl = userData['profileUrl'] as String;
+          final coverUrl = userData['coverUrl'] as String;
+          final location = userData['location'] as String;
+          final genres = userData['genres'] as List;
+          final instruments = userData['instruments'] as List;
 
-        BandsModel model = BandsModel(
-            profileLink: profileUrl,
-            coverLink: coverUrl,
-            location: location,
-            bio: bio,
-            genres: genres,
-            instruments: instruments);
+          BandsModel model = BandsModel(
+              profileLink: profileUrl,
+              coverLink: coverUrl,
+              location: location,
+              bio: bio,
+              genres: genres,
+              instruments: instruments);
 
-        model.profileLink = profileUrl;
-        model.coverLink = coverUrl;
+          model.profileLink = profileUrl;
+          model.coverLink = coverUrl;
         model.location = location;
         model.bio = bio;
         model.instruments = instruments;

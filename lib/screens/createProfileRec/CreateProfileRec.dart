@@ -7,8 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clique/models/user.dart';
 
 
-
-
 class CreateProfileRec extends StatefulWidget {
   final user User;
   const CreateProfileRec({required this.User});
@@ -16,6 +14,7 @@ class CreateProfileRec extends StatefulWidget {
   @override
   State<CreateProfileRec> createState() => _CreateProfileRecState();
 }
+
 
 class _CreateProfileRecState extends State<CreateProfileRec> {
   File? _profilePicture;
@@ -179,7 +178,6 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
 
   Future<void> _saveImages() async {
     final List<String> imageUrls = await _uploadImages();
-    // TODO: Save the image URLs to Firebase Firestore *optional*
     print('Image URLs: $imageUrls');
   }
 

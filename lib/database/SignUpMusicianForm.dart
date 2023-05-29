@@ -327,7 +327,6 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
                           borderRadius: BorderRadius.circular(50.0),
                         )),
                       ),
-                      //TODO: onPressed
 
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
@@ -335,8 +334,6 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
                               const SnackBar(content: Text('Processing Data')));
 
                         }
-                        //TODO:go back
-
                         submitForm();
                       },
                       child: const Text(

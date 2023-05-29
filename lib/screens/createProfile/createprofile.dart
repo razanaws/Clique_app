@@ -180,7 +180,6 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<void> _saveImages() async {
     final List<String> imageUrls = await _uploadImages();
-    // TODO: Save the image URLs to Firebase Firestore *optional*
     print('Image URLs: $imageUrls');
   }
 

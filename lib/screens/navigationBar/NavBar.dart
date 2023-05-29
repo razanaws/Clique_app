@@ -1,15 +1,12 @@
-import 'package:clique/screens/chat/ConversationList.dart';
 import 'package:clique/screens/bands/bands.dart';
 import 'package:clique/drawers/SettingsDrawer.dart';
+import 'package:clique/screens/chat/ChatsLists.dart';
 import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:clique/screens/profile/RecruiterProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../models/user.dart';
 import '../chat/ChatPreviewList.dart';
 import '../swipingCards/homepage.dart';
 
@@ -20,9 +17,6 @@ class NavBar extends StatefulWidget {
   @override
   State<NavBar> createState() => _NavBar();
 }
-
-//https://github.com/surveshoeb/flutter-google-signin/blob/master/lib/pages/home_page.dart
-//TODO:Refer back to the documentation above to link the profile info to the homepage,similar to the hi message
 
 class _NavBar extends State<NavBar> {
   late bool isRecruiter;
@@ -48,7 +42,6 @@ class _NavBar extends State<NavBar> {
               .doc(currentUser?.email.toString())
               .get();
 
-
           if (secondUserSnapshot.exists) {
             isRecruiter = true;
             return true;
@@ -71,14 +64,14 @@ class _NavBar extends State<NavBar> {
     if (isRecruiter) {
       pages = <Widget>[
         Homepage(),
-        ChatPreviewList(),
+        ChatLists(),
         Bands(),
         RecruiterProfile()
       ];
     } else {
       pages = <Widget>[
         Homepage(),
-        ChatPreviewList(),
+        ChatLists(),
         Bands(),
         MusicianProfile()
       ];

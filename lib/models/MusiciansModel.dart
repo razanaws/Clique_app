@@ -1,7 +1,7 @@
 class MusiciansModel {
   var name;
-  var profileLink;
-  var coverLink;
+  late String profileLink;
+  late String coverLink;
   var location;
   var bio;
   var genres = [];
