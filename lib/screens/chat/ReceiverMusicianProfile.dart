@@ -59,12 +59,12 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
             return "user doesn't exist";
           }
         } catch (e) {
-          print(e);
+          print(" here $e");
           return e;
         }
       }
     } catch (e) {
-      print(e);
+      print(" here2 $e");
       return e;
     }
   }
@@ -106,28 +106,30 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
         final receiverData = receiverSnapshot.data() as Map<String, dynamic>;
         final name = receiverData['name'] as String;
         final bio = receiverData['bio'] as String;
-        final profileUrl = receiverData['profileUrl'] as String;
+        final profileUrl = receiverData['profileUrl'];
         final coverUrl = receiverData['coverUrl'] as String;
         final location = receiverData['location'] as String;
         final genres = receiverData['genres'] as List;
         final instruments = receiverData['instruments'] as List;
-        final recruited = receiverData['recruited']  as bool? ?? false;
+        final recruited = receiverData['recruited'] as bool? ?? false;
         final recruiterId = receiverData['recruiterId'] as String?;
+
+        final profileLink = (profileUrl != null) ? profileUrl as String : null;
 
         MusiciansModel model = MusiciansModel(
           name: name.toString(),
-          profileLink: profileUrl,
+          profileLink: profileLink,
           coverLink: coverUrl,
           location: location,
           bio: bio,
           genres: genres,
           instruments: instruments,
           recruited: recruited,
-          recruiterId:recruiterId
+          recruiterId: recruiterId,
         );
 
         model.name = name;
-        model.profileLink = profileUrl;
+        model.profileLink = profileLink;
         model.coverLink = coverUrl;
         model.location = location;
         model.bio = bio;
@@ -149,26 +151,28 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
           secondReceiverSnapshot.data() as Map<String, dynamic>;
           final name = receiverData['name'] as String;
           final bio = receiverData['bio'] as String;
-          final profileUrl = receiverData['profileUrl'] as String;
+          final profileUrl = receiverData['profileUrl'];
           final coverUrl = receiverData['coverUrl'] as String;
           final location = receiverData['location'] as String;
           final genres = receiverData['genres'] as List;
           final requirements = receiverData['requirements'] as List;
 
+          final profileLink = (profileUrl != null) ? profileUrl as String : null;
+
           MusiciansModel model = MusiciansModel(
             name: name.toString(),
-            profileLink: profileUrl,
+            profileLink: profileLink,
             coverLink: coverUrl,
             location: location,
             bio: bio,
             genres: genres,
             instruments: requirements,
             recruited: false,
-            recruiterId: null
+            recruiterId: null,
           );
 
           model.name = name;
-          model.profileLink = profileUrl;
+          model.profileLink = profileLink;
           model.coverLink = coverUrl;
           model.location = location;
           model.bio = bio;
@@ -176,11 +180,11 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
           model.genres = genres;
           return model;
         } else {
-          print("user not found");
+          print("User not found");
         }
       }
     } catch (e) {
-      print(e);
+      print(" here 3 $e");
       return null;
     }
   }
@@ -247,14 +251,11 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                 child: const Icon(Icons.add, size: 30))
                                 : ClipOval(
                               child: Image.network(
-                                musician.profileLink,
+                                musician.profileLink!,
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          onTap: () {
-                            //_pickProfilePicture();
-                          },
                         ),
                       )
                     ]),

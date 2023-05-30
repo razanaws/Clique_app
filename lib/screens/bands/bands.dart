@@ -16,7 +16,7 @@ class _BandsState extends State<Bands> {
   @override
   void initState() {
     super.initState();
-    bandsStream = Stream<QuerySnapshot>.empty();
+    bandsStream = const Stream<QuerySnapshot>.empty();
     fetchBands();
   }
 

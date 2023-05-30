@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../chat/ChatAfterSwiping.dart';
+import '../chat/NavigateToBandProfile.dart';
 import 'ActionButtonWidget.dart';
 import 'DragWidget.dart';
 import 'ProfileModel.dart';
-
-
 
 class CardsStackWidget extends StatefulWidget {
   const CardsStackWidget({Key? key}) : super(key: key);
@@ -25,7 +24,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
 
-   fetchUserInfo() async {
+  fetchUserInfo() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -67,37 +66,62 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
 
   Future<List<Profile>> fetchProfiles() async {
     try {
-      QuerySnapshot musiciansSnapshot = await FirebaseFirestore.instance.collection('Musicians').get();
+      QuerySnapshot musiciansSnapshot =
+          await FirebaseFirestore.instance.collection('Musicians').get();
       musiciansSnapshot.docs.forEach((musicianDoc) {
         if (musicianDoc.exists) {
           String username = musicianDoc['username'];
           String location = musicianDoc['location'];
-          String profileUrl = musicianDoc['profileUrl'];
+          String? profileUrl;
+          Map<String, dynamic>? musicianData =
+              musicianDoc.data() as Map<String, dynamic>?;
 
+          if (musicianData != null && musicianData.containsKey('profileUrl')) {
+            dynamic profileUrlValue = musicianData['profileUrl'];
+            if (profileUrlValue != null) {
+              profileUrl = profileUrlValue.toString();
+            }
+          }
 
-          if (username != null && location != null && profileUrl != null) {
-            Profile profile = Profile(name: username, distance: location, imageAsset: profileUrl);
+          if (username.isNotEmpty && location.isNotEmpty) {
+            Profile profile = Profile(
+                name: username,
+                distance: location,
+                imageAsset: profileUrl);
             profiles.add(profile);
           }
         }
       });
 
       // Fetch users from "Bands" collection
-      QuerySnapshot bandsSnapshot = await FirebaseFirestore.instance.collection('bands').get();
+      QuerySnapshot bandsSnapshot =
+          await FirebaseFirestore.instance.collection('bands').get();
       bandsSnapshot.docs.forEach((bandDoc) {
         if (bandDoc.exists) {
           String username = bandDoc['name'];
           String location = bandDoc['location'];
-          String profileUrl = bandDoc['profileUrl'];
+          String? profileUrl;
 
-          if (username.isNotEmpty && location.isNotEmpty && profileUrl.isNotEmpty) {
-            Profile profile = Profile(name: username, distance: location, imageAsset: profileUrl);
+          Map<String, dynamic>? bandData =
+              bandDoc.data() as Map<String, dynamic>?;
+          if (bandData != null && bandData.containsKey('profileUrl')) {
+            dynamic profileUrlValue = bandData['profileUrl'];
+            if (profileUrlValue != null) {
+              profileUrl = profileUrlValue.toString();
+            }
+          }
+
+          if (username.isNotEmpty && location.isNotEmpty) {
+            Profile profile = Profile(
+              name: username,
+              distance: location,
+              imageAsset: profileUrl,
+            );
             bands.add(username);
             profiles.add(profile);
           }
         }
       });
-
     } catch (e) {
       print('Error fetching profiles: $e');
     }
@@ -171,7 +195,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -265,19 +288,20 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                   onPressed: () {
                     debugPrint("Accepted");
                     Profile acceptedProfile = profiles.last;
-                    if (isRecruiter) {
+
+                    if (bands.contains(acceptedProfile.name)) {
+                      //TODO: NAVIGATES TO BAND PROFILE
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NavigateToBandProfile(
+                                bandName: acceptedProfile.name)),
+                      );
+                    } else {
                       navigateToChat(acceptedProfile);
-                      //TODO: Handle navigation for recruiters
                     }
 
-                    else {
-                      if(bands.contains(acceptedProfile.name)){
-                        //TODO: NAVIGATES TO BAND PROFILE
-                      }else {
-                      navigateToChat(acceptedProfile);
-                      }
-
-                    }
                     swipeNotifier.value = Swipe.right;
                     _animationController.forward();
                   },
@@ -309,7 +333,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             onAccept: (int index) {
               setState(() {
                 profiles.removeAt(index);
-
               });
             },
           ),
@@ -333,16 +356,19 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             onAccept: (int index) {
               debugPrint("Accepted");
               Profile acceptedProfile = profiles[index];
-              if (isRecruiter) {
-                // Handle navigation for recruiters
+              if (bands.contains(acceptedProfile.name)) {
+                navigateToChat(acceptedProfile);
+                //TODO: NAVIGATES TO BAND PROFILE
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NavigateToBandProfile(
+                          bandName: acceptedProfile.name)),
+                );
               } else {
-                if(bands.contains(acceptedProfile.name)){
-                  navigateToChat(acceptedProfile);
-                  //TODO: NAVIGATES TO BAND PROFILE
-                }else {
-                  navigateToChat(acceptedProfile);
-                }
+                navigateToChat(acceptedProfile);
               }
+
               setState(() {
                 profiles.removeAt(index);
               });

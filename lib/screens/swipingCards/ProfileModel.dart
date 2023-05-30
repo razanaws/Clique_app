@@ -6,5 +6,5 @@ class Profile {
   });
   final String name;
   final String distance;
-  final String imageAsset;
+  final String? imageAsset;
 }

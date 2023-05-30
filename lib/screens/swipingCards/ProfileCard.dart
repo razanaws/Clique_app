@@ -17,10 +17,15 @@ class ProfileCard extends StatelessWidget {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                profile.imageAsset,
+              child: profile.imageAsset != null
+                  ? Image.network(
+                profile.imageAsset!,
                 fit: BoxFit.fill,
+              )
+                  : Container(
+                color: Colors.grey,
               ),
+
             ),
           ),
           Positioned(

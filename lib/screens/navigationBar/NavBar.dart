@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import '../RecruiterLabels.dart';
 import '../chat/ChatPreviewList.dart';
 import '../swipingCards/homepage.dart';
 
@@ -19,7 +20,7 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBar extends State<NavBar> {
-  late bool isRecruiter;
+  late bool isRecruiter = false;
   late var Profile;
 
   List<Widget> pages = const <Widget>[];
@@ -65,7 +66,7 @@ class _NavBar extends State<NavBar> {
       pages = <Widget>[
         Homepage(),
         ChatLists(),
-        Bands(),
+        RecruiterLabels(),
         RecruiterProfile()
       ];
     } else {
@@ -121,20 +122,24 @@ class _NavBar extends State<NavBar> {
                 widget.selectedIndexNavBar = index;
               });
             },
-            tabs: const [
-              GButton(
+            tabs: [
+              const GButton(
                 icon: Icons.home,
                 text: "Home",
               ),
-              GButton(
+              const GButton(
                 icon: Icons.message,
                 text: "Chat",
               ),
-              GButton(
+              isRecruiter ?
+              const GButton(
+                icon: Icons.group,
+                text: "Labeled",
+              ) :  const GButton(
                 icon: Icons.group,
                 text: "Bands",
-              ),
-              GButton(
+              ) ,
+              const GButton(
                 icon: Icons.account_box_rounded,
                 text: "Profile",
               ),

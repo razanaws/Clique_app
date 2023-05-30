@@ -16,16 +16,40 @@ class _MusicianProfileState extends State<MusicianProfile> {
   late Future<MusiciansModel?> musicianFuture;
   String? profileUrl;
   String? coverUrl;
+  late bool isLabelled = false;
+  late String? recruiterId = "no recruiter";
+
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
     musicianFuture = fetchUserInfo();
+    initializeIsLabelled();
   }
 
+  void initializeIsLabelled() async {
+    bool fetchedIsLabelled = await getIsLabeled();
+    setState(() {
+      isLabelled = fetchedIsLabelled;
+    });
+  }
+
+  Future<bool> getIsLabeled() async {
+    bool Labelled = false;
+    final snapshot = await FirebaseFirestore.instance.collection("Musicians")
+        .doc(currentUser?.email.toString()).get();
+
+    if(snapshot.exists){
+      final userData = snapshot.data() as Map<String, dynamic>;
+      Labelled = userData['recruited'] as bool? ?? false;
+      recruiterId = userData['recruiterId'] as String?;
+
+    }
+    return Labelled;
+  }
 
   Future<MusiciansModel?> fetchUserInfo() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
       final userSnapshot = await firestore
@@ -132,7 +156,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     child: const Icon(Icons.add, size: 30))
                                 : ClipOval(
                                     child: Image.network(
-                                      musician.profileLink,
+                                      musician.profileLink!,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -149,12 +173,22 @@ class _MusicianProfileState extends State<MusicianProfile> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(top: 5),
-                            child: Text(
-                              musician.name,
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 25,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  musician.name,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                musician.recruited != null && musician.recruited || isLabelled?
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                ): const Text(""),
+                              ],
                             ),
                           ),
 
@@ -289,7 +323,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                               shape: BoxShape.circle,
                                               color: Colors.red,
                                               image: DecorationImage(
-                                                image: NetworkImage(musician.profileLink),
+                                                image: NetworkImage(musician.profileLink!),
                                                 fit: BoxFit.cover,
                                               ),
                                             ),

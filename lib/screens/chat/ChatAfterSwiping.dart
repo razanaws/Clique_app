@@ -9,7 +9,7 @@ import 'ReceiverMusicianProfile.dart';
 
 class ChatAfterSwiping extends StatelessWidget {
   final String profileName;
-  final String profileImage;
+  final String? profileImage;
   final String currentUserEmail;
   final String otherUserEmail;
 
@@ -55,9 +55,13 @@ class ChatAfterSwiping extends StatelessWidget {
                 SizedBox(height: 20),
                 InkWell(
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(profileImage),
+                    backgroundImage: profileImage != null
+                        ? NetworkImage(profileImage!)
+                        : null,
+                    backgroundColor: profileImage != null ? null : Colors.grey,
                     radius: 50,
                   ),
+
                   onTap: () {
                     Navigator.push(
                         context,
