@@ -29,6 +29,8 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
     musicianFuture = fetchUserInfo();
     isCurrentUserRecruiter();
   }
+
+
   Future isCurrentUserRecruiter() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -427,7 +429,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
                                     ),
-                                    child: Text('Label as Recruitered'),
+                                    child: const Text('Label as Recruited'),
                                   ),
                                 ],
                               ],

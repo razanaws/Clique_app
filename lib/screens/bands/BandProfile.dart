@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:clique/models/BandsModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,6 +27,8 @@ class _BandProfileState extends State<BandProfile> {
   File? _coverPhoto;
   String? profileUrl;
   String? coverUrl;
+  late bool isLabelled = false;
+  late bool isCurrentRecruiter = false;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -34,6 +37,72 @@ class _BandProfileState extends State<BandProfile> {
     band = widget.band;
     bandFuture = fetchUserInfo();
     _loadImages();
+    isCurrentUserRecruiter();
+  }
+
+  Future isCurrentUserRecruiter() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      final userSnapshot = await firestore
+          .collection('Musicians')
+          .doc(currentUser?.email.toString())
+          .get();
+      if (userSnapshot.exists) {
+        setState(() {
+          isCurrentRecruiter = false;
+        });
+        return true;
+      } else {
+        try {
+          final secondUserSnapshot = await firestore
+              .collection('Recruiters')
+              .doc(currentUser?.email.toString())
+              .get();
+
+          if (secondUserSnapshot.exists) {
+            setState(() {
+              isCurrentRecruiter = true;
+            });
+            return true;
+          } else {
+            print("user doesn't exist");
+            return "user doesn't exist";
+          }
+        } catch (e) {
+          print("$e");
+          return e;
+        }
+      }
+    } catch (e) {
+      print("$e");
+      return e;
+    }
+  }
+
+  labelAsRecruiter() async {
+    String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
+    if (currentUserEmail != null) {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference musicianRef =
+          firestore.collection('bands').doc(widget.bandId);
+
+      await musicianRef.update({
+        'recruited': true,
+        'recruiterId': currentUserEmail,
+      });
+
+      DocumentReference recruiterRef =
+          firestore.collection('Recruiters').doc(currentUserEmail);
+
+      recruiterRef.update({
+        'labeledBands': FieldValue.arrayUnion([widget.bandId]),
+      });
+
+      setState(() {
+        isLabelled = true;
+      });
+    }
   }
 
   Future<BandsModel?> fetchUserInfo() async {
@@ -43,28 +112,36 @@ class _BandProfileState extends State<BandProfile> {
           await firestore.collection('bands').doc(widget.bandId).get();
 
       if (userSnapshot.exists) {
-          final userData = userSnapshot.data() as Map<String, dynamic>;
-          final bio = userData['bio'] as String;
-          final profileUrl = userData['profileUrl'] as String;
-          final coverUrl = userData['coverUrl'] as String;
-          final location = userData['location'] as String;
-          final genres = userData['genres'] as List;
-          final instruments = userData['instruments'] as List;
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        final bio = userData['bio'] as String;
+        final profileUrl = userData['profileUrl'] as String;
+        final coverUrl = userData['coverUrl'] as String;
+        final location = userData['location'] as String;
+        final genres = userData['genres'] as List;
+        final instruments = userData['instruments'] as List;
+        final recruited = userData['recruited'] as bool? ?? false;
+        final recruiterId = userData['recruiterId'] as String?;
 
-          BandsModel model = BandsModel(
-              profileLink: profileUrl,
-              coverLink: coverUrl,
-              location: location,
-              bio: bio,
-              genres: genres,
-              instruments: instruments);
+        BandsModel model = BandsModel(
+          profileLink: profileUrl,
+          coverLink: coverUrl,
+          location: location,
+          bio: bio,
+          genres: genres,
+          instruments: instruments,
+          recruited: recruited,
+          recruiterId: recruiterId,
+        );
 
-          model.profileLink = profileUrl;
-          model.coverLink = coverUrl;
+        model.profileLink = profileUrl;
+        model.coverLink = coverUrl;
         model.location = location;
         model.bio = bio;
         model.instruments = instruments;
         model.genres = genres;
+        model.recruiterId = recruiterId;
+        model.recruited = recruited;
+
         return model;
       } else {
         return null;
@@ -237,11 +314,28 @@ class _BandProfileState extends State<BandProfile> {
                             SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Text(
-                                    bandName,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 25,
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          bandName,
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 25,
+                                          ),
+                                        ),
+                                        band.recruited != null &&
+                                                    band.recruited ||
+                                                isLabelled
+                                            ? const Icon(
+                                                Icons.star,
+                                                color: Colors.yellow,
+                                              )
+                                            : const Text(""),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(height: height * 0.05),
@@ -344,7 +438,6 @@ class _BandProfileState extends State<BandProfile> {
                                                 ),
                                               ),
                                             ),
-
                                             SizedBox(height: 7),
                                             Wrap(
                                               alignment: WrapAlignment.start,
@@ -389,18 +482,26 @@ class _BandProfileState extends State<BandProfile> {
                                               alignment: WrapAlignment.start,
                                               spacing: 6,
                                               runSpacing: 6,
-                                              children: bandMembers!.map((member) {
-                                                final emailParts = member.split('@');
-                                                final memberName = emailParts.isNotEmpty ? emailParts.first : member;
+                                              children:
+                                                  bandMembers!.map((member) {
+                                                final emailParts =
+                                                    member.split('@');
+                                                final memberName =
+                                                    emailParts.isNotEmpty
+                                                        ? emailParts.first
+                                                        : member;
 
                                                 return Container(
-                                                  padding: const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                     horizontal: 12,
                                                     vertical: 6,
                                                   ),
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey,
-                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
                                                   ),
                                                   child: Text(
                                                     memberName,
@@ -415,9 +516,18 @@ class _BandProfileState extends State<BandProfile> {
                                         ),
                                       ),
 
-                                      SizedBox(
-                                        height: 7,
+                                      const SizedBox(height: 7),
+                                    if (isCurrentRecruiter && band.recruited != null && band.recruited == false && !isLabelled) ...[
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          labelAsRecruiter();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+                                        ),
+                                        child: const Text('Label as Recruited'),
                                       ),
+                                      ]
                                     ]),
                                   ),
                                 ],
@@ -463,7 +573,5 @@ class _BandProfileState extends State<BandProfile> {
             }),
       ),
     );
-
-
   }
 }
