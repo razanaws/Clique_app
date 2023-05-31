@@ -1,4 +1,3 @@
-//import 'package:flutter/cupertino.dart';
 import 'package:clique/models/MusiciansModel.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,14 +36,15 @@ class _MusicianProfileState extends State<MusicianProfile> {
 
   Future<bool> getIsLabeled() async {
     bool Labelled = false;
-    final snapshot = await FirebaseFirestore.instance.collection("Musicians")
-        .doc(currentUser?.email.toString()).get();
+    final snapshot = await FirebaseFirestore.instance
+        .collection("Musicians")
+        .doc(currentUser?.email.toString())
+        .get();
 
-    if(snapshot.exists){
+    if (snapshot.exists) {
       final userData = snapshot.data() as Map<String, dynamic>;
       Labelled = userData['recruited'] as bool? ?? false;
       recruiterId = userData['recruiterId'] as String?;
-
     }
     return Labelled;
   }
@@ -78,8 +78,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
             genres: genres,
             instruments: instruments,
             recruited: recruited,
-            recruiterId:recruiterId
-        );
+            recruiterId: recruiterId);
 
         model.name = name;
         model.profileLink = profileUrl;
@@ -93,6 +92,8 @@ class _MusicianProfileState extends State<MusicianProfile> {
         return null;
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
       print(e);
       return null;
     }
@@ -107,11 +108,14 @@ class _MusicianProfileState extends State<MusicianProfile> {
             future: musicianFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                return CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {
-                return Text('User not found.'); // Show appropriate message if user not found
+                return Text(
+                  'User not found.',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                );
               } else {
                 final musician = snapshot.data!;
                 double height = MediaQuery.of(context).size.height;
@@ -126,9 +130,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                         child: Center(
                           child: musician.coverLink.toString() == "null"
                               ? const Center(
-                                  //TODO CALL UPLOAD METHOD
-                                  child: Text(
-                                      'Click here to upload a cover photo'))
+                                  child: Text('upload a cover photo'))
                               : Image.network(
                                   musician.coverLink,
                                   fit: BoxFit.fitWidth,
@@ -162,7 +164,7 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                   ),
                           ),
                           onTap: () {
-                            //_pickProfilePicture();
+                            null;
                           },
                         ),
                       )
@@ -183,22 +185,22 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     fontSize: 25,
                                   ),
                                 ),
-                                musician.recruited != null && musician.recruited || isLabelled?
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                ): const Text(""),
+                                musician.recruited != null &&
+                                            musician.recruited ||
+                                        isLabelled
+                                    ? const Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                      )
+                                    : const Text(""),
                               ],
                             ),
                           ),
-
                           SizedBox(height: height * 0.05),
-
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Column(
                               children: [
-                                //TODO: location
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -218,7 +220,6 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     ),
                                   ],
                                 ),
-                                //TODO: bio
                                 Row(
                                   children: [
                                     Padding(
@@ -232,11 +233,15 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 7,),
+                                SizedBox(
+                                  height: 7,
+                                ),
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 2.0, top: 1.0),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 2.0, top: 1.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Align(
                                         alignment: Alignment.topLeft,
@@ -256,10 +261,12 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                         runSpacing: 6,
                                         children: musician.genres.map((genre) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6),
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
-                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               genre,
@@ -287,12 +294,15 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                         alignment: WrapAlignment.start,
                                         spacing: 6,
                                         runSpacing: 6,
-                                        children: musician.instruments.map((instrument) {
+                                        children: musician.instruments
+                                            .map((instrument) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6),
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
-                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               instrument,
@@ -306,78 +316,8 @@ class _MusicianProfileState extends State<MusicianProfile> {
                                     ],
                                   ),
                                 ),
-
-                                SizedBox(height: 7,),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 240.0),
-                                      child: Column(
-                                        //crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 60.0,
-                                            width: 60.0,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.red,
-                                              image: DecorationImage(
-                                                image: NetworkImage(musician.profileLink!),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 2.0),
-                                            child: Row(
-                                              children:  [
-                                                Text(
-                                                  musician.name,
-                                                  style: TextStyle(
-                                                      color: Colors.white70),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 2.0),
-                                            child: Row(
-                                              children: const [
-                                                Text(
-                                                  "2d ago",
-                                                  style: TextStyle(
-                                                      color: Colors.white70),
-                                                )
-                                              ], //TODO: time-postTime
-                                            ),
-                                          ),
-                                          SizedBox(height: 7,),
-                                          Center(
-                                            child: Row(children: [
-                                              Image.asset(
-                                                "images/splashingDrums.png",
-                                                fit: BoxFit.fill,
-                                                height: height * 0.3,
-                                                width: width * 0.8,
-                                              ),
-                                            ]),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                SizedBox(
+                                  height: 7,
                                 ),
                               ],
                             ),
@@ -385,8 +325,6 @@ class _MusicianProfileState extends State<MusicianProfile> {
                         ],
                       ),
                     ),
-
-                    // TODO: Profile image
                   ],
                 );
               }

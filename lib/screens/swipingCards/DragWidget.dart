@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'ProfileCard.dart';
-import 'ProfileModel.dart';
+import '../../models/ProfileModel.dart';
 import 'TagWidget.dart';
 
 enum Swipe { left, right, none }
@@ -27,7 +27,6 @@ class _DragWidgetState extends State<DragWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Draggable<int>(
-        // Data is the value this Draggable stores.
         data: widget.index,
         feedback: Material(
           color: Colors.transparent,
@@ -94,14 +93,12 @@ class _DragWidgetState extends State<DragWidget> {
           color: Colors.transparent,
         ),
 
-        //This will be visible when we press action button
         child: ValueListenableBuilder(
             valueListenable: widget.swipeNotifier,
             builder: (BuildContext context, Swipe swipe, Widget? child) {
               return Stack(
                 children: [
                   ProfileCard(profile: widget.profile),
-                  // heck if this is the last card and Swipe is not equal to Swipe.none
                   swipe != Swipe.none && widget.isLastCard
                       ? swipe == Swipe.right
                           ? Positioned(

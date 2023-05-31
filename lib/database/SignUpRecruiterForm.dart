@@ -1,13 +1,8 @@
-import 'package:clique/screens/createProfile/welcomepage.dart';
 import 'package:clique/screens/createProfileRec/welcomePageRec.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/screens/login/login.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:clique/screens/swipingCards/homepage.dart';
-
 import '../models/user.dart';
 
 class SignUpRecruiterForm extends StatefulWidget {
@@ -33,7 +28,7 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
 
   bool isValidEmail(value) {
     return RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(value);
   }
 
@@ -42,33 +37,33 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
   }
 
   bool isValidUsername(value) {
-    return RegExp(r'^(?=.{4,20}$)(?:[a-zA-Z\d]+(?:(?:\.|-|_)[a-zA-Z\d])*)+$').hasMatch(value);
+    return RegExp(r'^(?=.{4,20}$)(?:[a-zA-Z\d]+(?:(?:\.|-|_)[a-zA-Z\d])*)+$')
+        .hasMatch(value);
   }
-
 
   bool isValidPhonenumber(value) {
-    return RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$').hasMatch(value);
+    return RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
+        .hasMatch(value);
   }
 
-
-  Future<bool> CreateUserNameAndPassword() async{
+  Future<bool> CreateUserNameAndPassword() async {
     try {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+              email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('The account already exists for that email.')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The account already exists for that email.')));
       }
       return false;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("something went wrong please try again later")));
-    return false;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("something went wrong please try again later")));
+      return false;
     }
     return true;
   }
@@ -76,18 +71,16 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
   Future<bool> CreateUserInfo() async {
     try {
       CollectionReference users =
-      FirebaseFirestore.instance.collection('Recruiters');
-      // Call the user's CollectionReference to connect user email
+          FirebaseFirestore.instance.collection('Recruiters');
       await users.doc(emailController.text).set({
         'name': nameController.text,
         'number': numberController.text,
         'username': usernameController.text,
         'company': companyController.text
       });
-
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("something went wrong please try again later")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("something went wrong please try again later")));
       return false;
     }
     return true;
@@ -95,26 +88,23 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
 
   submitForm() async {
     CreateUserNameAndPassword().then((value) {
-      if(value == true){
-        CreateUserInfo().then((value2){
-          if(value2 == true){
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => WelcomePageRec(User: new user(nameController.text, emailController.text))));
-          }
-          else {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("something went wrong please try again later")));
+      if (value == true) {
+        CreateUserInfo().then((value2) {
+          if (value2 == true) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => WelcomePageRec(
+                    User:
+                        new user(nameController.text, emailController.text))));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("something went wrong please try again later")));
           }
         });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("something went wrong please try again later")));
       }
-      else
-      {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("something went wrong please try again later")));
-      }
-
     });
-
   }
 
   @override
@@ -132,7 +122,9 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: height*0.09,),
+                SizedBox(
+                  height: height * 0.09,
+                ),
                 const Text(
                   "Create a new recruiter account",
                   style: TextStyle(
@@ -140,7 +132,9 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                     fontSize: 20,
                   ),
                 ),
-                SizedBox(height: height*0.05,),
+                SizedBox(
+                  height: height * 0.05,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(7.0),
                   child: TextFormField(
@@ -292,7 +286,6 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                   child: TextFormField(
                     controller: companyController,
                     validator: (value) {
-                      print("in validator");
                       if (value == null || value.isEmpty) {
                         return 'Field is required';
                       }
@@ -327,7 +320,6 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                       )),
                     ),
                     onPressed: () {
-
                       if (formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')));
@@ -342,8 +334,8 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => AuthScreen()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AuthScreen()));
                     },
                     child: const Text(
                       "I already have an account",

@@ -1,4 +1,3 @@
-
 import 'package:clique/database/loginForm.dart';
 import 'package:clique/screens/navigationBar/NavBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,31 +11,34 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-
   final TextEditingController emailController = TextEditingController();
 
   @override
-  void dispose(){
+  void dispose() {
     emailController.dispose();
     super.dispose();
   }
 
+  bool isValidEmail(value) {
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(value);
+  }
+
   showAlertDialog(BuildContext context) {
-    
-    // Create button
     Widget okButton = TextButton(
       child: Text("Ok"),
       onPressed: () {
         final currentUser = FirebaseAuth.instance.currentUser;
 
-        if(currentUser?.email==null){
+        if (currentUser?.email == null) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => Login(),
             ),
           );
-        }else{
+        } else {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -44,11 +46,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             ),
           );
         }
-       
       },
     );
 
-    // Create AlertDialog
     AlertDialog alert = AlertDialog(
       content: Text("Password reset link sent please check your email"),
       actions: [
@@ -56,7 +56,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -65,23 +64,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  Future SendResetLink() async{
-
-    try{
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+  Future SendResetLink() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text.trim());
 
       showAlertDialog(context);
-
-    } on FirebaseAuthException catch (e){
+    } on FirebaseAuthException catch (e) {
       print(e);
-      showDialog(context: context, builder: (context){
-        return AlertDialog(
-          content: Text(e.message.toString())
-        );
-      });
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(content: Text(e.message.toString()));
+          });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,29 +87,25 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
         elevation: 0,
       ),
-      body:
-      Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: const Text(
-                "Please enter your email",
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 20
-              ),
+              "Please enter your email",
+              style: TextStyle(color: Colors.white70, fontSize: 20),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  //TODO: Validate email "xxx@xxx.com"
                   return 'This field is required.';
+                } else if (!isValidEmail(value)) {
+                  return 'Invalid Email.';
                 }
                 return null;
               },
@@ -132,8 +125,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               ),
             ),
           ),
-
-
           Container(
             width: double.maxFinite,
             height: 60,
@@ -156,7 +147,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ],
       ),
-
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
     );
   }

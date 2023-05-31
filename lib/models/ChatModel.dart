@@ -7,7 +7,12 @@ class ChatModel {
   var profileUrl;
   var otherUserName;
 
-  ChatModel({ required  this.docId, required this.sender,
-    required this.receiver, required this.message,
-    required this.timestamp, this.profileUrl, this.otherUserName});
+  ChatModel(
+      {required this.docId,
+      required this.sender,
+      required this.receiver,
+      required this.message,
+      required this.timestamp,
+      this.profileUrl,
+      this.otherUserName});
 }

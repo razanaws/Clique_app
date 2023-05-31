@@ -28,7 +28,7 @@ class BackgroudCurveWidget extends StatelessWidget {
       ),
       child: const Padding(
         padding: EdgeInsets.only(top: 46.0, left: 20.0),
-        child: SizedBox(), // Replace with your desired content
+        child: SizedBox(),
       ),
     );
   }

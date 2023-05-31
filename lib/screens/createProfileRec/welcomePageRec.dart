@@ -1,10 +1,7 @@
-import 'package:clique/screens/createProfileRec/welcomePageRec.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/models/user.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'CreateProfileRec.dart';
-
 
 class WelcomePageRec extends StatelessWidget {
   final user User;
@@ -21,20 +18,18 @@ class WelcomePageRec extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
       ),
       body: Container(
-
         height: height,
         width: width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            const Center(
               child: Image(
                 image: AssetImage('images/welcome.png'),
                 fit: BoxFit.fill,
               ),
             ),
-            SizedBox(height: height*0.08),
+            SizedBox(height: height * 0.08),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(
@@ -43,24 +38,19 @@ class WelcomePageRec extends StatelessWidget {
                     fontSize: 30,
                     fontFamily: 'SanFrancisco',
                     fontWeight: FontWeight.bold,
-                    color: Colors.white70
-                ),
+                    color: Colors.white70),
               ),
             ),
-
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
                 "Lets get started",
-                style:  TextStyle(
+                style: TextStyle(
                     fontSize: 25,
                     fontFamily: 'SanFrancisco',
-                    color: Colors.white70
-
-                ),
+                    color: Colors.white70),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: Container(
@@ -74,28 +64,23 @@ class WelcomePageRec extends StatelessWidget {
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0))),
                   ),
-                  onPressed:  (){
+                  onPressed: () {
                     Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (context) => CreateProfileRec(User:  User)));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CreateProfileRec(User: User)));
                   },
                   child: const Text(
                     'Create my profile',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18
-                    )
-                    ,
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
               ),
             )
-
           ],
         ),
       ),
-
     );
   }
-
-
 }

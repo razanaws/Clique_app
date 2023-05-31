@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clique/screens/signup/musicianSignUp.dart';
 import 'package:clique/screens/signup/recruiterSignUp.dart';
-import 'package:clique/screens/swipingCards/homepage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
 import '../screens/login/resetPasswordPage.dart';
 
 class Login extends StatefulWidget {
@@ -18,7 +14,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -38,14 +33,12 @@ class _LoginState extends State<Login> {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
-      //navigate to homepage after signing in.
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("invalid username or password")));
         return false;
-
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("invalid username or password")));
@@ -53,19 +46,17 @@ class _LoginState extends State<Login> {
       }
     }
     return true;
-
   }
 
-   submitForm() async {
+  submitForm() async {
     validateUserInfo().then((value) {
-      if (value == true)
-        {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => NavBar(selectedIndexNavBar: 0,)));
-        }
-
+      if (value == true) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => NavBar(
+                  selectedIndexNavBar: 0,
+                )));
+      }
     });
-
   }
 
   @override
@@ -81,10 +72,11 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 40,),
+              SizedBox(
+                height: 40,
+              ),
               Image.asset('images/cliqueClipArtLogin.png',
                   width: width * 0.3, height: height * 0.3),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -115,11 +107,10 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  obscureText: true, //Hides password
+                  obscureText: true,
                   controller: passwordController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -146,7 +137,6 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-
               Container(
                 width: double.maxFinite,
                 height: 60,
@@ -158,11 +148,10 @@ class _LoginState extends State<Login> {
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0))),
                   ),
-                  onPressed:  (){
+                  onPressed: () {
                     if (formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Processing Data')));
-
                     }
 
                     submitForm();
@@ -173,7 +162,6 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-
               TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -183,21 +171,20 @@ class _LoginState extends State<Login> {
                     "Forgot Password? Reset your password.",
                     style: TextStyle(color: Colors.white),
                   )),
-
               SizedBox(
                 width: width * 0.005,
                 height: height * 0.005,
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: const Text(
+              const Padding(
+                padding: EdgeInsets.all(14.0),
+                child: Text(
                   "Don't have an account?",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(height: height*0.05,),
-
+              SizedBox(
+                height: height * 0.05,
+              ),
               Row(
                 children: [
                   Expanded(
@@ -231,5 +218,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 }

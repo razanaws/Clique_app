@@ -65,7 +65,6 @@ class _CreateProfileState extends State<CreateProfile> {
         _genres = genresController.text.replaceAll(' ', '').split(',');
 
       });
-      print(_instruments);
 
       try {
         CollectionReference users = FirebaseFirestore.instance.collection('Musicians');

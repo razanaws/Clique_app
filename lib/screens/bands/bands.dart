@@ -10,6 +10,7 @@ class Bands extends StatefulWidget {
   @override
   State<Bands> createState() => _BandsState();
 }
+
 class _BandsState extends State<Bands> {
   late Stream<QuerySnapshot> bandsStream;
 

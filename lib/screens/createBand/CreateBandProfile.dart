@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'package:clique/screens/navigationBar/NavBar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 
 class CreateBandProfile extends StatefulWidget {
   final String bandId;
@@ -19,7 +16,6 @@ class CreateBandProfile extends StatefulWidget {
 }
 
 class _CreateBandProfileState extends State<CreateBandProfile> {
-
   Map<String, dynamic>? band;
   File? _profilePicture;
   File? _coverPhoto;
@@ -38,23 +34,23 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
   _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _instruments = instrumentsController.text.replaceAll(' ', '').split(',');
+        _instruments =
+            instrumentsController.text.replaceAll(' ', '').split(',');
         _genres = genresController.text.replaceAll(' ', '').split(',');
-
       });
-      print(_instruments);
 
       try {
-        CollectionReference users = FirebaseFirestore.instance.collection('bands');
+        CollectionReference users =
+            FirebaseFirestore.instance.collection('bands');
         await users.doc(widget.bandId).update({
           'bio': bioController.text.trim(),
-          'location' : locationController.text.trim(),
-          'instruments' : _instruments,
+          'location': locationController.text.trim(),
+          'instruments': _instruments,
           'genres': _genres,
         });
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("something went wrong please try again later")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("something went wrong please try again later")));
         return false;
       }
       Navigator.pushReplacement(
@@ -63,7 +59,6 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
           builder: (context) => NavBar(selectedIndexNavBar: 2),
         ),
       );
-
     }
   }
 
@@ -103,7 +98,7 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
   Future<void> _loadImages() async {
     try {
       final bandRef =
-      FirebaseFirestore.instance.collection('bands').doc(widget.bandId);
+          FirebaseFirestore.instance.collection('bands').doc(widget.bandId);
       final bandDoc = await bandRef.get();
       final data = bandDoc.data() as Map<String, dynamic>?;
       if (data != null) {
@@ -114,54 +109,46 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Something went wrong. Please try again later.")),
+        const SnackBar(
+            content: Text("Something went wrong. Please try again later.")),
       );
     }
   }
 
-
   Future<void> _StoreProfileUrl(downloadUrl) async {
     try {
-      final bandRef = FirebaseFirestore.instance.collection('bands').doc(widget.bandId);
-      await bandRef.update({
-        'profileUrl': downloadUrl
-      });
+      final bandRef =
+          FirebaseFirestore.instance.collection('bands').doc(widget.bandId);
+      await bandRef.update({'profileUrl': downloadUrl});
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("something went wrong please try again later")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("something went wrong please try again later")));
       return;
     }
     _loadImages();
-
-
   }
 
   Future<void> _StorCoverUrl(downloadUrl) async {
     try {
-      final bandRef = FirebaseFirestore.instance.collection('bands').doc(widget.bandId);
-      await bandRef.update({
-        'coverUrl': downloadUrl
-      });
+      final bandRef =
+          FirebaseFirestore.instance.collection('bands').doc(widget.bandId);
+      await bandRef.update({'coverUrl': downloadUrl});
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("something went wrong please try again later")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("something went wrong please try again later")));
       return;
-
     }
     _loadImages();
-
   }
 
   Future<void> _pickProfilePicture() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _profilePicture = File(pickedFile.path);
         _saveImages();
         _loadImages();
-
-
       } else {
         print('No image selected.');
       }
@@ -170,7 +157,7 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
 
   Future<void> _pickCoverPhoto() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _coverPhoto = File(pickedFile.path);
@@ -195,7 +182,6 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
       final String downloadUrl = await snapshot.ref.getDownloadURL();
       imageUrls.add(downloadUrl);
       _StoreProfileUrl(downloadUrl);
-
     }
     if (_coverPhoto != null) {
       final Reference ref = storage
@@ -206,7 +192,6 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
       final String downloadUrl = await snapshot.ref.getDownloadURL();
       imageUrls.add(downloadUrl);
       _StorCoverUrl(downloadUrl);
-
     }
     return imageUrls;
   }
@@ -218,10 +203,8 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
 
   @override
   Widget build(BuildContext context) {
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
@@ -241,19 +224,18 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                     color: Colors.grey,
                     child: _coverPhoto == null
                         ? const Center(
-                        child: Text('Click here to upload a cover photo'))
+                            child: Text('Click here to upload a cover photo'))
                         : Image.file(
-                      _coverPhoto!,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+                            _coverPhoto!,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   onTap: () {
                     _pickCoverPhoto();
                   },
                 ),
                 SizedBox(height: 100),
-
                 Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -263,10 +245,8 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Tell us more about your band",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -274,7 +254,7 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                           child: Container(
                             width: 300,
                             child: TextFormField(
-                              validator: (value){
+                              validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a bio';
                                 }
@@ -285,38 +265,38 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
-
                                 label: const Text("About you",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Where can people find you?",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -325,7 +305,7 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                             width: 300,
                             child: TextFormField(
                               style: TextStyle(color: Colors.white70),
-                              validator: (value){
+                              validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter your location';
                                 }
@@ -335,39 +315,38 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
-
                                 label: const Text("Your Location",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Tell us more about your instruments\n         seperated by a comma",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -382,39 +361,38 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
-
                                 label: const Text("Talent1, talent2, talent3",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "What genres are you interested in?\n       seperated by a comma",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -429,35 +407,34 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(color: Colors.white),
                                 ),
-
                                 label: const Text("Genre1, Genre2, Genre3",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-
-
                         SizedBox(height: 16.0),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+                            backgroundColor:
+                                const Color.fromRGBO(100, 13, 20, 1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
@@ -465,18 +442,13 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                           onPressed: _submitForm,
                           child: Text(
                             'Create profile',
-                            style: TextStyle(
-                                fontSize: 17
-                            ),
+                            style: TextStyle(fontSize: 17),
                           ),
                         ),
-
                       ],
                     ),
-
                   ),
                 ),
-
               ],
             ),
             Positioned(
@@ -489,18 +461,18 @@ class _CreateBandProfileState extends State<CreateBandProfile> {
                   width: 120.0,
                   decoration: BoxDecoration(
                     border:
-                    Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
+                        Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
                     color: Colors.grey,
                     shape: BoxShape.circle,
                   ),
                   child: _profilePicture == null
                       ? const Center(child: const Icon(Icons.add, size: 30))
                       : ClipOval(
-                    child: Image.file(
-                      _profilePicture!,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                          child: Image.file(
+                            _profilePicture!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                 ),
                 onTap: () {
                   _pickProfilePicture();

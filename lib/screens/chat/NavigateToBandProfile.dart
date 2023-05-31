@@ -9,12 +9,12 @@ class NavigateToBandProfile extends StatefulWidget {
   @override
   State<NavigateToBandProfile> createState() => _NavigateToBandProfileState();
 }
+
 class _NavigateToBandProfileState extends State<NavigateToBandProfile> {
   String? bandId;
   late final Map<String, dynamic> band;
 
   fetchBandProfile() async {
-
     final snapshot = await FirebaseFirestore.instance
         .collection("bands")
         .where("name", isEqualTo: widget.bandName)
@@ -31,7 +31,7 @@ class _NavigateToBandProfileState extends State<NavigateToBandProfile> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     fetchBandProfile();
   }

@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:clique/screens/navigationBar/NavBar.dart';
-import 'package:clique/screens/profile/MusicianProfile.dart';
-import 'package:clique/screens/profile/RecruiterProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,7 +22,7 @@ class _ChangeProfilePictureState extends State<ChangeProfilePicture> {
 
   Future<void> _pickProfilePicture() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _profilePicture = File(pickedFile.path);
@@ -34,6 +32,7 @@ class _ChangeProfilePictureState extends State<ChangeProfilePicture> {
       }
     });
   }
+
   Future<void> _StoreProfileUrl(downloadUrl) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -58,20 +57,27 @@ class _ChangeProfilePictureState extends State<ChangeProfilePicture> {
               isRecruiter = true;
             });
           } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("User Doesn't Exist")));
             print("user doesn't exist");
           }
         } catch (e) {
           print(e);
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Error occurred")));
         }
       }
     } catch (e) {
       print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
     }
 
-    if(!isRecruiter){
+    if (!isRecruiter) {
       try {
-        final bandRef =
-        FirebaseFirestore.instance.collection('Musicians').doc(currentUser?.email.toString());
+        final bandRef = FirebaseFirestore.instance
+            .collection('Musicians')
+            .doc(currentUser?.email.toString());
         await bandRef.update({'profileUrl': downloadUrl});
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -84,12 +90,11 @@ class _ChangeProfilePictureState extends State<ChangeProfilePicture> {
           builder: (context) => NavBar(selectedIndexNavBar: 3),
         ),
       );
-
-
-    }else{
+    } else {
       try {
-        final bandRef =
-        FirebaseFirestore.instance.collection('Recruiters').doc(currentUser?.email.toString());
+        final bandRef = FirebaseFirestore.instance
+            .collection('Recruiters')
+            .doc(currentUser?.email.toString());
         await bandRef.update({'profileUrl': downloadUrl});
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -99,11 +104,9 @@ class _ChangeProfilePictureState extends State<ChangeProfilePicture> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  NavBar(selectedIndexNavBar: 3),
+          builder: (context) => NavBar(selectedIndexNavBar: 3),
         ),
       );
-
-
     }
   }
 
@@ -151,14 +154,14 @@ class _ChangeProfilePictureState extends State<ChangeProfilePicture> {
             },
             child: _profilePicture == null
                 ? const Center(
-              child: Icon(Icons.add, size: 50),
-            )
+                    child: Icon(Icons.add, size: 50),
+                  )
                 : ClipOval(
-              child: Image.file(
-                _profilePicture!,
-                fit: BoxFit.cover,
-              ),
-            ),
+                    child: Image.file(
+                      _profilePicture!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
           ),
         ),
       ),

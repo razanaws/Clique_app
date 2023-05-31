@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'BackgroudCurveWidget.dart';
 import 'CardsStackWidget.dart';
 
-
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -11,16 +10,13 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
   @override
   Widget build(BuildContext context) {
-
     return const Stack(
       children: [
         BackgroudCurveWidget(),
         CardsStackWidget(),
       ],
     );
-
   }
 }

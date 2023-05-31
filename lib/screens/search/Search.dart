@@ -1,34 +1,33 @@
-import "package:clique/screens/createBand/CreateBandProfile.dart";
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:firebase_auth/firebase_auth.dart";
-import "package:flutter/material.dart";
+import 'package:clique/screens/chat/NavigateToBandProfile.dart';
+import 'package:clique/screens/chat/ReceiverMusicianProfile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
-class CreateBand extends StatefulWidget {
-  const CreateBand({Key? key}) : super(key: key);
+class Search extends StatefulWidget {
+  const Search({Key? key}) : super(key: key);
 
   @override
-  State<CreateBand> createState() => _CreateBandState();
+  State<Search> createState() => _SearchState();
 }
 
-class _CreateBandState extends State<CreateBand> {
-  final TextEditingController _groupNameController = TextEditingController();
+class _SearchState extends State<Search> {
   final TextEditingController _memberEmailController = TextEditingController();
-  final List<String?> _memberEmails = [];
+  final TextEditingController _bandEmailController = TextEditingController();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  void _addMember() async {
+  void _searchUser() async {
     final String memberEmail = _memberEmailController.text.trim();
 
     if (memberEmail.isNotEmpty) {
-      final snapshot = await _firestore
+      final snapshot = await FirebaseFirestore.instance
           .collection('Musicians')
           .doc(memberEmail.toString())
           .get();
 
       if (snapshot.exists) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ReceiverMusicianProfile(
+                receiverEmail: memberEmail.toString())));
         setState(() {
-          _memberEmails.add(memberEmail);
           _memberEmailController.clear();
         });
       } else {
@@ -53,58 +52,30 @@ class _CreateBandState extends State<CreateBand> {
     }
   }
 
-  void _createGroup() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    final String groupName = _groupNameController.text.trim();
-    if (groupName.isNotEmpty && _memberEmails.isNotEmpty) {
-      if (_memberEmails.isNotEmpty) {
-        _memberEmails.add(currentUser?.email.toString());
-        final DocumentReference groupRef = _firestore.collection('bands').doc();
-        final Map<String, dynamic> groupData = {
-          'name': groupName,
-          'admin': currentUser?.email.toString(),
-          'members': _memberEmails,
-        };
-        await groupRef.set(groupData);
+  void _searchBand() async {
+    final String bandName = _bandEmailController.text.trim();
 
-        for (final member in _memberEmails) {
-          final DocumentReference userRef =
-              _firestore.collection('Musicians').doc(member);
-          final Map<String, dynamic> userData = {
-            'bands': FieldValue.arrayUnion([groupRef]),
-          };
-          await userRef.update(userData);
-        }
+    if (bandName.isNotEmpty) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('bands')
+          .where('name', isEqualTo: bandName)
+          .limit(1)
+          .get();
 
-        _groupNameController.clear();
-        _memberEmailController.clear();
-
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Success'),
-              content: Text('Band created successfully.'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            CreateBandProfile(groupRef.id, groupData)));
-                  },
-                ),
-              ],
-            );
-          },
-        );
+      if (snapshot.docs.isNotEmpty) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => NavigateToBandProfile(bandName: bandName),
+        ));
+        setState(() {
+          _bandEmailController.clear();
+        });
       } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Error'),
-              content: const Text('error msg.'), //catch
+              title: Text('Oops'),
+              content: Text('Band does not exist.'),
               actions: <Widget>[
                 TextButton(
                   child: Text('OK'),
@@ -141,9 +112,9 @@ class _CreateBandState extends State<CreateBand> {
                           ? "field is required"
                           : null;
                     },
-                    controller: _groupNameController,
-                    decoration: InputDecoration(
-                      labelText: 'Group Name',
+                    controller: _memberEmailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Musician Email',
                       labelStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -153,6 +124,20 @@ class _CreateBandState extends State<CreateBand> {
                       ),
                     ),
                     style: TextStyle(color: Colors.white),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      _searchUser();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromRGBO(100, 13, 20, 1)),
+                    ),
+                    child: Text(
+                      'Search Musician',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   SizedBox(height: 16.0),
                   TextFormField(
@@ -161,9 +146,9 @@ class _CreateBandState extends State<CreateBand> {
                           ? "field is required"
                           : null;
                     },
-                    controller: _memberEmailController,
-                    decoration: InputDecoration(
-                      labelText: 'Member Email',
+                    controller: _bandEmailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Band Name',
                       labelStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -177,33 +162,14 @@ class _CreateBandState extends State<CreateBand> {
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
-                      _addMember();
+                      _searchBand();
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           Color.fromRGBO(100, 13, 20, 1)),
                     ),
                     child: Text(
-                      'Add Member',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Members: ${_memberEmails.join(", ")}',
-                    style: TextStyle(fontSize: 16.0, color: Colors.white),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      _createGroup();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromRGBO(100, 13, 20, 1)),
-                    ),
-                    child: Text(
-                      'Create Group',
+                      'Search Band',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

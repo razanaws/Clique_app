@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'ProfileModel.dart';
+import '../../models/ProfileModel.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({Key? key, required this.profile}) : super(key: key);
@@ -19,13 +18,12 @@ class ProfileCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: profile.imageAsset != null
                   ? Image.network(
-                profile.imageAsset!,
-                fit: BoxFit.fill,
-              )
+                      profile.imageAsset!,
+                      fit: BoxFit.fill,
+                    )
                   : Container(
-                color: Colors.grey,
-              ),
-
+                      color: Colors.grey,
+                    ),
             ),
           ),
           Positioned(

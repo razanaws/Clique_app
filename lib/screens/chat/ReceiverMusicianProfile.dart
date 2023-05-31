@@ -22,14 +22,12 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
   late bool isCurrentRecruiter = false;
   late bool isLabelled = false;
 
-
   @override
   void initState() {
     super.initState();
     musicianFuture = fetchUserInfo();
     isCurrentUserRecruiter();
   }
-
 
   Future isCurrentUserRecruiter() async {
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -58,15 +56,21 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
             return true;
           } else {
             print("user doesn't exist");
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("user doesn't exist")));
             return "user doesn't exist";
           }
         } catch (e) {
-          print(" here $e");
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Error occurred")));
+          print("$e");
           return e;
         }
       }
     } catch (e) {
-      print(" here2 $e");
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurred")));
+      print("$e");
       return e;
     }
   }
@@ -76,7 +80,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
     if (currentUserEmail != null) {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference musicianRef =
-      firestore.collection('Musicians').doc(widget.receiverEmail);
+          firestore.collection('Musicians').doc(widget.receiverEmail);
 
       await musicianRef.update({
         'recruited': true,
@@ -84,7 +88,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
       });
 
       DocumentReference recruiterRef =
-      firestore.collection('Recruiters').doc(currentUserEmail);
+          firestore.collection('Recruiters').doc(currentUserEmail);
 
       recruiterRef.update({
         'labeledMusicians': FieldValue.arrayUnion([widget.receiverEmail]),
@@ -150,7 +154,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
         if (secondReceiverSnapshot.exists) {
           isRecruiter = true;
           final receiverData =
-          secondReceiverSnapshot.data() as Map<String, dynamic>;
+              secondReceiverSnapshot.data() as Map<String, dynamic>;
           final name = receiverData['name'] as String;
           final bio = receiverData['bio'] as String;
           final profileUrl = receiverData['profileUrl'];
@@ -159,7 +163,8 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
           final genres = receiverData['genres'] as List;
           final requirements = receiverData['requirements'] as List;
 
-          final profileLink = (profileUrl != null) ? profileUrl as String : null;
+          final profileLink =
+              (profileUrl != null) ? profileUrl as String : null;
 
           MusiciansModel model = MusiciansModel(
             name: name.toString(),
@@ -182,11 +187,15 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
           model.genres = genres;
           return model;
         } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("User not found")));
           print("User not found");
         }
       }
     } catch (e) {
-      print(" here 3 $e");
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurred")));
+      print("$e");
       return null;
     }
   }
@@ -203,12 +212,14 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
             future: musicianFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                return CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {
                 return Text(
-                    'User not found.'); // Show appropriate message if user not found
+                  'User not found.',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                );
               } else {
                 final musician = snapshot.data!;
                 double height = MediaQuery.of(context).size.height;
@@ -223,15 +234,14 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                         child: Center(
                           child: musician.coverLink.toString() == "null"
                               ? const Center(
-                            //TODO CALL UPLOAD METHOD
-                              child: Text(
-                                  'Click here to upload a cover photo'))
+                                  child: Text(
+                                      'Click here to upload a cover photo'))
                               : Image.network(
-                            musician.coverLink,
-                            fit: BoxFit.fitWidth,
-                            height: height * 0.3,
-                            width: width,
-                          ),
+                                  musician.coverLink,
+                                  fit: BoxFit.fitWidth,
+                                  height: height * 0.3,
+                                  width: width,
+                                ),
                         ),
                       ),
                       Positioned(
@@ -250,13 +260,13 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                             ),
                             child: musician.profileLink == null
                                 ? const Center(
-                                child: const Icon(Icons.add, size: 30))
+                                    child: const Icon(Icons.add, size: 30))
                                 : ClipOval(
-                              child: Image.network(
-                                musician.profileLink!,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                                    child: Image.network(
+                                      musician.profileLink!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                           ),
                         ),
                       )
@@ -277,11 +287,14 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                     fontSize: 25,
                                   ),
                                 ),
-                                musician.recruited != null && musician.recruited || isLabelled?
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                  ): const Text(""),
+                                musician.recruited != null &&
+                                            musician.recruited ||
+                                        isLabelled
+                                    ? const Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                      )
+                                    : const Text(""),
                               ],
                             ),
                           ),
@@ -290,7 +303,6 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Column(
                               children: [
-                                //TODO: location
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -310,7 +322,6 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                     ),
                                   ],
                                 ),
-                                //TODO: bio
                                 Row(
                                   children: [
                                     Padding(
@@ -332,7 +343,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                       bottom: 2.0, top: 1.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Align(
                                         alignment: Alignment.topLeft,
@@ -357,7 +368,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
                                               borderRadius:
-                                              BorderRadius.circular(10.0),
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               genre,
@@ -373,21 +384,21 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                         alignment: Alignment.topLeft,
                                         child: isRecruiter == true
                                             ? Text(
-                                          "Requirements",
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        )
+                                                "Requirements",
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              )
                                             : Text(
-                                          "Instruments",
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
+                                                "Instruments",
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
                                       ),
                                       SizedBox(height: 7),
                                       Wrap(
@@ -402,7 +413,7 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
                                               borderRadius:
-                                              BorderRadius.circular(10.0),
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               instrument,
@@ -416,18 +427,22 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
                                     ],
                                   ),
                                 ),
-
                                 const SizedBox(
                                   height: 7,
                                 ),
-                                if (!isRecruiter && isCurrentRecruiter && musician.recruited != null && musician.recruited == false && !isLabelled) ...[
+                                if (!isRecruiter &&
+                                    isCurrentRecruiter &&
+                                    musician.recruited != null &&
+                                    musician.recruited == false &&
+                                    !isLabelled) ...[
                                   const SizedBox(height: 7),
                                   ElevatedButton(
                                     onPressed: () {
                                       labelAsRecruiter();
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+                                      backgroundColor:
+                                          const Color.fromRGBO(100, 13, 20, 1),
                                     ),
                                     child: const Text('Label as Recruited'),
                                   ),
@@ -446,4 +461,3 @@ class _ReceiverMusicianProfileState extends State<ReceiverMusicianProfile> {
     );
   }
 }
-

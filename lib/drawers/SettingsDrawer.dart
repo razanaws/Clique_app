@@ -1,5 +1,4 @@
 import 'package:clique/database/loginForm.dart';
-import 'package:clique/screens/profile/MusicianProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../screens/createBand/CreateBand.dart';
@@ -26,9 +25,10 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
   logoutUser(context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      // Redirect or show login screen
     } catch (e) {
       print('Error occurred while logging out: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error occurred while logging out')));
       return false;
     }
     Navigator.of(context)
@@ -62,15 +62,21 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
             return true;
           } else {
             print("user doesn't exist");
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("user doesn't exist")));
             return "user doesn't exist";
           }
         } catch (e) {
           print(e);
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Error occurred")));
           return e;
         }
       }
     } catch (e) {
       print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
       return e;
     }
   }
@@ -126,24 +132,24 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
             ),
             if (!isRecruiter)
               const Divider(
-              color: Colors.white,
-              height: 5,
-            ),
-            if (!isRecruiter) // Only show if not a recruiter
+                color: Colors.white,
+                height: 5,
+              ),
+            if (!isRecruiter)
               buildMenuItem(
                 text: 'Create A Band',
                 icon: Icons.add_circle,
                 onClicked: () => selectedItem(context, 2),
               ),
             if (!isRecruiter)
-            const SizedBox(
-              height: 10,
-            ),
+              const SizedBox(
+                height: 10,
+              ),
             if (!isRecruiter)
-            const Divider(
-              color: Colors.white,
-              height: 5,
-            ),
+              const Divider(
+                color: Colors.white,
+                height: 5,
+              ),
             const SizedBox(
               height: 10,
             ),

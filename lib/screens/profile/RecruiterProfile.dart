@@ -22,7 +22,6 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
   }
 
   Future<RecruitersModel?> fetchUserInfo() async {
-
     final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -62,6 +61,8 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
         return null;
       }
     } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurred")));
       print(e);
       return null;
     }
@@ -76,11 +77,16 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
             future: recruiterFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                return CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {
-                return Text('User not found.'); // Show appropriate message if user not found
+                return const Center(
+                  child: Text(
+                    'User not found.',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                );
               } else {
                 final recruiter = snapshot.data!;
                 double height = MediaQuery.of(context).size.height;
@@ -95,15 +101,13 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                         child: Center(
                           child: recruiter.coverLink.toString() == "null"
                               ? const Center(
-                            //TODO CALL UPLOAD METHOD
-                              child: Text(
-                                  'Click here to upload a cover photo'))
+                                  child: Text('upload a cover photo'))
                               : Image.network(
-                            recruiter.coverLink,
-                            fit: BoxFit.fitWidth,
-                            height: height * 0.3,
-                            width: width,
-                          ),
+                                  recruiter.coverLink,
+                                  fit: BoxFit.fitWidth,
+                                  height: height * 0.3,
+                                  width: width,
+                                ),
                         ),
                       ),
                       Positioned(
@@ -122,16 +126,16 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                             ),
                             child: recruiter.profileLink == null
                                 ? const Center(
-                                child: const Icon(Icons.add, size: 30))
+                                    child: const Icon(Icons.add, size: 30))
                                 : ClipOval(
-                              child: Image.network(
-                               recruiter.profileLink,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                                    child: Image.network(
+                                      recruiter.profileLink,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                           ),
                           onTap: () {
-                            //_pickProfilePicture();
+                            null;
                           },
                         ),
                       )
@@ -150,14 +154,11 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                               ),
                             ),
                           ),
-
                           SizedBox(height: height * 0.05),
-
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Column(
                               children: [
-                                //TODO: location
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -171,13 +172,12 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                           ),
                                         ),
                                         TextSpan(
-                                            text:  recruiter.location,
+                                            text: recruiter.location,
                                             style: TextStyle(fontSize: 17))
                                       ]),
                                     ),
                                   ],
                                 ),
-                                //TODO: bio
                                 Row(
                                   children: [
                                     Padding(
@@ -191,11 +191,15 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 7,),
+                                SizedBox(
+                                  height: 7,
+                                ),
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 2.0, top: 1.0),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 2.0, top: 1.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Align(
                                         alignment: Alignment.topLeft,
@@ -215,10 +219,12 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                         runSpacing: 6,
                                         children: recruiter.genres.map((genre) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6),
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
-                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               genre,
@@ -246,12 +252,15 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                         alignment: WrapAlignment.start,
                                         spacing: 6,
                                         runSpacing: 6,
-                                        children: recruiter.requirements.map((instrument) {
+                                        children: recruiter.requirements
+                                            .map((instrument) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6),
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
-                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Text(
                                               instrument,
@@ -265,78 +274,8 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 7,),
-
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 240.0),
-                                      child: Column(
-                                        //crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              height: 60.0,
-                                              width: 60.0,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.red,
-                                                image: DecorationImage(
-                                                  image: NetworkImage(recruiter.profileLink),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 2.0),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  recruiter.name,
-                                                  style: TextStyle(
-                                                      color: Colors.white70),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 2.0),
-                                            child: Row(
-                                              children: const [
-                                                Text(
-                                                  "2d ago",
-                                                  style: TextStyle(
-                                                      color: Colors.white70),
-                                                )
-                                              ], //TODO: time-postTime
-                                            ),
-                                          ),
-                                          SizedBox(height: 7,),
-                                          Center(
-                                            child: Row(children: [
-                                              Image.asset(
-                                                "images/splashingDrums.png",
-                                                fit: BoxFit.fill,
-                                                height: height * 0.3,
-                                                width: width * 0.8,
-                                              ),
-                                            ]),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                SizedBox(
+                                  height: 7,
                                 ),
                               ],
                             ),
@@ -344,8 +283,6 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
                         ],
                       ),
                     ),
-
-                    // TODO: Profile image
                   ],
                 );
               }
@@ -354,144 +291,3 @@ class _RecruiterProfileState extends State<RecruiterProfile> {
     );
   }
 }
-
-
-
-/*
-class MultiSelectChipGenres extends StatefulWidget {
-  final List<String> genreList;
-
-  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
-
-  @override
-  _MultiSelectChipStateGenres createState() => _MultiSelectChipStateGenres();
-}
-
-class MultiSelectChipInstruments extends StatefulWidget {
-  final List<String> genreList;
-
-
-
-  MultiSelectChip(this.genresList, {this.onSelectionChanged,this.canSelect = true});
-
-  @override
-  _MultiSelectChipStateInstruments createState() => _MultiSelectChipStateInstruments();
-}
-
-
-
-class _MultiSelectChipStateGenres extends State<MultiSelectChip> {
-  List<String> selectedChoices = [];
-
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.genresList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(3.0),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-          label: Container(
-              width: MediaQuery.of(context).size.width / 4.2,
-              child: Text(
-                item,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: selectedChoices.contains(item)
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 9),
-              )),
-          selected: selectedChoices.contains(item),
-          selectedColor: Color.fromRGBO(100, 13, 20, 1),
-          onSelected: (selected) {
-            setState(() {
-              if(widget.canSelect) {
-                selectedChoices.contains(item)
-                    ? selectedChoices.remove(item)
-                    : selectedChoices.add(item);
-
-                widget.onSelectionChanged!(selectedChoices);
-              }
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Wrap(
-          children: _buildChoiceList(),
-        )
-      ],
-    );
-  }
-}
-class _MultiSelectChipStateInstruments extends State<MultiSelectChip> {
-  List<String> selectedChoices = [];
-
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.instrumentsList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(3.0),
-        child: ChoiceChip(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-          label: Container(
-              width: MediaQuery.of(context).size.width / 4.2,
-              child: Text(
-                item,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: selectedChoices.contains(item)
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: 9),
-              )),
-          selected: selectedChoices.contains(item),
-          selectedColor: Color.fromRGBO(100, 13, 20, 1),
-          onSelected: (selected) {
-            setState(() {
-              if(widget.canSelect) {
-                selectedChoices.contains(item)
-                    ? selectedChoices.remove(item)
-                    : selectedChoices.add(item);
-
-                widget.onSelectionChanged!(selectedChoices);
-              }
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Wrap(
-          children: _buildChoiceList(),
-        )
-      ],
-    );
-  }
-}
-
-*/
-

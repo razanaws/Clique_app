@@ -67,14 +67,20 @@ class _BandProfileState extends State<BandProfile> {
             return true;
           } else {
             print("user doesn't exist");
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("user doesn't exit")));
             return "user doesn't exist";
           }
         } catch (e) {
           print("$e");
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Error occurred")));
           return e;
         }
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
       print("$e");
       return e;
     }
@@ -148,6 +154,8 @@ class _BandProfileState extends State<BandProfile> {
       }
     } catch (e) {
       print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
       return null;
     }
   }
@@ -273,12 +281,12 @@ class _BandProfileState extends State<BandProfile> {
             future: bandFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                return CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {
                 return Text(
-                    'User not found.'); // Show appropriate message if user not found
+                    'User not found.');
               } else {
                 final band = snapshot.data!;
                 double height = MediaQuery.of(context).size.height;
@@ -342,7 +350,6 @@ class _BandProfileState extends State<BandProfile> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Column(children: [
-                                      //TODO: location
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -364,7 +371,6 @@ class _BandProfileState extends State<BandProfile> {
                                           ),
                                         ],
                                       ),
-                                      //TODO: bio
                                       Row(
                                         children: [
                                           Padding(
@@ -517,16 +523,22 @@ class _BandProfileState extends State<BandProfile> {
                                       ),
 
                                       const SizedBox(height: 7),
-                                    if (isCurrentRecruiter && band.recruited != null && band.recruited == false && !isLabelled) ...[
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          labelAsRecruiter();
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+                                      if (isCurrentRecruiter &&
+                                          band.recruited != null &&
+                                          band.recruited == false &&
+                                          !isLabelled) ...[
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            labelAsRecruiter();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    100, 13, 20, 1),
+                                          ),
+                                          child:
+                                              const Text('Label as Recruited'),
                                         ),
-                                        child: const Text('Label as Recruited'),
-                                      ),
                                       ]
                                     ]),
                                   ),

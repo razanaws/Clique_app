@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../chat/ChatAfterSwiping.dart';
 import '../chat/NavigateToBandProfile.dart';
 import 'ActionButtonWidget.dart';
 import 'DragWidget.dart';
-import 'ProfileModel.dart';
+import '../../models/ProfileModel.dart';
 
 class CardsStackWidget extends StatefulWidget {
   const CardsStackWidget({Key? key}) : super(key: key);
@@ -50,15 +48,21 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             });
             return true;
           } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("user doesn't exit")));
             print("user doesn't exist");
             return "user doesn't exist";
           }
         } catch (e) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Error occurred")));
           print(e);
           return e;
         }
       }
     } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurred")));
       print(e);
       return e;
     }
@@ -85,15 +89,12 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
 
           if (username.isNotEmpty && location.isNotEmpty) {
             Profile profile = Profile(
-                name: username,
-                distance: location,
-                imageAsset: profileUrl);
+                name: username, distance: location, imageAsset: profileUrl);
             profiles.add(profile);
           }
         }
       });
 
-      // Fetch users from "Bands" collection
       QuerySnapshot bandsSnapshot =
           await FirebaseFirestore.instance.collection('bands').get();
       bandsSnapshot.docs.forEach((bandDoc) {
@@ -123,6 +124,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
         }
       });
     } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurred")));
       print('Error fetching profiles: $e');
     }
     return profiles;
@@ -145,7 +148,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
         ),
       );
     } else {
-      // Handle receiver email not found scenario
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Receiver not found")));
     }
   }
 
@@ -164,7 +168,6 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
         uids.add(uid);
       }
     });
-    debugPrint(uids.toString());
 
     if (uids.isNotEmpty) {
       final email = uids[0];
@@ -286,12 +289,9 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                 const SizedBox(width: 20),
                 ActionButtonWidget(
                   onPressed: () {
-                    debugPrint("Accepted");
                     Profile acceptedProfile = profiles.last;
 
                     if (bands.contains(acceptedProfile.name)) {
-                      //TODO: NAVIGATES TO BAND PROFILE
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -354,11 +354,9 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
               );
             },
             onAccept: (int index) {
-              debugPrint("Accepted");
               Profile acceptedProfile = profiles[index];
               if (bands.contains(acceptedProfile.name)) {
                 navigateToChat(acceptedProfile);
-                //TODO: NAVIGATES TO BAND PROFILE
                 Navigator.push(
                   context,
                   MaterialPageRoute(

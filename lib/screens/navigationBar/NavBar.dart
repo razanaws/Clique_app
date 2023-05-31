@@ -7,13 +7,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import '../RecruiterLabels.dart';
-import '../chat/ChatPreviewList.dart';
+import '../RecruitingList/RecruiterLabels.dart';
+import '../search/Search.dart';
 import '../swipingCards/homepage.dart';
 
 class NavBar extends StatefulWidget {
-   int selectedIndexNavBar;
-   NavBar({Key? key, required this.selectedIndexNavBar}): super(key: key);
+  int selectedIndexNavBar;
+  NavBar({Key? key, required this.selectedIndexNavBar}) : super(key: key);
 
   @override
   State<NavBar> createState() => _NavBar();
@@ -47,15 +47,21 @@ class _NavBar extends State<NavBar> {
             isRecruiter = true;
             return true;
           } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("user doesn't exit")));
             print("user doesn't exist");
             return "user doesn't exist";
           }
         } catch (e) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Error occurred")));
           print(e);
           return e;
         }
       }
     } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Error occurred")));
       print(e);
       return e;
     }
@@ -70,12 +76,7 @@ class _NavBar extends State<NavBar> {
         RecruiterProfile()
       ];
     } else {
-      pages = <Widget>[
-        Homepage(),
-        ChatLists(),
-        Bands(),
-        MusicianProfile()
-      ];
+      pages = <Widget>[Homepage(), ChatLists(), Bands(), MusicianProfile()];
     }
   }
 
@@ -88,19 +89,24 @@ class _NavBar extends State<NavBar> {
           CreateList();
         });
       } else {
-        //TODO: Handle the case when user doesn't exist
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("user doesn't exist")));
       }
     });
+  }
+
+  void search() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Search()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: false,
-
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
-
-      //Navigation Bar
       body: IndexedStack(
         index: widget.selectedIndexNavBar,
         children: pages,
@@ -131,14 +137,15 @@ class _NavBar extends State<NavBar> {
                 icon: Icons.message,
                 text: "Chat",
               ),
-              isRecruiter ?
-              const GButton(
-                icon: Icons.group,
-                text: "Labeled",
-              ) :  const GButton(
-                icon: Icons.group,
-                text: "Bands",
-              ) ,
+              isRecruiter
+                  ? const GButton(
+                      icon: Icons.group,
+                      text: "Labeled",
+                    )
+                  : const GButton(
+                      icon: Icons.group,
+                      text: "Bands",
+                    ),
               const GButton(
                 icon: Icons.account_box_rounded,
                 text: "Profile",
@@ -147,8 +154,6 @@ class _NavBar extends State<NavBar> {
           ),
         ),
       ),
-
-      //Drawer Menu
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: Builder(builder: (context) {
@@ -157,6 +162,12 @@ class _NavBar extends State<NavBar> {
             onPressed: () => Scaffold.of(context).openDrawer(),
           );
         }),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: search,
+          ),
+        ],
       ),
       drawer: SettingsDrawer(),
     );

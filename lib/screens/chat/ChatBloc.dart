@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final String currentUserEmail;
   final String otherUserEmail;
@@ -10,7 +9,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatBloc({required this.currentUserEmail, required this.otherUserEmail})
       : super(ChatInitial()) {
-    // Initialize the chat stream
     _chatStream = FirebaseFirestore.instance
         .collection('chats')
         .doc(getChatId())
@@ -18,15 +16,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .orderBy('timestamp', descending: true)
         .snapshots();
 
-    // Update participants field in the document
     FirebaseFirestore.instance
         .collection('chats')
         .doc(getChatId())
         .set({
-    'participants': [currentUserEmail, otherUserEmail]..sort()
-    }, SetOptions(merge: true))
+          'participants': [currentUserEmail, otherUserEmail]..sort()
+        }, SetOptions(merge: true))
         .then((_) => print('Participants field updated successfully.'))
-        .catchError((error) => print('Failed to update participants field: $error'));
+        .catchError(
+            (error) => print('Failed to update participants field: $error'));
   }
 
   @override
@@ -55,7 +53,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   String getChatId() {
-    // Generate a unique chat ID based on the emails of the two users
     List<String> emails = [currentUserEmail, otherUserEmail];
     emails.sort();
     return emails.join('_');
@@ -65,8 +62,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return _chatStream;
   }
 }
-
-// Define the chat events and states
 abstract class ChatEvent {}
 
 class SendMessage extends ChatEvent {

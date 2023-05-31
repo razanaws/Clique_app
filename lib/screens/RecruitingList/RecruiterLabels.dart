@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'chat/NavigateToBandProfile.dart';
-import 'chat/ReceiverMusicianProfile.dart';
+import '../chat/NavigateToBandProfile.dart';
+import '../chat/ReceiverMusicianProfile.dart';
 
 class RecruiterLabels extends StatefulWidget {
   const RecruiterLabels({Key? key}) : super(key: key);
@@ -85,10 +84,9 @@ class _RecruiterLabelsState extends State<RecruiterLabels> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ReceiverMusicianProfile(
-                                        receiverEmail: musicianEmail ?? '',
-                                      ),
+                                  builder: (context) => ReceiverMusicianProfile(
+                                    receiverEmail: musicianEmail ?? '',
+                                  ),
                                 ),
                               );
                             },
@@ -142,9 +140,9 @@ class _RecruiterLabelsState extends State<RecruiterLabels> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                  NavigateToBandProfile(bandName: bandName,)
-                                ),
+                                    builder: (context) => NavigateToBandProfile(
+                                          bandName: bandName,
+                                        )),
                               );
                             },
                           ),

@@ -5,7 +5,6 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:image_picker/image_picker.dart";
-
 import "../screens/navigationBar/NavBar.dart";
 
 class ChangeCoverPicture extends StatefulWidget {
@@ -16,7 +15,6 @@ class ChangeCoverPicture extends StatefulWidget {
 }
 
 class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
-
   File? _coverPicture;
   final ImagePicker _picker = ImagePicker();
   final currentUser = FirebaseAuth.instance.currentUser;
@@ -24,7 +22,7 @@ class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
 
   Future<void> _pickCoverPicture() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _coverPicture = File(pickedFile.path);
@@ -34,6 +32,7 @@ class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
       }
     });
   }
+
   Future<void> _StoreCoverUrl(downloadUrl) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -62,16 +61,21 @@ class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
           }
         } catch (e) {
           print(e);
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Error occurred")));
         }
       }
     } catch (e) {
       print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
     }
 
-    if(!isRecruiter){
+    if (!isRecruiter) {
       try {
-        final bandRef =
-        FirebaseFirestore.instance.collection('Musicians').doc(currentUser?.email.toString());
+        final bandRef = FirebaseFirestore.instance
+            .collection('Musicians')
+            .doc(currentUser?.email.toString());
         await bandRef.update({'coverUrl': downloadUrl});
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -84,12 +88,11 @@ class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
           builder: (context) => NavBar(selectedIndexNavBar: 3),
         ),
       );
-
-
-    }else{
+    } else {
       try {
-        final bandRef =
-        FirebaseFirestore.instance.collection('Recruiters').doc(currentUser?.email.toString());
+        final bandRef = FirebaseFirestore.instance
+            .collection('Recruiters')
+            .doc(currentUser?.email.toString());
         await bandRef.update({'coverUrl': downloadUrl});
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -99,11 +102,9 @@ class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  NavBar(selectedIndexNavBar: 3),
+          builder: (context) => NavBar(selectedIndexNavBar: 3),
         ),
       );
-
-
     }
   }
 
@@ -149,20 +150,18 @@ class _ChangeCoverPictureState extends State<ChangeCoverPicture> {
                 color: Colors.grey,
                 child: _coverPicture == null
                     ? const Center(
-                    child: Text(
-                        'Click here to change the cover photo'))
+                        child: Text('Click here to change the cover photo'))
                     : Image.file(
-                  _coverPicture!,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
+                        _coverPicture!,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
               ),
               onTap: () {
                 _pickCoverPicture();
               },
             ),
           ],
-
         ),
       ),
     );

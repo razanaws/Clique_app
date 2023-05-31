@@ -1,4 +1,3 @@
-import 'package:clique/models/ChatModel.dart';
 import 'package:clique/screens/chat/ChatBloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,14 +28,12 @@ class ChatAfterSwiping extends StatelessWidget {
       otherUserEmail: otherUserEmail,
     );
 
-    // Use a BlocBuilder to listen to chat state changes and update the UI accordingly
     return BlocBuilder<ChatBloc, ChatState>(
       bloc: chatBloc,
       builder: (context, state) {
-        if (state is SendMessageSuccess) {
-          // Handle successful message sending
-        } else if (state is SendMessageFailure) {
-          // Handle failed message sending
+        if (state is SendMessageFailure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Failed To send")));
         }
 
         return Scaffold(
@@ -61,7 +58,6 @@ class ChatAfterSwiping extends StatelessWidget {
                     backgroundColor: profileImage != null ? null : Colors.grey,
                     radius: 50,
                   ),
-
                   onTap: () {
                     Navigator.push(
                         context,
@@ -82,7 +78,8 @@ class ChatAfterSwiping extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       List<DocumentSnapshot> messages = snapshot.data!.docs;
-                      messages.sort((a, b) => (b['timestamp'] as Timestamp).compareTo(a['timestamp'] as Timestamp));
+                      messages.sort((a, b) => (b['timestamp'] as Timestamp)
+                          .compareTo(a['timestamp'] as Timestamp));
 
                       return Expanded(
                         child: ListView.builder(
@@ -99,7 +96,8 @@ class ChatAfterSwiping extends StatelessWidget {
                                   : CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: isCurrentUser
@@ -111,7 +109,8 @@ class ChatAfterSwiping extends StatelessWidget {
                                     maxWidth: 200,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         isCurrentUser ? "You" : sender,
@@ -139,8 +138,6 @@ class ChatAfterSwiping extends StatelessWidget {
                     }
                   },
                 ),
-
-                // Input field for sending messages
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -148,15 +145,13 @@ class ChatAfterSwiping extends StatelessWidget {
                       border: Border.all(
                         color: Colors.white,
                       ),
-                      borderRadius:
-                          BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Type a message',
                         labelStyle: TextStyle(color: Colors.white),
-                        border: InputBorder
-                            .none,
+                        border: InputBorder.none,
                       ),
                       style: const TextStyle(color: Colors.white),
                       onFieldSubmitted: (value) {

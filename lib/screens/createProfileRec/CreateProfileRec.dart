@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clique/models/user.dart';
 
-
 class CreateProfileRec extends StatefulWidget {
   final user User;
   const CreateProfileRec({required this.User});
@@ -14,7 +13,6 @@ class CreateProfileRec extends StatefulWidget {
   @override
   State<CreateProfileRec> createState() => _CreateProfileRecState();
 }
-
 
 class _CreateProfileRecState extends State<CreateProfileRec> {
   File? _profilePicture;
@@ -55,27 +53,26 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
     return null;
   }
 
-
   _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _requirements = requirementsController.text.replaceAll(' ', '').split(',');
+        _requirements =
+            requirementsController.text.replaceAll(' ', '').split(',');
         _genres = genresController.text.replaceAll(' ', '').split(',');
-
       });
 
       try {
-        CollectionReference users = FirebaseFirestore.instance.collection('Recruiters');
+        CollectionReference users =
+            FirebaseFirestore.instance.collection('Recruiters');
         await users.doc(widget.User.email).update({
           'bio': bioController.text.trim(),
-          'location' : locationController.text.trim(),
-          'requirements' : _requirements,
+          'location': locationController.text.trim(),
+          'requirements': _requirements,
           'genres': _genres,
-
         });
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("something went wrong please try again later")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("something went wrong please try again later")));
         return false;
       }
       Navigator.pushReplacement(
@@ -84,7 +81,6 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
           builder: (context) => Login(),
         ),
       );
-
     }
   }
 
@@ -96,34 +92,29 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
 
   Future<void> _StoreProfileUrl(downloadUrl) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('Recruiters');
-      await users.doc(widget.User.email).update({
-        'profileUrl': downloadUrl
-      });
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Recruiters');
+      await users.doc(widget.User.email).update({'profileUrl': downloadUrl});
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("something went wrong please try again later")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("something went wrong please try again later")));
     }
-
   }
 
   Future<void> _StorCoverUrl(downloadUrl) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('Recruiters');
-      await users.doc(widget.User.email).update({
-        'coverUrl': downloadUrl
-      });
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Recruiters');
+      await users.doc(widget.User.email).update({'coverUrl': downloadUrl});
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("something went wrong please try again later")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("something went wrong please try again later")));
     }
-
   }
-
 
   Future<void> _pickProfilePicture() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _profilePicture = File(pickedFile.path);
@@ -136,7 +127,7 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
 
   Future<void> _pickCoverPhoto() async {
     final pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         _coverPhoto = File(pickedFile.path);
@@ -160,7 +151,6 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
       final String downloadUrl = await snapshot.ref.getDownloadURL();
       imageUrls.add(downloadUrl);
       _StoreProfileUrl(downloadUrl);
-
     }
     if (_coverPhoto != null) {
       final Reference ref = storage
@@ -171,7 +161,6 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
       final String downloadUrl = await snapshot.ref.getDownloadURL();
       imageUrls.add(downloadUrl);
       _StorCoverUrl(downloadUrl);
-
     }
     return imageUrls;
   }
@@ -183,10 +172,8 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
 
   @override
   Widget build(BuildContext context) {
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(37, 37, 37, 1),
@@ -206,19 +193,18 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                     color: Colors.grey,
                     child: _coverPhoto == null
                         ? const Center(
-                        child: Text('Click here to upload a cover photo'))
+                            child: Text('Click here to upload a cover photo'))
                         : Image.file(
-                      _coverPhoto!,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+                            _coverPhoto!,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   onTap: () {
                     _pickCoverPhoto();
                   },
                 ),
                 SizedBox(height: 100),
-
                 Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -228,10 +214,8 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Tell us more about you ${widget.User.name}",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -239,7 +223,7 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                           child: Container(
                             width: 300,
                             child: TextFormField(
-                              validator: (value){
+                              validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a bio';
                                 }
@@ -250,38 +234,42 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
-
                                 label: const Text("About you",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Whats the location of your company",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -290,7 +278,7 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                             width: 300,
                             child: TextFormField(
                               style: TextStyle(color: Colors.white70),
-                              validator: (value){
+                              validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter your location';
                                 }
@@ -300,39 +288,42 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
-
                                 label: const Text("Your Location",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Tell us more about your requirements\n           seperated by a comma",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -347,39 +338,43 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
-
-                                label: const Text("Requirement1, Requirement2, Requirement3",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                label: const Text(
+                                    "Requirement1, Requirement2, Requirement3",
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "What genres are you interested in?\n       seperated by a comma",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white70
-                            ),
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white70),
                           ),
                         ),
                         Padding(
@@ -394,35 +389,38 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0)
-                                ),
+                                    borderRadius: BorderRadius.circular(30.0)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set enabled border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide(color: Colors.white), // Set focused border color
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .white),
                                 ),
-
                                 label: const Text("Genre1, Genre2, Genre3",
-                                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
-                                hintStyle: const TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13)),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                hintStyle:
+                                    const TextStyle(color: Colors.white70),
                                 fillColor: Colors.grey,
                                 labelStyle: TextStyle(color: Colors.black),
                                 filled: false,
-
                               ),
                             ),
                           ),
                         ),
-
-
                         SizedBox(height: 16.0),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromRGBO(100, 13, 20, 1),
+                            backgroundColor:
+                                const Color.fromRGBO(100, 13, 20, 1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
@@ -430,18 +428,13 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                           onPressed: _submitForm,
                           child: Text(
                             'Create profile',
-                            style: TextStyle(
-                                fontSize: 17
-                            ),
+                            style: TextStyle(fontSize: 17),
                           ),
                         ),
-
                       ],
                     ),
-
                   ),
                 ),
-
               ],
             ),
             Positioned(
@@ -454,18 +447,18 @@ class _CreateProfileRecState extends State<CreateProfileRec> {
                   width: 120.0,
                   decoration: BoxDecoration(
                     border:
-                    Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
+                        Border.all(color: const Color.fromRGBO(100, 13, 20, 1)),
                     color: Colors.grey,
                     shape: BoxShape.circle,
                   ),
                   child: _profilePicture == null
                       ? const Center(child: const Icon(Icons.add, size: 30))
                       : ClipOval(
-                    child: Image.file(
-                      _profilePicture!,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                          child: Image.file(
+                            _profilePicture!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                 ),
                 onTap: () {
                   _pickProfilePicture();

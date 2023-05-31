@@ -2,8 +2,6 @@ import 'package:clique/screens/chat/ChatAfterSwiping.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clique/screens/chat/ChatBloc.dart';
 import 'package:clique/models/ChatModel.dart';
 
 class ChatLists extends StatefulWidget {
@@ -45,13 +43,19 @@ class _ChatListsState extends State<ChatLists> {
             });
             return true;
           } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("user doesn't exit")));
             print("user doesn't exist");
           }
         } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Error occurred")));
           print(e);
         }
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
       print(e);
     }
     return isRecruiter;
@@ -65,7 +69,7 @@ class _ChatListsState extends State<ChatLists> {
 
     if (querySnapshot.docs.isNotEmpty) {
       List<String> documentIds =
-      querySnapshot.docs.map((doc) => doc.id).toList();
+          querySnapshot.docs.map((doc) => doc.id).toList();
 
       if (documentIds.isNotEmpty) {
         for (String documentId in documentIds) {
@@ -82,7 +86,7 @@ class _ChatListsState extends State<ChatLists> {
             var receiver = lastMessageData['receiver'];
             var message = lastMessageData['message'];
             var timestamp =
-            (lastMessageData['timestamp'] as Timestamp).toDate();
+                (lastMessageData['timestamp'] as Timestamp).toDate();
 
             if (sender == currentUserEmail) {
               otherUserName = receiver;
@@ -132,6 +136,8 @@ class _ChatListsState extends State<ChatLists> {
         }
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Error occurred")));
       print(e);
     }
 
@@ -185,11 +191,10 @@ class _ChatListsState extends State<ChatLists> {
               style: const TextStyle(color: Colors.white),
             ),
             trailing: Text(
-              chatModel.timestamp.toString(), // Format the timestamp as desired
+              chatModel.timestamp.toString(),
               style: const TextStyle(color: Colors.white),
             ),
             onTap: () {
-              // Navigate to ChatAfterSwiping screen when tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
