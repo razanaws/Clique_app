@@ -1,0 +1,642 @@
+@startuml
+class Login {
+  - emailController: TextEditingController
+  - passwordController: TextEditingController
+  - formKey: GlobalKey<FormState>
+
+  + Login()
+  + build(BuildContext): Widget
+  + isValidEmail(value): bool
+  + isValidPassword(value): bool
+  + validateUserInfo(): Future<bool>
+  + submitForm(): void
+}
+
+class SignUpMusicianForm {
+  + TextEditingController emailController
+  + TextEditingController passwordController
+  + TextEditingController nameController
+  + TextEditingController usernameController
+  + TextEditingController numberController
+  + GlobalKey<FormState> formKey
+  + isValidPassword(value: String): bool
+  + isValidEmail(value: String): bool
+  + isValidName(value: String): bool
+  + isValidUsername(value: String): bool
+  + isValidPhonenumber(value: String): bool
+  + CreateUserNameAndPassword(): Future<bool>
+  + CreateUserInfo(): Future<bool>
+  + submitForm()
+  + build(context: BuildContext): Widget
+}
+
+class _SignUpMusicianFormState {
+  - TextEditingController emailController
+  - TextEditingController passwordController
+  - TextEditingController nameController
+  - TextEditingController usernameController
+  - TextEditingController numberController
+  - GlobalKey<FormState> formKey
+  - isValidPassword(value: String): bool
+  - isValidEmail(value: String): bool
+  - isValidName(value: String): bool
+  - isValidUsername(value: String): bool
+  - isValidPhonenumber(value: String): bool
+  - CreateUserNameAndPassword(): Future<bool>
+  - CreateUserInfo(): Future<bool>
+  - submitForm()
+  - build(context: BuildContext): Widget
+}
+
+SignUpMusicianForm --> _SignUpMusicianFormState
+
+
+class SignUpRecruiterForm {
+  + TextEditingController emailController
+  + TextEditingController passwordController
+  + TextEditingController nameController
+  + TextEditingController usernameController
+  + TextEditingController numberController
+  + TextEditingController companyController
+  + GlobalKey<FormState> formKey
+
+  + bool isValidPassword(value)
+  + bool isValidEmail(value)
+  + bool isValidName(value)
+  + bool isValidUsername(value)
+  + bool isValidPhonenumber(value)
+  + Future<bool> CreateUserNameAndPassword()
+  + Future<bool> CreateUserInfo()
+  + submitForm()
+  + Widget build(BuildContext context)
+}
+
+class ChangeCoverPicture {
+  - File _coverPicture
+  - ImagePicker _picker
+  - User currentUser
+  - bool isRecruiter
+  + ChangeCoverPicture()
+  + Future<void> _pickCoverPicture()
+  + Future<void> _StoreCoverUrl(downloadUrl)
+  + Future<void> _saveImages()
+  + Future<List<String>> _uploadImages()
+  + build(context)
+}
+ChangeCoverPicture --> NavBar
+RecruiterLabels --> NavBar
+Search --> NavBar
+LoginForm --> NavBar
+
+class ChangeProfilePicture {
+  - File _profilePicture
+  - String profileUrl
+  - ImagePicker _picker
+  - User currentUser
+  - bool isRecruiter
+  + ChangeProfilePicture()
+  + Future<void> _pickProfilePicture()
+  + Future<void> _StoreProfileUrl(downloadUrl)
+  + Future<void> _saveImages()
+  + Future<List<String>> _uploadImages()
+  + build(context)
+}
+
+ChangeProfilePicture --> NavBar
+
+
+class SettingsDrawer {
+  - bool isRecruiter
+  + SettingsDrawer()
+  + initState()
+  + logoutUser(context)
+  + fetchUserInfo()
+  + build(context)
+  + buildMenuItem(text, icon, onClicked)
+  + selectedItem(context, index)
+}
+SettingsDrawer --> Login
+SettingsDrawer --> PrivacyPolicy
+SettingsDrawer --> CreateBand
+SettingsDrawer --> SubDrawer
+
+class SubDrawer {
+  + SubDrawer()
+  + build(context)
+  + buildMenuItem(text, icon, onClicked)
+  + selectedItem(context, index)
+}
+
+SubDrawer --> ResetPasswordPage
+SubDrawer --> ChangeProfilePicture
+SubDrawer --> ChangeCoverPicture
+
+class BandsModel {
+  - profileLink
+  - coverLink
+  - location
+  - bio
+  - genres
+  - instruments
+  - recruited
+  - recruiterId
+
+  + BandsModel(profileLink, coverLink, location, bio, genres, instruments, recruited, recruiterId)
+}
+
+
+class ChatModel {
+  - docId
+  - sender
+  - receiver
+  - message
+  - timestamp
+  - profileUrl
+  - otherUserName
+
+  + ChatModel(docId, sender, receiver, message, timestamp, profileUrl, otherUserName)
+}
+
+class MusiciansModel {
+  - name
+  - profileLink
+  - coverLink
+  - location
+  - bio
+  - genres
+  - instruments
+  - recruited
+  - recruiterId
+
+  + MusiciansModel(name, profileLink, coverLink, location, bio, genres, instruments, recruited, recruiterId)
+}
+
+class Profile {
+  + Profile(name, distance, imageAsset)
+  ~ name: String
+  ~ distance: String
+  ~ imageAsset: String
+}
+
+class RecruitersModel {
+  + RecruitersModel(name, profileLink, coverLink, location, bio, genres, requirements)
+  ~ name: String
+  ~ profileLink: String
+  ~ coverLink: String
+  ~ location: String
+  ~ bio: String
+  ~ genres: List
+  ~ requirements: List
+}
+
+class user {
+  + user(name, email)
+  ~ name: String
+  ~ email: String
+}
+
+class BandProfile {
+  - bandId: String?
+  - band: Map<String, dynamic>
+  - bandFuture: Future<BandsModel?>
+  - _profilePicture: File?
+  - _coverPhoto: File?
+  - profileUrl: String?
+  - coverUrl: String?
+  - isLabelled: bool
+  - isCurrentRecruiter: bool
+  - _picker: ImagePicker
+
+  + BandProfile(bandId: String?, band: Map<String, dynamic>)
+  + initState(): void
+  + isCurrentUserRecruiter(): Future
+  + labelAsRecruiter(): void
+  + fetchUserInfo(): Future<BandsModel?>
+  + _loadImages(): Future<void>
+  + _StoreProfileUrl(downloadUrl): Future<void>
+  + _StorCoverUrl(downloadUrl): Future<void>
+  + _pickProfilePicture(): Future<void>
+  + _pickCoverPhoto(): Future<void>
+  + _uploadImages(): Future<List<String>>
+  + _saveImages(): Future<void>
+  + build(context: BuildContext): Widget
+}
+
+class BandsModel {
+  + profileLink: String?
+  + coverLink: String?
+  + location: String
+  + bio: String
+  + genres: List
+  + instruments: List
+  + recruited: bool?
+  + recruiterId: String?
+}
+
+BandProfile "1" --> "*" BandsModel
+
+class Bands {
+  - late Stream<QuerySnapshot> bandsStream
+
+  + Bands()
+  + State<Bands> createState()
+  + void initState()
+  + Future<void> fetchBands()
+  + Widget build(BuildContext context)
+}
+
+class _BandsState {
+  + _BandsState()
+  + void initState()
+  + Future<void> fetchBands()
+  + Widget build(BuildContext context)
+}
+
+Bands --> _BandsState : composition
+Bands "1" --> "*" BandProfile
+
+
+class ChatAfterSwiping {
+  - final String profileName
+  - final String? profileImage
+  - final String currentUserEmail
+  - final String otherUserEmail
+
+  + ChatAfterSwiping(profileName: String, profileImage: String?, currentUserEmail: String, otherUserEmail: String)
+  + Widget build(BuildContext context)
+}
+
+
+
+class ChatBloc {
+  - currentUserEmail: String
+  - otherUserEmail: String
+  - _chatStream: Stream<QuerySnapshot>
+
+  + ChatBloc(currentUserEmail: String, otherUserEmail: String)
+  + mapEventToState(event: ChatEvent): Stream<ChatState>
+  + getChatStream(): Stream<QuerySnapshot>
+  - _mapSendMessageToState(event: SendMessage): Stream<ChatState>
+  + getChatId(): String
+}
+
+ChatAfterSwiping --> ChatBloc
+ChatAfterSwiping --> ReceiverMusicianProfile
+
+
+class ChatLists {
+  - currentUserEmail: String?
+  - chatModels: List<ChatModel>
+  - otherUserEmail: List<String>
+  - profileUrl: String?
+  - otherUserName: String?
+
+  + ChatLists()
+  + fetchUserInfo(): Future<bool>
+  + fetchChat(): Future<void>
+  + fetchProfileUrl(receiverEmail: String): Future<String?>
+  + refreshChat(): Future<void>
+  + initState(): void
+  + build(context: BuildContext): Widget
+}
+
+
+
+class NavigateToBandProfile {
+  - bandName: String?
+  - bandId: String?
+  - band: Map<String, dynamic>
+
+  + NavigateToBandProfile({bandName: String})
+  + fetchBandProfile(): Future<void>
+  + initState(): void
+  + build(context: BuildContext): Widget
+}
+
+
+class ReceiverMusicianProfile {
+  - receiverEmail: String
+  - musicianFuture: Future<MusiciansModel?>
+  - profileUrl: String?
+  - coverUrl: String?
+  - isRecruiter: bool
+  - isCurrentRecruiter: bool
+  - isLabelled: bool
+
+  + ReceiverMusicianProfile({receiverEmail: String})
+  + initState(): void
+  + isCurrentUserRecruiter(): Future<void>
+  + labelAsRecruiter(): Future<void>
+  + fetchUserInfo(): Future<MusiciansModel?>
+  + build(context: BuildContext): Widget
+}
+
+
+class CreateBand {
+  - _groupNameController: TextEditingController
+  - _memberEmailController: TextEditingController
+  - _memberEmails: List<String?>
+  - _firestore: FirebaseFirestore
+
+  + CreateBand()
+  + _addMember(): void
+  + _createGroup(): void
+  + build(BuildContext): Widget
+}
+CreateBand --> CreateBandProfile
+
+
+class CreateBandProfile {
+  - bandId: String
+  - bandInfo: Map<String, dynamic>
+  - band: Map<String, dynamic>?
+  - _profilePicture: File?
+  - _coverPhoto: File?
+  - profileUrl: String?
+  - coverUrl: String?
+  - _picker: ImagePicker
+  - _instruments: List<String>
+  - _genres: List<String>
+  - _formKey: GlobalKey<FormState>
+  - bioController: TextEditingController
+  - locationController: TextEditingController
+  - instrumentsController: TextEditingController
+  - genresController: TextEditingController
+
+  + CreateBandProfile(bandId: String, bandInfo: Map<String, dynamic>)
+  + createState(): _CreateBandProfileState
+  - _submitForm(): void
+  - _validateTalents(value: String?): String?
+  - _validateGenres(value: String?): String?
+  + initState(): void
+  - _loadImages(): Future<void>
+  - _StoreProfileUrl(downloadUrl: dynamic): Future<void>
+  - _StorCoverUrl(downloadUrl: dynamic): Future<void>
+  - _pickProfilePicture(): Future<void>
+  - _pickCoverPhoto(): Future<void>
+  - _uploadImages(): Future<List<String>>
+  - _saveImages(): Future<void>
+  + build(context: BuildContext): Widget
+}
+
+
+class CreateProfile {
+  - File _profilePicture
+  - File _coverPhoto
+  - List<String> _instruments
+  - List<String> _genres
+  - GlobalKey<FormState> _formKey
+  - ImagePicker _picker
+  - TextEditingController bioController
+  - TextEditingController locationController
+  - TextEditingController instrumentsController
+  - TextEditingController genresController
+
+  + CreateProfile({User: user})
+  + State<CreateProfile> createState()
+  - String? _validateTalents(value: String?): String?
+  - String? _validateGenres(value: String?): String?
+  - _submitForm(): void
+  + void dispose()
+  - Future<void> _StoreProfileUrl(downloadUrl: dynamic): void
+  - Future<void> _StorCoverUrl(downloadUrl: dynamic): void
+  - Future<void> _pickProfilePicture(): void
+  - Future<void> _pickCoverPhoto(): void
+  - Future<List<String>> _uploadImages(): List<String>
+  - Future<void> _saveImages(): void
+  + Widget build(context: BuildContext): Widget
+}
+
+CreateProfile "1" o-- "1" user
+
+
+class WelcomePage {
+  - user: User
+
+  + WelcomePage({Key? key, required User User})
+  + build(BuildContext context): Widget
+}
+
+WelcomePage "1" o-- "1" user
+
+
+class CreateProfileRec {
+  - File _profilePicture
+  - File _coverPhoto
+  - List<String> _requirements
+  - List<String> _genres
+  - GlobalKey<FormState> _formKey
+  - ImagePicker _picker
+  - TextEditingController bioController
+  - TextEditingController locationController
+  - TextEditingController requirementsController
+  - TextEditingController genresController
+
+  + CreateProfileRec(User User)
+  + State<CreateProfileRec> createState()
+  - String? _validateRequirements(String? value)
+  - String? _validateGenres(String? value)
+  - _submitForm(): void
+  + void dispose()
+  - Future<void> _StoreProfileUrl(downloadUrl)
+  - Future<void> _StorCoverUrl(downloadUrl)
+  - Future<void> _pickProfilePicture()
+  - Future<void> _pickCoverPhoto()
+  - Future<List<String>> _uploadImages()
+  - Future<void> _saveImages()
+  + Widget build(BuildContext context)
+}
+
+CreateProfileRec "1" --> "1" user
+
+class WelcomePageRec {
+  - user: User
+  + WelcomePageRec({Key? key, required User User})
+  + build(BuildContext context): Widget
+}
+
+WelcomePageRec "1" --> "1" user
+
+
+class ResetPasswordPage {
+  + ResetPasswordPage()
+  + build(BuildContext context): Widget
+  - emailController: TextEditingController
+  + dispose(): void
+  + isValidEmail(value): bool
+  + showAlertDialog(BuildContext context): void
+  + SendResetLink(): Future<void>
+}
+
+
+
+class NavBar {
+  + NavBar(selectedIndexNavBar: int)
+  + build(BuildContext context): Widget
+  - isRecruiter: bool
+  - Profile
+  - pages: List<Widget>
+  + fetchUserInfo(): Future<void>
+  + CreateList(): void
+  + initState(): void
+  + search(): void
+}
+
+
+
+class PrivacyPolicy {
+  + PrivacyPolicy()
+  + build(BuildContext context): Widget
+}
+
+class MusicianProfile {
+  - musicianFuture: Future<MusiciansModel?>
+  - profileUrl: String?
+  - coverUrl: String?
+  - isLabelled: bool
+  - recruiterId: String?
+
+  + initState(): void
+  + initializeIsLabelled(): void
+  + getIsLabeled(): Future<bool>
+  + fetchUserInfo(): Future<MusiciansModel?>
+  + build(BuildContext context): Scaffold
+
+}
+
+
+
+class RecruiterProfile {
+  - recruiterFuture: Future<RecruitersModel?>
+  + RecruiterProfile()
+  + initState(): void
+  + fetchUserInfo(): Future<RecruitersModel?>
+  + build(BuildContext): Widget
+}
+
+RecruiterProfile "1" --> "1" RecruitersModel
+
+class RecruiterLabels {
+  - profilesStream: Stream<QuerySnapshot>
+  - bandsStream: Stream<QuerySnapshot>
+  + RecruiterLabels()
+  + fetchProfiles(): void
+  + fetchBands(): void
+  + build(BuildContext): Widget
+}
+
+class Search {
+  - _memberEmailController: TextEditingController
+  - _bandEmailController: TextEditingController
+  + Search()
+  + _searchUser(): void
+  + _searchBand(): void
+  + build(BuildContext): Widget
+}
+
+class MusicianSignUp {
+  + MusicianSignUp()
+  + build(BuildContext): Widget
+}
+
+MusicianSignUp --> SignUpMusicianForm
+
+class RecruiterSignUp {
+  + RecruiterSignUp()
+  + build(BuildContext): Widget
+}
+
+RecruiterSignUp --> SignUpRecruiterForm
+
+class ActionButtonWidget {
+  + ActionButtonWidget(onPressed: VoidCallback, icon: Icon)
+  + build(BuildContext): Widget
+}
+
+class BackgroudCurveWidget {
+  + BackgroudCurveWidget()
+  + build(BuildContext): Widget
+}
+
+class CardsStackWidget {
+  - profiles: List<Profile>
+  - bands: List<String>
+  - isRecruiter: bool
+  - swipeNotifier: ValueNotifier<Swipe>
+  - _animationController: AnimationController
+  + fetchUserInfo(): Future<void>
+  + fetchProfiles(): Future<List<Profile>>
+  + navigateToChat(profile: Profile): void
+  + getReceiverEmail(profileName: String): Future<String>
+  + initState(): void
+  + build(BuildContext): Widget
+}
+
+CardsStackWidget "1" --> "1" ActionButtonWidget
+CardsStackWidget "1" --> "1" Profile
+
+enum Swipe {
+  left
+  right
+  none
+}
+
+class DragWidget {
+  + DragWidget({
+      required this.profile,
+      required this.index,
+      required this.swipeNotifier,
+      this.isLastCard = false,
+  })
+  - profile: Profile
+  - index: int
+  - swipeNotifier: ValueNotifier<Swipe>
+  - isLastCard: bool
+  + profile: Profile
+  + index: int
+  + swipeNotifier: ValueNotifier<Swipe>
+  + isLastCard: bool
+}
+
+class Homepage {
+  + Homepage()
+}
+
+Homepage --> BackgroudCurveWidget
+Homepage --> CardsStackWidget
+
+
+class ProfileCard {
+  + ProfileCard(profile: Profile)
+  - final Profile profile
+  + build(context: BuildContext): Widget
+}
+
+ProfileCard --> Profile
+
+class TagWidget {
+  + TagWidget(text: String, color: Color)
+  - final String text
+  - final Color color
+  + build(context: BuildContext): Widget
+}
+
+class MyApp {
+  + MyApp()
+  + build(context: BuildContext): Widget
+}
+
+MyApp --> Login
+MyApp --> NavBar
+ChatLists --> ChatModel : has multiple
+MusicianProfile "1" --> "1" MusiciansModel
+CardsStackWidget -- Profile : association
+
+ChatAfterSwiping --> NavigateToBandProfile
+Search --> NavigateToBandProfile
+Search --> ReceiverMusicianProfile
+CardsStackWidget --> DragWidget
+TagWidget --> DragWidget
+
+
+@enduml
