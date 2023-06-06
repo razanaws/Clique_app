@@ -323,8 +323,9 @@ class _SignUpRecruiterFormState extends State<SignUpRecruiterForm> {
                       if (formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')));
+                        submitForm();
+
                       }
-                      submitForm();
                     },
                     child: const Text(
                       'Sign up',

@@ -67,8 +67,10 @@ class _MusicianProfileState extends State<MusicianProfile> {
         final location = userData['location'] as String;
         final genres = userData['genres'] as List;
         final instruments = userData['instruments'] as List;
-        final recruited = userData['recruited'] as bool;
+        final recruited = userData['recruited'] as bool? ?? false;
         final recruiterId = userData['recruiterId'] as String?;
+
+        print("location $location");
 
         MusiciansModel model = MusiciansModel(
             name: name.toString(),
@@ -88,6 +90,8 @@ class _MusicianProfileState extends State<MusicianProfile> {
         model.bio = bio;
         model.instruments = instruments;
         model.genres = genres;
+        model.recruited = recruited;
+        model.recruiterId = recruiterId;
         return model;
       } else {
         return null;

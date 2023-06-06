@@ -306,8 +306,9 @@ class _SignUpMusicianFormState extends State<SignUpMusicianForm> {
                       if (formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')));
+                        submitForm();
                       }
-                      submitForm();
+
                     },
                     child: const Text(
                       'SIGN UP',
