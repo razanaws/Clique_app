@@ -1,6 +1,6 @@
 # clique
 
-A new Flutter project.
+A mobile application specified for musician and recruiters. it helps musicians to meet other musicians, create band and chat with other. While helping recruiters who is looking to hire musicians!
 
 ## Getting Started
 
